@@ -307,8 +307,7 @@ p {
     
 }
 
-
-.fa-brands.fa-windows {
+.fa-light.fa-alien-8bit {
 
 animation: target_image_2 3s; 
 
@@ -317,6 +316,16 @@ animation-iteration-count: infinite;
 transform-origin: 0% 50% 100%;
 
 }
+
+.sexyboy {
+
+    animation: target_image_2 3s; 
+    
+    animation-iteration-count: infinite;
+    
+    transform-origin: 0% 50% 100%;
+    
+    }
 
 @keyframes target_image_2 {
 
