@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>NamYeong's Portfolio</title>
+    <meta name = "description" content = "Portfolio for world-recommend software engineer NamYeong"/>
+    <meta name = "author" content = "NY"/>
+
+    <!-- font awesome 태그 -->
+    <script
+        src="https://kit.fontawesome.com/f2dbb08f8a.js",
+        crossorigin="anonymous"
+    ></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans&family=Otomanopee+One&family=Roboto+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+    <!-- font awesome 태그 -->
+
+    <!-- icon 태그 -->
+    <link rel="icon" type = "images.png" href="images/turtle_logo.png"/>
+    <!-- icon 태그 -->
+
+    <link rel="stylesheet" href="style.css"/>
+    <script src = "main.js" defer></script>
+
+
+</head>
+<body class="beScrollbar">
+
+    <!-- navbar -->
+    <nav id="navbar">
+        
+        <div class="navbar__logo">
+            <i class="fas fa-asterisk"></i>
+            <a href="#">NamYeong</a>
+        </div>
+
+        <ul class="navbar__menu">
+            <li class="navbar__menu__item" data-link = "Home">Home</li>
+            <li class="navbar__menu__item" data-link = "about">About</li>
+            <li class="navbar__menu__item" data-link = "skills">Skills</li>
+            <li class="navbar__menu__item" data-link = "work">My work</li>
+            <li class="navbar__menu__item" data-link = "testimonials">Testimonial</li>
+            <li class="navbar__menu__item" data-link = "contact">Contact</li>
+        </ul>
+        
+        <!-- Toggle BTN -->
+        <button class="navbar__toggle__btn">
+            <i class="fas fa-align-justify"></i>
+        </button>
+
+    </nav>
+
+    <!-- Home -->
+    <section id="Home" class = "section">
+
+        <div class="home__container">
+            <img src="images/profile_1.JPG" alt="Hello I'm NamYeong Kim" class="home__avatar">
+            <h1 class="home__title">Hello! <i class="fas fa-mitten"></i><br>Welcome to my WebSite</h1>
+            <button class="home__contact">Contact Me</button>
+        </div>
+    </section>
+
+    <!-- about -->
+    <section id="about" class = "section">
+        <div class="section__container">
+            <h1>About me</h1>
+        <p>A person who derives pleasure when doing object-oriented programming. <br>
+            I am Game Programming student And Focus well and pay close attention to the detailed parts.</p>
+
+    <div class="about__majors">
+        <div class="major">
+            <div class="major__icon">
+                <i class="fas fa-gamepad"></i>
+            </div>
+            <h2 class="major__title">Game Engine</h2>
+            <div class="major__description">Unreal Engine, <br> Unity Engine</div>
+        </div>      
+        
+        <div class="major">
+            <div class="major__icon">
+                <i class="fa-brands fa-windows"></i>
+            </div>
+            <h2 class="major__title">API</h2>
+            <div class="major__description">Win32API, CMake, DirectX12</div>
+        </div>
+
+        <div class="major">
+            <div class="major__icon">
+                <i class="fa-regular fa-brain-circuit"></i>
+            </div>
+            <h2 class="major__title">Algorithm</h2>
+            <div class="major__description">BaekJoon</div>
+        </div>
+    </div> 
+    
+        <div class="about__jobs">
+
+            <div class="job">
+                <a href="https://www.sungkyul.ac.kr/sites/skukr/index.do" target="_blank"><img src="images/sungkyul_logo.png" alt="sungjyul_college" class="job__logo"></a>
+            <div class="job__description">
+                    <p class="job__name">SungKyul University</p>
+                    <p class="job__period">3years</p>
+            </div>
+            </div>
+
+            <div class="job">
+                <!-- <img src="" alt="" class="job__logo"> -->
+                <p class="job__name"></p>
+                <p class="job__period"></p>
+            </div>
+            
+            <!-- GameMakers -->
+            <div class="job">
+                <a href="" target="_blank"><img src="images/GasmeMakers.jpg" alt="GameMakers" class="job__logo"></a>
+            <div class="job__description">
+                    <p class="job__name">GameMakers 6 Member</p>
+                    <p class="job__period"></p>
+            </div>
+            </div>
+
+            <div class="job">
+                <!-- <img src="" alt="" class="job__logo"> -->
+                <p class="job__name"></p>
+                <p class="job__period"></p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- skills -->
+    <section id="skills" class = "section">
+        <h1>Skills</h1>
+        <h2>Skills && Attribute</h2>
+        <p>I am passionate and interested in creating high-quality games through Unreal Engine's outstanding technology and advanced graphics.</p>
+
+        <div class="skillset">
+            <div class="skillset__left">
+                <h3 class="skillset__title">Skills</h3>
+                    <div class="skill_description">
+                        <span>Unreal Engine</span>
+                        <span>60%</span>
+                    </div>   
+                        <div class="skill__bar">
+                            <div class="skill__value" style = "width: 60%"></div>
+                        </div>
+                    
+                    <div class="skill_description">
+                        <span>Unity Engine</span>
+                        <span>80%</span>
+                    </div>   
+                        <div class="skill__bar">
+                            <div class="skill__value" style = "width: 80%"></div>
+                        </div>
+                    
+                    <div class="skill_description">
+                        <span>WinAPI32</span>
+                        <span>80%</span>
+                    </div>   
+                        <div class="skill__bar">
+                            <div class="skill__value" style = "width: 75%"></div>
+                        </div>    
+                    
+                    <div class="skill_description">
+                        <span>C++</span>
+                        <span>80%</span>
+                    </div>   
+                        <div class="skill__bar">
+                            <div class="skill__value" style = "width: 80%"></div>
+                        </div>    
+                    
+                    <div class="skill_description">
+                        <span>C#</span>
+                        <span>80%</span>
+                    </div>   
+                        <div class="skill__bar">
+                            <div class="skill__value" style = "width: 80%"></div>
+                        </div>   
+                        
+                    <div class="skill_description">
+                        <span>Alorithm</span>
+                        <span>50%</span>
+                    </div>   
+                        <div class="skill__bar">
+                            <div class="skill__value" style = "width: 50%"></div>
+                        </div>     
+            </div>
+
+            <div class="skillset__right">
+                <div class="tools">
+                    <h3 class="skillset__title">Tools</h3>
+                    <ul class="tools__list">
+                        <li><span>Unreal Engine,</span></li>
+                        <li><span>Unity Engine,</span></li>
+                        <li><span>Visual Studio,</span></li>
+                        <li><span>DevC++,</span></li>
+                        <li><span>Blender</span></li>
+                    </ul>
+                </div>
+                <div class="etc">
+                    <h3 class="skillset__title">Etc</h3>
+                    <ul class="etc__list">
+                        <li><span>Github</span></li>
+                    </ul>    
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <img class = "project__img" src="images/projects/game.gif" alt="Game">
+
+    <!-- work -->
+    <section id="work" class = "section">
+        <div class="section__container">
+            <h1>My Work</h1>
+            <h3>Projects</h3>
+    
+            <div class="work__catagories">
+                <button class="catagories__btn" data-filter="*">All <span class="catagory__count">5</span></button>
+                <button class="catagories__btn" data-filter="front-end">Unreal<span class="catagory__count">2</span></button>
+                <button class="catagories__btn" data-filter="back-end">Unity<span class="catagory__count">2</span></button>
+                <button class="catagories__btn" data-filter="back-end">Win32API<span class="catagory__count">1</span></button>
+            </div>
+    
+        <div class="work__projects">    
+            <a href="https://github.com/starkshn/JumpKing" class="project" target = "blank" data-type="develop">
+                <img class = "project__img" src="images/projects/JumpKing.jpg" alt="Python instrgram auto login & read comments">
+            <div class="project__description">
+                <h3>Win32API</h3>
+                <span>Made by only C++</span>
+            </div></a>
+    
+            <a href="https://www.youtube.com/watch?v=mhnsu9_LtmY" class="project" target = "blank" data-type="develop">
+                <img class = "project__img" src="images/projects/Pak.png" alt="Python project">
+            <div class="project__description">
+                <h3>Motion Warping in <br>Unreal Engine5</h3>
+            </div></a>
+    
+            <a href="https://github.com/starkshn/UE4_R" class="project" target = "blank" data-type="develop">
+                <img class = "project__img" src="images/projects/UE4_R.png" alt="Python Project">
+            <div class="project__description">
+                <h3>Unreal Engine4</h3>
+                <span>AI Project</span>
+            </div></a>
+    
+            <a href="https://play.google.com/store/apps/details?id=com.Dgmmer.ZigZagVersion5&hl=ko&gl=US"  class="project" target = "blank" data-type="front-end">
+                <img class = "project__img" src="images/projects/UnityLogo.png" alt="test portfolio">
+            <div class="project__description">
+                <h3>Aracade Miin Test Game</h3>
+            </div></a>
+    
+            <a href="https://github.com/starkshn/.NetUnityServer"  class="project" target = "blank" data-type="develop">
+                <img class = "project__img" src="images/projects/UnityServer.png" alt="Python Project">
+            <div class="project__description">
+                <h3>Unity Server Test</h3>
+                <span>By C#</span>
+            </div></a>
+
+            </div>
+        </div>
+        
+    </section>
+
+    <!-- testimonials -->
+    <section id="testimonials" class = "section">
+        <div class="section__container">
+            <h1>Testimonials</h1>
+        <h3>See what they say about me</h3>
+        <div class="testimonials">
+            <div class="testimonial">
+                <img src="images/testimonial_1.jpeg" alt="Lee MinJae" class="testimonial__avatar">
+                <div class="testimonial__speech__bubble">
+                    <p>            
+If you have a great study and passion for Unreal Engine and want to make something, make it to the end and put a lot of effort into it.
+                    </p>
+                    <p class="name"><a href="https://github.com/sochubert" target="blank">Min Jae Lee (Git hub) </a> / FullStackDev</p>
+                </div>
+            </div>
+
+            <div class="testimonial">
+                <div class="testimonial__speech__bubble">
+                    <p>
+                        
+It seems that the passion and persistence for game development is great.
+                    </p>
+                    <p class="name"><a href="https://github.com/tm9704" target="_blank">
+                        Min Hyung Lee (Git hub) </a> / Android Dev</p>
+                    
+                </div>
+                <img src="images/testimonilas_2.jpeg" alt="Guido van Rossum" class="testimonial__avatar">
+            </div>
+        </div>
+
+        </div>
+    </section>
+
+    <!-- contact -->
+    <section id="contact" class = "section">
+        <h1 class="contact__title">Let's talk</h1>
+        <h2 class="contact__email">starkshn97@gmail.com</h2>
+        <div class="contact__link">
+            <a href="https://github.com/starkshn" target = "blank">
+                <i class="fab fa-github"></i>
+            </a>
+            <a href="https://www.instagram.com/ny_o_ny/" target = "blank">
+                <i class="fab fa-instagram"></i>
+            </a>
+            
+        </div>
+        
+        <div class="icon__description">
+            <p class="Git">&nbsp;Github</p>
+            <p class="Insta">Instagram</p>
+        </div>
+        
+
+
+        <p class="contact__rights">2021 Game Dev Nam Yeong Kim - All rights reserved</p>
+
+
+    </section>
+
+    <!-- arrow btn -->
+    
+        <button class="arrow__btn">
+            <i class="fas fa-arrow-circle-up"></i>
+        </button>
+
+    <!-- make scroll bar -->
+<!--     
+    <div class="scroll_box">
+        asdasd
+    </div> -->
+
+
+</body>
+</html>

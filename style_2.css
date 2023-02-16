@@ -1,0 +1,45 @@
+/*  정렬 */
+
+/* flex-box 에서는 중심축에서 정렬하는건 justify-content 그리고 반대축에서 정렬하는것은 align-items */
+
+/* flex-box가 아닐때 정렬하는 방법 
+margin-auto 이것은 한줄아 하나만
+text-align : center (블럭레벨이 아닌경우 사용가능) 블럭레벌 적용 x -> margin-auto 사용해야함 블럭레벨일 경우
+line-height : 100px */
+
+/* transfrom : translate(50%, 50%) */
+
+/* 정렬 end */
+
+/* background-image */
+/* background-repeat: no-repeat;
+background-position: center; 
+background-size: cover; -> 남은 공간 반응형으로 차지함 */
+
+/* background : center/cover no-repeat url('') */
+
+/* background end */
+
+/* transform */
+/* transform: translateX (100px);
+transform: translate(50px, 50px);
+transform: scale(1.2);
+transform: rotate(45deg);
+
+transfrom: translate(100px, 100px) scale(2) rotate(45deg)
+*/
+/* transfrom end */
+
+/*  transition */
+/* smooth 하게 만드는거임 변화를 
+box: hover {
+    background-color: blue;
+    transition-delay;
+    transition-property: background color;
+    transition-time: ease;
+
+
+    보통 이렇게씀
+    transition: background-color 300ms linear;
+}
+*/
