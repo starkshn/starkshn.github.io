@@ -217,7 +217,7 @@ p {
 
 /* Home */
 #Home {
-    background: url('images/my_background_2.png') center/cover no-repeat; 
+    background: url('images/navbar_bacground.png') center/cover no-repeat; 
     padding: 40px;
     align-items: center;
     text-align: center;
@@ -240,24 +240,6 @@ p {
 .home__description {
     color: var(--color-white);
 }
-
-.fas-brands.fa-windows{
-    animation: hand__image 3s; 
-
-    animation-iteration-count: infinite;
-
-    transform-origin: 0% 50% 100%;
-}
-
-@keyframes hand__image {
-
-    0% { transform: rotate(-20deg); } 
-
-    50% { transform: rotate(40deg); }
-    
-    100% { transform: rotate(-20deg); }
-    
-    }
 
 .home__contact {
     font-size: var(--font-regular);
@@ -307,47 +289,8 @@ p {
 
 
 
-.fa-regular.fa-brain-circuit {
 
-    animation: target_image 3s; 
 
-    animation-iteration-count: infinite;
-
-    transform-origin: 0% 50% 100%;
-}
-
-@keyframes target_image {
-
-    0% { transform: rotate(-10deg); } 
-
-    50% { color: var(--color-orange); }
-    50% { transform: rotate(180deg); }
-    
-    100% { transform: rotate(-10deg); }
-    
-    }
-
-.fa-brands.fa-windows {
-
-    animation: target_image_2 3s; 
-
-    animation-iteration-count: infinite;
-
-    transform-origin: 0% 50% 100%;
-
-}
-
-@keyframes target_image_2 {
-
-    0% { transform: translateX(20px) } 
-
-    50% { color: var(--color-dark-grey); }
-    
-    50% { transform: translateX(-20px); }
-    
-    100% { transform: translateX(20px); }
-    
-    }
 
 .fas.fa-gamepad {
     animation: target_image_3 3s; 
@@ -366,7 +309,51 @@ p {
     
     100% { transform: translateY(30px); }
     
-    }
+}
+
+
+.fa-brands.fa-windows {
+
+animation: target_image_2 3s; 
+
+animation-iteration-count: infinite;
+
+transform-origin: 0% 50% 100%;
+
+}
+
+@keyframes target_image_2 {
+
+0% { transform: translateX(20px) } 
+
+50% { color: var(--color-dark-grey); }
+
+50% { transform: translateX(-20px); }
+
+100% { transform: translateX(20px); }
+
+}
+
+
+.fa-regular.fa-brain-circuit {
+
+animation: target_image 3s; 
+
+animation-iteration-count: infinite;
+
+transform-origin: 0% 50% 100%;
+}
+
+@keyframes target_image {
+
+0% { transform: rotate(-10deg); } 
+
+50% { color: var(--color-orange); }
+50% { transform: rotate(180deg); }
+
+100% { transform: rotate(-10deg); }
+
+}
 
 .major__icon i{
     transition: 300ms linear;
