@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XDD814ZBH2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XDD814ZBH2');
+</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>StarCraft 모작 (맵툴, 2D) | 김남영 포트폴리오</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="project.css">
+    <link rel="stylesheet" href="gunfire.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <nav class="nav"><div class="nav-container">
+        <a href="../index.html" class="nav-logo">NY</a>
+        <a href="../index.html#projects" class="back-link"><i class="fas fa-arrow-left"></i> 프로젝트 목록</a>
+    </div></nav>
+
+    <article class="project-detail"><div class="container">
+        <div class="project-meta-card">
+            <p class="meta-desc">WIN32 API, C++로 스타크래프트를 모작. A* 길찾기, 차집합/교집합 유닛 선택, 마우스 드래그/더블클릭, 맵툴 구현.</p>
+            <div class="meta-tags">
+                <span class="tag tag-primary">C++</span><span class="tag tag-primary">Win32 API</span>
+            </div>
+            <div class="meta-info">
+                <span><i class="fas fa-user"></i> 1인 개발</span>
+                <span><i class="fas fa-calendar"></i> 2024.04 ~ 2024.05</span>
+                <span><a href="https://github.com/starkshn/-" target="_blank"><i class="fab fa-github"></i> GitHub</a></span>
+            </div>
+        </div>
+
+        <h1 class="project-detail-title">StarCraft 모작 (맵툴, 2D)</h1>
+        <a href="https://www.youtube.com/watch?v=YL8snJ3K3qo" target="_blank" class="video-thumbnail">
+            <img src="https://img.youtube.com/vi/YL8snJ3K3qo/maxresdefault.jpg" alt="프로젝트 영상" loading="lazy">
+            <div class="play-button"><i class="fas fa-play"></i></div>
+        </a>
+
+        <div class="project-content">
+            <div class="feature-summary"><h2>구현 기능</h2>
+                <div class="feature-chips">
+                    <a href="#astar" class="chip">A* 길찾기</a>
+                    <a href="#unitselect" class="chip">유닛 선택</a>
+                    <a href="#mouse" class="chip">마우스 상태</a>
+                    <a href="#maptool" class="chip">맵툴</a>
+                </div>
+            </div><hr>
+
+            <!-- ===== A* 길찾기 ===== -->
+            <section class="feature-card" id="astar">
+                <div class="feature-header"><h2>A* 길찾기</h2><span class="feature-badge">우선순위 큐 / 휴리스틱</span></div>
+                <blockquote><strong>8방향 탐색</strong>에 <strong>우선순위 큐(PQNode)</strong>를 사용한 A* 구현. <strong>휴리스틱(맨해튼 거리)</strong> + <strong>직선 10/대각선 12</strong> 가중치로 최적 경로 탐색. <strong>std::stack</strong>으로 경로 역추적.</blockquote>
+                <p>Obj 클래스에 A* 함수를 구현하여 모든 지상군 유닛이 공유합니다. <strong>best 이차원 배열</strong>을 INT32_MAX로 초기화한 뒤, 현재 화면에 렌더링되는 타일 범위(Min/Max Row/Col) 내에서만 탐색하여 연산량을 제한했습니다. 탐색 완료 후 <strong>parent 맵</strong>을 역추적하여 <strong>std::stack</strong>에 경로를 쌓고, 지나갈 타일을 노란색으로 표시합니다.</p>
+                <figure class="project-image"><img src="../images/StarCraft_모작_맵툴구현,_2D__1.gif" loading="lazy"><figcaption>A* 길찾기 결과</figcaption></figure>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/StarCraft_모작_맵툴구현,_2D__2.png" loading="lazy"><figcaption>경로 추적 코드</figcaption></figure>
+                    <figure class="project-image"><img src="../images/StarCraft_모작_맵툴구현,_2D__3.png" loading="lazy"><figcaption>경로 시각화</figcaption></figure>
+                </div>
+                <details class="code-toggle"><summary>A* 핵심 코드</summary>
+<pre><code class="language-cpp">// 우선순위 큐 + 8방향 탐색
+priority_queue&lt;PQNode, vector&lt;PQNode&gt;, greater&lt;PQNode&gt;&gt; pq;
+pq.push(PQNode{ start, 0 + Heuristic(start, dest) });
+best[start.y][start.x] = 0;
+
+while (!pq.empty()) {
+    PQNode cur = pq.top(); pq.pop();
+    for (int dir = 0; dir &lt; 8; dir++) {
+        int ny = cur.pos.y + dy[dir];
+        int nx = cur.pos.x + dx[dir];
+        int cost = (dir &lt; 4) ? 10 : 12; // 직선 10, 대각 12
+        int newG = best[cur.pos.y][cur.pos.x] + cost;
+        if (newG &lt; best[ny][nx]) {
+            best[ny][nx] = newG;
+            parent[ny][nx] = cur.pos;
+            pq.push(PQNode{ {nx, ny}, newG + Heuristic({nx,ny}, dest) });
+        }
+    }
+}
+// stack으로 경로 역추적
+stack&lt;Pos&gt; path;
+Pos trace = dest;
+while (trace != start) {
+    path.push(trace);
+    trace = parent[trace.y][trace.x];
+}</code></pre></details>
+            </section>
+
+            <!-- ===== 차집합/교집합 유닛 선택 ===== -->
+            <section class="feature-card" id="unitselect">
+                <div class="feature-header"><h2>차집합/교집합 유닛 선택</h2><span class="feature-badge">set_intersection / set_difference</span></div>
+                <blockquote>드래그 영역 내 유닛을 수집 &rarr; 기존 선택과 <strong>std::set_intersection(교집합)</strong> &rarr; <strong>std::set_difference(차집합)</strong>으로 선택 해제 대상 추출. <strong>Possessed 플래그</strong>로 제어 가능 여부 관리.</blockquote>
+                <p>마우스 드래그가 끝난 시점에 사각형 영역 안에 들어온 유닛 목록을 수집합니다. 기존 선택 유닛과 <strong>교집합(set_intersection)</strong>을 구한 뒤, 기존 유닛에서 교집합을 뺀 <strong>차집합(set_difference)</strong>이 선택 해제 대상입니다. 해제 대상의 <strong>Possessed 플래그를 false</strong>로 설정하여 제어에서 제외합니다.</p>
+                <figure class="project-image"><img src="../images/StarCraft_모작_맵툴구현,_2D__4.gif" loading="lazy"><figcaption>유닛 선택 결과</figcaption></figure>
+                <figure class="project-image"><img src="../images/StarCraft_모작_맵툴구현,_2D__5.png" loading="lazy"><figcaption>교집합 + 차집합 코드</figcaption></figure>
+                <details class="code-toggle"><summary>교집합 + 차집합 핵심</summary>
+<pre><code class="language-cpp">// 드래그 영역 내 유닛 수집
+set&lt;Unit*&gt; newSelected;
+for (auto&amp; unit : allUnits) {
+    if (IsInRect(dragRect, unit-&gt;GetPos()) &amp;&amp; unit-&gt;IsPossessed())
+        newSelected.insert(unit);
+}
+// 교집합: 유지할 유닛
+vector&lt;Unit*&gt; keep;
+set_intersection(prevSelected.begin(), prevSelected.end(),
+                 newSelected.begin(), newSelected.end(),
+                 back_inserter(keep));
+// 차집합: 해제할 유닛
+vector&lt;Unit*&gt; deselect;
+set_difference(prevSelected.begin(), prevSelected.end(),
+               newSelected.begin(), newSelected.end(),
+               back_inserter(deselect));
+for (auto* u : deselect) u-&gt;SetSelected(false);</code></pre></details>
+            </section>
+
+            <!-- ===== 마우스 상태 제어 ===== -->
+            <section class="feature-card" id="mouse">
+                <div class="feature-header"><h2>마우스 상태 제어</h2><span class="feature-badge">더블클릭 / 드래그</span></div>
+                <blockquote><strong>'눌렀다-땠다'를 1동작</strong>으로 보고 특정 시간 내 재입력 시 <strong>더블클릭</strong> 판정. 누른 상태 유지 시 <strong>드래그</strong> 전환. 같은 종류 유닛만 <strong>더블클릭 선택</strong>.</blockquote>
+                <p>마우스 좌클릭 <strong>'눌렀다→땠다'를 하나의 동작</strong>으로 보고, '땠다' 시점부터 시간을 누적합니다. 특정 시간 안에 다시 '눌렸다' 입력이 들어오면 <strong>더블클릭</strong>으로 판정하며, 이때 같은 종류의 유닛만 선택됩니다. '눌렸다' 상태에서 계속 누르고 있으면 <strong>드래그 상태</strong>로 전환하고, 드래그 텍스처와 사각형 영역을 렌더링합니다.</p>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/StarCraft_모작_맵툴구현,_2D__6.gif" loading="lazy"><figcaption>더블클릭 선택</figcaption></figure>
+                    <figure class="project-image"><img src="../images/StarCraft_모작_맵툴구현,_2D__7.gif" loading="lazy"><figcaption>드래그 선택</figcaption></figure>
+                </div>
+                <figure class="project-image"><img src="../images/StarCraft_모작_맵툴구현,_2D__8.png" loading="lazy"><figcaption>마우스 상태 처리 코드</figcaption></figure>
+            </section>
+
+            <!-- ===== 맵툴 ===== -->
+            <section class="feature-card" id="maptool">
+                <div class="feature-header"><h2>맵툴</h2><span class="feature-badge">타일 / 마우스 피킹</span></div>
+                <blockquote><strong>2차원 배열</strong> 기반 타일 배치 + <strong>마우스 피킹</strong>으로 타일 타입 변경. 빨간색 = 이동 불가 영역. <strong>나머지 연산</strong>으로 타입 순환.</blockquote>
+                <p>맵 텍스처를 가져와 설정한 크기의 <strong>2차원 배열</strong>로 타일을 깔고, <strong>마우스 피킹</strong>으로 선택한 타일의 타입을 변경합니다. 타입이 많지 않아 클릭할 때마다 값을 <strong>1씩 증가</strong>시키고 <strong>나머지 연산(%)</strong>으로 순환하도록 구현했습니다. 빨간색 타일은 A* 탐색에서 이동 불가 영역으로 처리됩니다.</p>
+                <figure class="project-image"><img src="../images/StarCraft_모작_맵툴구현,_2D__9.gif" loading="lazy"><figcaption>맵툴 결과</figcaption></figure>
+                <figure class="project-image"><img src="../images/StarCraft_모작_맵툴구현,_2D__10.png" loading="lazy"><figcaption>맵툴 코드</figcaption></figure>
+            </section>
+        </div>
+
+        <div class="project-nav">
+            <a href="../index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> 프로젝트 목록으로</a>
+        </div>
+    </div></article>
+    <footer class="footer"><p>&copy; 2026 김남영. All rights reserved.</p></footer>
+    <script src="project.js"></script>
+</body>
+</html>

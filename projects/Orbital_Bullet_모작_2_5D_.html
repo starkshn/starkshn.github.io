@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orbital Bullet 모작 (2.5D) | 김남영 포트폴리오</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="project.css">
+    <link rel="stylesheet" href="gunfire.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">NY</a>
+            <a href="../index.html#projects" class="back-link"><i class="fas fa-arrow-left"></i> 프로젝트 목록</a>
+        </div>
+    </nav>
+    <article class="project-detail">
+        <div class="container">
+            <div class="project-meta-card">
+  <p class="meta-desc">DX9, C++로 스팀의 오비탈 불릿을 모작한 프로젝트입니다.</p>
+  <div class="meta-tags"><span class="tag">C++</span><span class="tag">DX9</span></div>
+  <div class="meta-info">
+    <span><i class="fas fa-user"></i> 김남영, 김민용, 이진우, 조민호</span>
+  </div>
+</div>
+
+            <h1 class="project-detail-title">Orbital Bullet 모작 (2.5D)</h1>
+            <div class="project-content">
+                <p>깃허브 링크:  https://github.com/starkshn/Orbiral-</p>
+<h1>영상 링크</h1>
+<a href="https://www.youtube.com/watch?v=R-4KWs9VKEw" target="_blank" class="video-thumbnail"><img src="https://img.youtube.com/vi/R-4KWs9VKEw/maxresdefault.jpg" alt="영상" loading="lazy"><div class="play-button"><i class="fas fa-play"></i></div></a>
+<p>제작자 : 김남영(플레이어, 카메라), 김민용(맵툴, 이펙트, 아이템), 조민호(몬스터, UI), 이진우(보스)</p>
+<p>제작 년도 : 2024.08.09~2024.09.06</p>
+<p>제작 기간 : 3주</p>
+<p>소스 코드 : <a href="https://github.com/starkshn/Orbiral-" target="_blank">https://github.com/starkshn/Orbiral-</a></p>
+<hr>
+<h1>담당 업무</h1>
+<ul>
+<li>플레이어 이동, 상태, 텍스쳐 애니매이션 제어 구현</li>
+<li>카메라 이동 및 관련 구현</li>
+<li>플레이어 리소스 및 사운드 편집 및 구현</li>
+</ul>
+<hr>
+<h1>플레이어 이동 및 상태 제어</h1>
+<h3>구현 과정</h3>
+<p>플레이어의 상태는 비트 연산자를 활용하여 제어하였습니다.</p>
+<p>중첩 상태를 관리하기에 비트 연산을 통해 관리하는 것이 효율적이라 판단하여 해당 방법을 선택하여 애니매이션 제어도 함께 수행하였습니다.</p>
+<p>중심점을 기준으로 빙글빙글 도는 식의 게임플레이 방식이라 플레이어의 부모 행렬을 스테이지의 중심으로 잡고 행렬 연산을 수행하였습니다.</p>
+<hr>
+<h3>Code</h3>
+<figure class="project-image"><img src="../images/Orbital_Bullet_모작_2_5D__1.png" alt="image.png" loading="lazy"></figure>
+<ul>
+<li>Code</li>
+</ul>
+<details class="code-toggle"><summary>📝 Code</summary>
+<pre><code class="language-cpp">    	// player state
+    private:
+    	void							Add_State(const _uint&amp; iState) 
+    	{ 
+    		m_iPlayerState |= iState; 
+    	}
+    
+    	void							Sub_State(const _uint&amp; iState) 
+    	{ 
+    		m_iPlayerState &amp;= ~iState; 
+    	}
+    
+    	void							Sub_All_State() { m_iPlayerState &amp;= 0; }</code></pre>
+</details>
+<p>상태 추가, 삭제 비트연산을 함수화 한 코드</p>
+<figure class="project-image"><img src="../images/Orbital_Bullet_모작_2_5D__2.png" alt="image.png" loading="lazy"></figure>
+<ul>
+<li>전체 Code</li>
+</ul>
+<details class="code-toggle"><summary>📝 Code</summary>
+<pre><code class="language-cpp">    void CPlayer::KeyInput_Dash()
+    {
+    	if (Check_State(PLAYER_INOUT) || Check_State(PLAYER_TRANSPORT_UPPER_LEVEL)) return;
+    
+    	if (Engine::Key_Down(VK_LSHIFT))
+    	{
+    		if ((m_iPlayerState &amp; Get_State_Sum(PLAYER_DASH, PLAYER_TRANSPORT_UPPER_LEVEL, PLAYER_FIRE, PLAYER_DEAD)))
+    			return;
+    
+    		if (Check_State(PLAYER_JUMP))
+    		{
+    			if (Check_State(PLAYER_MOVE))
+    				Sub_State(PLAYER_MOVE);
+    		}
+    		else
+    		{
+    			if (Check_State(PLAYER_MOVE))
+    				Sub_State(PLAYER_MOVE);
+    		}
+    
+    		Change_Player_Anim_State(PLAYER_ANIM_STATE::DASH);
+    		Add_State(PLAYER_DASH);
+    	}
+    }</code></pre>
+</details>
+<p>대쉬 스킬을 쓸 때 최대 회전 값만큼 회전할 수 있게하는 코드</p>
+<figure class="project-image"><img src="../images/Orbital_Bullet_모작_2_5D__3.png" alt="image.png" loading="lazy"></figure>
+<ul>
+<li>Code</li>
+</ul>
+<details class="code-toggle"><summary>📝 Code</summary>
+<pre><code class="language-cpp">    void CPlayer::KeyInput_Jump()
+    {
+    	if (Check_State(PLAYER_INOUT) || Check_State(PLAYER_TRANSPORT_UPPER_LEVEL)) return;
+    
+    	if (Engine::Key_Down(VK_SPACE))
+    	{
+    		if (!(m_iPlayerState &amp; Get_State_Sum(PLAYER_DASH, PLAYER_TRANSPORT_UPPER_LEVEL, PLAYER_DEAD)))
+    		{
+    			// default jump
+    			if (!m_bJumping)
+    			{
+    				m_bJumping = true;
+    				m_bDoubleJumping = false;
+    
+    				Sub_All_State();
+    				Add_State(PLAYER_JUMP);
+    				Change_Player_Anim_State(PLAYER_ANIM_STATE::JUMP);
+    			}
+    			// double jump
+    			else if (Check_State(PLAYER_JUMP) &amp;&amp; m_bJumping &amp;&amp; !m_bDoubleJumping)
+    			{
+    				m_fDoubleJumpStartY = m_fCurJumpY;
+    				m_bDoubleJumping = true;
+    				Change_Player_Anim_State(PLAYER_ANIM_STATE::JUMP);
+    			}
+    		}
+    	}
+    }</code></pre>
+</details>
+<p>일반 점프, 안쪽과 바깥쪽을 왔다갔다하는 점프를 하는 경우 포물선 방정식을 활용하여 점프할 수 있도록 구현한 코드</p>
+<h1>카메라 이동 및 관련 기능 구현</h1>
+<h3>구현 과정</h3>
+<p>플레이어가 안쪽, 바깥쪽으로 이동하는 경우 스테이지의 중심점으로 부터 반지름의 길이 자체를 선형보간하여 줄이거나 늘려 보다 부드럽게 줌인 줌아웃되는 듯하게 구현하였습니다.</p>
+<p>플레이어 피격시나 보스 스테이지 입장시 카메라의 At의 위치를 미세하게 매틱 변경하영 카메라 Shaking효과를 구현하였습니다.</p>
+<hr>
+<h3>Code</h3>
+<figure class="project-image"><img src="../images/Orbital_Bullet_모작_2_5D__4.png" alt="image.png" loading="lazy"></figure>
+<ul>
+<li>Code</li>
+</ul>
+<details class="code-toggle"><summary>📝 Code</summary>
+<pre><code class="language-cpp">    _float CCamFunc::Linear_InterPolation(_vec3&amp; vSrc, const _vec3&amp; vStart, const _vec3&amp; vEnd, _float&amp; fCurSP, const _float fMinSP, const _float fMaxSP, const _float&amp; fDT)
+    {
+    	static _vec3	vTempDis = _vec3();
+    	static _float	fTotalDis = 0.f;
+    	static _vec3	vDir = _vec3();
+    	static _float	fLen = 0.f;
+    	static _float	fRatio = 0.f;
+    
+    	// 목표지점 까지의 총 거리 계산
+    	fTotalDis = CCamFunc::Get_Len(vStart, vEnd);
+    
+    	// 현재 위치에서 목표지점까지의 거리 계산
+    	fLen = CCamFunc::Get_Len(vSrc, vEnd);
+    
+    	// 목표지점에 매우 가까운 경우, 남은 거리가 최소 속도보다 작은 경우
+    	if (fLen &lt; fMinSP * fDT)
+    	{
+    		vSrc = vEnd;
+    		fCurSP = 0.f; // 현재 속도를 0으로 처리한다.(종료이기때문)
+    		return 0.f;
+    	}
+    
+    	vDir = vEnd - vStart;
+    	D3DXVec3Normalize(&amp;vDir, &amp;vDir);
+    
+    	// 속도 보정(최소 및 최대 속도 설정)
+    	if (fCurSP &lt;= fMinSP)
+    		fCurSP = fMinSP;
+    	else if (fMaxSP != 0.f)
+    	{
+    		if (fCurSP &gt;= fMaxSP)
+    			fCurSP = fMaxSP;
+    	}
+    
+    	// vSrc를 이동 시킨다(보간)
+    	vSrc += vDir * fCurSP * fDT;
+    
+    	fLen = CCamFunc::Get_Len(vEnd, vSrc);
+    	fRatio = (fLen / fTotalDis);
+    	fCurSP = fLen;
+    
+    	// 현재 거리 비율을 반환한다.
+    	return fRatio;
+    }</code></pre>
+</details>
+<p>카메라가 목적지 까지의 이동을 선형보간으로 이동하는 코드</p>
+<figure class="project-image"><img src="../images/Orbital_Bullet_모작_2_5D__5.png" alt="image.png" loading="lazy"></figure>
+<figure class="project-image"><img src="../images/Orbital_Bullet_모작_2_5D__6.png" alt="image.png" loading="lazy"></figure>
+<ul>
+<li>Code</li>
+</ul>
+<details class="code-toggle"><summary>📝 Code</summary>
+<pre><code class="language-cpp">    void CCameraDynamic::Cam_Shake(const _float&amp; fDT)
+    {
+    	_float fRandX, fRandY;
+    	CCamFunc::Set_Random_Value(fRandX, m_vBeforeDE_AtPos.x - 0.2f, m_vBeforeDE_AtPos.x + 0.2f);
+    	CCamFunc::Set_Random_Value(fRandY, m_vBeforeDE_AtPos.y - 0.2f, m_vBeforeDE_AtPos.y + 0.2f);
+    
+    	printf("%f, %f\n", fRandX, fRandY);
+    
+    	m_vAt.x = fRandX;
+    	m_vAt.y = fRandY;
+    }
+    
+    void CCamFunc::Set_Random_Value(_float&amp; fSrc, const _float&amp; fMin, const _float&amp; fMax)
+    {
+    	// 0.0f에서 1.0f 사이의 난수를 생성하기 위한 분포 설정
+    	std::uniform_real_distribution&lt;float&gt; distribution(fMin, fMax);
+    	fSrc = distribution(generator);
+    }</code></pre>
+</details>
+<p>카메라가 흔들리게 하는 코드</p>
+<p>카메라의 At의 x, y 의 값을 작은 랜덤한 값을 설정하여 덜덜 떨리도록 하였습니다.</p>
+<hr>
+<h1>프로젝트를 통해 배운점</h1>
+<ul>
+<li><strong>좌표계 변환과 행렬에 대한 학습</strong></li>
+</ul>
+<p>이번 프로젝트에서 가장 많이 배운 점 중 하나는 좌표계 변환과 행렬에 대한 이해입니다. 게임이 특정 위치를 중심으로 반지름만큼 떨어진 상태에서 원형 궤도를 도는 형태로 진행되었기 때문에, 개발 초기에는 원방정식이나 원주율을 사용한 방식 등을 고민했습니다. 하지만 최종적으로는 특정한 점을 부모 좌표계로 설정하고, 이 좌표계로부터 일정 거리(반지름)만큼 떨어진 위치에 객체를 배치하는 방식을 채택했습니다. 이로 인해 월드 좌표계와 부모 좌표계 간의 변환을 효율적으로 관리할 수 있었습니다.</p>
+<ul>
+<li><strong>3차원 공간에서의 좌표계 변환</strong></li>
+</ul>
+<p>3차원 공간에서의 변환도 큰 학습 포인트였습니다. 게임 내에서 엘리베이터나 에스컬레이터를 통해 다른 원기둥으로 이동하는 상황에서는, 부모 좌표계를 이동시킴으로써 플레이어가 자연스럽게 해당 부모 좌표계와 함께 이동할 수 있도록 구현했습니다. 이러한 방식은 여러 오브젝트가 부모와 자식 관계로 연결된 상태에서 자연스러운 이동과 회전을 가능하게 했으며, 행렬 연산을 통한 변환의 중요성을 깨닫게 해주었습니다.</p>
+<ul>
+<li><strong>중첩 상태 관리 및 비트 연산 활용</strong></li>
+</ul>
+<p>또 다른 배움은 중첩 상태 관리에 관한 것이었습니다. 프로젝트 중 객체의 다양한 상태를 관리하는 과정에서 enum 값만을 사용한 방식은 예외 처리가 너무 복잡해지는 문제를 초래했습니다. 이러한 문제를 해결하기 위해 상태 관리를 비트 연산으로 처리하는 방식을 도입했으며, 이를 통해 여러 상태를 동시에 처리하고 관리할 수 있게 되었습니다. 비트 플래그를 사용한 방식이 복잡한 상태 관리에서 더 유리하다는 점을 배울 수 있었습니다.</p>
+<ul>
+<li><strong>3차원 공간에서의 월드 좌표와 로컬 좌표의 변환</strong></li>
+</ul>
+<p>부모 좌표계를 중심으로 자식 오브젝트가 회전하거나 이동하는 경우, 월드 좌표와 로컬 좌표 간의 변환이 중요했습니다. 이 과정에서 회전 행렬, 이동 행렬 등의 3차원 행렬 변환 방식을 활용하여 자식 오브젝트가 부모 오브젝트의 위치와 방향에 따라 자연스럽게 움직일 수 있도록 구현했습니다. 이를 통해 좌표 변환에 대한 깊이 있는 이해를 얻을 수 있었습니다.</p>
+<hr>
+<h1>프로젝트 후기</h1>
+<p>이번 팀 프로젝트는 <strong>DirectX</strong>를 활용한 첫 팀플레이였기에, 개발 초기에는 <strong>3차원 공간</strong>에 대한 이해가 부족했습니다. 하지만 팀원들과 함께 서로 가르쳐주고 공부하며 지식을 쌓아가는 과정이 가장 기억에 남습니다.</p>
+<p>처음에는 <strong>부모 좌표계</strong>가 이동하면 자식의 좌표도 일정 거리를 유지하며 함께 이동하는 개념이 이해하기 어려웠고, <strong>렌더링 파이프라인</strong>을 통해 실제 화면에 렌더링되는 과정도 복잡하게 느껴졌습니다. 하지만 매일 연필로 수식을 하나하나 써가며 팀원들과 함께 학습한 덕분에, 점차 이해할 수 있었습니다.</p>
+<p>물론 <strong>3차원 변환</strong>과 <strong>렌더링 파이프라인</strong>을 이해하는 것도 중요한 배움이었지만, 무엇보다 <strong>팀원들과의 의사소통</strong>, 서로 알려주며 함께 성장한 경험이 더 소중한 기억으로 남는 프로젝트였습니다.</p>
+
+            </div>
+            <div class="project-nav">
+                <a href="../index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> 프로젝트 목록으로</a>
+            </div>
+        </div>
+    </article>
+    <footer class="footer"><p>&copy; 2026 김남영. All rights reserved.</p></footer>
+    <script src="project.js"></script>
+</body>
+</html>

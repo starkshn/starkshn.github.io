@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XDD814ZBH2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XDD814ZBH2');
+</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>C# Game Server (TCP) | 김남영 포트폴리오</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="project.css">
+    <link rel="stylesheet" href="gunfire.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <nav class="nav"><div class="nav-container">
+        <a href="../index.html" class="nav-logo">NY</a>
+        <a href="../index.html#projects" class="back-link"><i class="fas fa-arrow-left"></i> 프로젝트 목록</a>
+    </div></nav>
+
+    <article class="project-detail"><div class="container">
+        <div class="project-meta-card">
+            <p class="meta-desc">C#으로 IOCP 기반 TCP 게임 서버 프레임워크 구현. Session, RecvBuffer/SendBuffer, PacketSession, 패킷 직렬화/자동생성, JobQueue, Packet Gathering, JobTimer.</p>
+            <div class="meta-tags">
+                <span class="tag tag-primary">C#</span>
+                <span class="tag">Visual Studio</span>
+            </div>
+            <div class="meta-info">
+                <span><i class="fas fa-user"></i> 1인 개발</span>
+                <span><i class="fas fa-calendar"></i> 2025.11</span>
+                <span><a href="https://github.com/starkshn/C-GameServer" target="_blank"><i class="fab fa-github"></i> GitHub</a></span>
+            </div>
+        </div>
+
+        <h1 class="project-detail-title">C# Game Server (TCP)</h1>
+
+        <div class="project-content">
+            <div class="feature-summary"><h2>구현 기능</h2>
+                <div class="feature-chips">
+                    <a href="#flow" class="chip">Session</a><a href="#recvbuf" class="chip">RecvBuffer</a>
+                    <a href="#sendbuf" class="chip">SendBuffer</a><a href="#packet" class="chip">PacketSession</a>
+                    <a href="#codegen" class="chip">패킷 자동생성</a><a href="#jobqueue" class="chip">JobQueue</a>
+                    <a href="#jobqueue" class="chip">Packet Gathering</a><a href="#jobtimer" class="chip">JobTimer</a>
+                </div>
+            </div><hr>
+
+            <!-- ===== 접속 흐름 ===== -->
+            <section class="feature-card" id="flow">
+                <div class="feature-header"><h2>접속 흐름</h2><span class="feature-badge">IOCP / 비동기</span></div>
+                <blockquote><strong>Listener</strong>가 클라 접속 대기 → <strong>ClientSession</strong> 생성 → <strong>RecvBuffer/SendBuffer</strong> 초기화. 클라는 <strong>Connector</strong>로 비동기 Connect → <strong>ServerSession</strong> 생성. 서버/클라 <strong>대칭 구조</strong>.</blockquote>
+                <figure class="project-image"><img src="../images/C_Game_Server_TCP__1.png" loading="lazy"><figcaption>전체 접속 흐름</figcaption></figure>
+                <div class="feature-grid triple">
+                    <figure class="project-image"><img src="../images/C_Game_Server_TCP__2.png" loading="lazy"><figcaption>접속 상세 1</figcaption></figure>
+                    <figure class="project-image"><img src="../images/C_Game_Server_TCP__3.png" loading="lazy"><figcaption>접속 상세 2</figcaption></figure>
+                    <figure class="project-image"><img src="../images/C_Game_Server_TCP__4.png" loading="lazy"><figcaption>접속 상세 3</figcaption></figure>
+                </div>
+            </section>
+
+            <!-- ===== Session ===== -->
+            <section class="feature-card" id="session">
+                <div class="feature-header"><h2>Session</h2><span class="feature-badge">비동기 IO / lock 분리</span></div>
+                <blockquote><strong>소켓 1개의 수명주기를 캡슐화</strong>. <strong>_sendQueue</strong>에 쌓고 <strong>_pendingList</strong>로 옮겨 <strong>배치 송신</strong>. <strong>Interlocked.Exchange</strong>로 Disconnect 1회 보장. 수신은 <strong>콜백 단일 경로</strong>, 송신만 <strong>최소 임계영역(_lock)</strong>.</blockquote>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/C_Game_Server_TCP__5.png" loading="lazy"><figcaption>클래스 구조</figcaption></figure>
+                    <figure class="project-image"><img src="../images/C_Game_Server_TCP__6.png" loading="lazy"><figcaption>세션 구조</figcaption></figure>
+                </div>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/C_Game_Server_TCP__7.png" loading="lazy"><figcaption>sendQueue / pendingList</figcaption></figure>
+                    <figure class="project-image"><img src="../images/C_Game_Server_TCP__8.png" loading="lazy"><figcaption>분리 구조</figcaption></figure>
+                </div>
+                <details class="code-toggle"><summary>📝 Session Send + RegisterSend 핵심</summary>
+<pre><code class="language-csharp">public void Send(ArraySegment&lt;byte&gt; sendBuff) {
+    lock (_lock) {
+        _sendQueue.Enqueue(sendBuff);
+        if (_pendingList.Count == 0)
+            RegisterSend();
+    }
+}
+void RegisterSend() {
+    while (_sendQueue.Count > 0) {
+        var buff = _sendQueue.Dequeue();
+        _pendingList.Add(buff);
+        _sendArgs.BufferList = _pendingList;
+    }
+    _socket.SendAsync(_sendArgs);
+}</code></pre></details>
+            </section>
+
+            <!-- ===== RecvBuffer ===== -->
+            <section class="feature-card" id="recvbuf">
+                <div class="feature-header"><h2>RecvBuffer</h2><span class="feature-badge">커서 / Zero-alloc</span></div>
+                <blockquote>단일 배열 + <strong>_readPos/_writePos 커서</strong>. <strong>WriteSegment</strong>로 OS에 쓸 공간 제공, <strong>ReadSegment</strong>로 앱에 읽을 영역 제공. <strong>Clean()</strong> 1회 복사로 커서 리셋. <strong>세션별 인스턴스</strong>로 락 불필요.</blockquote>
+                <figure class="project-image"><img src="../images/C_Game_Server_TCP__11.png" loading="lazy"><figcaption>RecvBuffer 구조</figcaption></figure>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/C_Game_Server_TCP__12.png" loading="lazy"><figcaption>TCP 패킷 잘림 문제</figcaption></figure>
+                    <figure class="project-image"><img src="../images/C_Game_Server_TCP__13.png" loading="lazy"><figcaption>Clean 전</figcaption></figure>
+                </div>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/C_Game_Server_TCP__14.png" loading="lazy"><figcaption>Clean 후</figcaption></figure>
+                    <figure class="project-image"><img src="../images/C_Game_Server_TCP__15.png" loading="lazy"><figcaption>멤버 1</figcaption></figure>
+                </div>
+                <figure class="project-image"><img src="../images/C_Game_Server_TCP__16.png" loading="lazy"><figcaption>멤버 2</figcaption></figure>
+                <details class="code-toggle"><summary>📝 Clean() 핵심</summary>
+<pre><code class="language-csharp">public void Clean() {
+    int dataSize = DataSize; // _writePos - _readPos
+    if (dataSize == 0)
+        _readPos = _writePos = 0;
+    else {
+        Array.Copy(_buffer, _readPos, _buffer, 0, dataSize);
+        _readPos = 0;
+        _writePos = dataSize;
+    }
+}</code></pre></details>
+            </section>
+
+            <!-- ===== SendBuffer ===== -->
+            <section class="feature-card" id="sendbuf">
+                <div class="feature-header"><h2>SendBuffer</h2><span class="feature-badge">ThreadLocal / 청크</span></div>
+                <blockquote><strong>ThreadLocal&lt;SendBuffer&gt;</strong>로 스레드별 대용량 청크(400KB) 1개 배치. <strong>Open(reserve) → Close(used)</strong> 선형 할당. <strong>GC 압박 제거</strong> + 송신 경로 <strong>락 불필요</strong>.</blockquote>
+                <figure class="project-image"><img src="../images/C_Game_Server_TCP__17.png" loading="lazy"><figcaption>SendBuffer 구조</figcaption></figure>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/C_Game_Server_TCP__18.png" loading="lazy"><figcaption>상세 1</figcaption></figure>
+                    <figure class="project-image"><img src="../images/C_Game_Server_TCP__19.png" loading="lazy"><figcaption>상세 2</figcaption></figure>
+                </div>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/C_Game_Server_TCP__20.png" loading="lazy"><figcaption>스레드별 이유 1</figcaption></figure>
+                    <figure class="project-image"><img src="../images/C_Game_Server_TCP__21.png" loading="lazy"><figcaption>스레드별 이유 2</figcaption></figure>
+                </div>
+            </section>
+
+            <!-- ===== PacketSession + 직렬화 ===== -->
+            <section class="feature-card" id="packet">
+                <div class="feature-header"><h2>PacketSession + 직렬화</h2><span class="feature-badge">길이 프레이밍 / Span</span></div>
+                <blockquote><strong>[size(2)][id(2)][payload]</strong> 고정 헤더. <strong>OnRecv를 sealed</strong>하여 헤더→완전성→<strong>OnRecvPacket</strong> 반복 호출. <strong>Span&lt;byte&gt;</strong> 기반 Zero-alloc 직렬화/역직렬화.</blockquote>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/C_Game_Server_TCP__22.png" loading="lazy"><figcaption>패킷 구조</figcaption></figure>
+                    <figure class="project-image"><img src="../images/C_Game_Server_TCP__23.png" loading="lazy"><figcaption>직렬화 흐름</figcaption></figure>
+                </div>
+                <details class="code-toggle"><summary>📝 PacketSession.OnRecv while 루프</summary>
+<pre><code class="language-csharp">public sealed override int OnRecv(ArraySegment&lt;byte&gt; buffer) {
+    int processLen = 0;
+    while (true) {
+        if (buffer.Count &lt; HeaderSize) break;
+        ushort dataSize = BitConverter.ToUInt16(buffer.Array, buffer.Offset);
+        if (buffer.Count &lt; dataSize) break;
+        OnRecvPacket(new ArraySegment&lt;byte&gt;(
+            buffer.Array, buffer.Offset, dataSize));
+        processLen += dataSize;
+        buffer = new ArraySegment&lt;byte&gt;(
+            buffer.Array, buffer.Offset + dataSize, buffer.Count - dataSize);
+    }
+    return processLen;
+}</code></pre></details>
+            </section><hr>
+
+            <!-- ===== 패킷 자동생성 ===== -->
+            <section class="feature-card" id="codegen">
+                <div class="feature-header"><h2>패킷 자동생성</h2><span class="feature-badge">PDL.xml / 배치 스크립트</span></div>
+                <blockquote><strong>PDL.xml</strong> 스키마 → <strong>PacketFormat 템플릿</strong> 기반 코드 방출 → <strong>GenPackets.cs + PacketManager.cs</strong> 자동 생성. 배치 스크립트로 클라/서버 <strong>양쪽 복사</strong>. 스키마 변경 시 <strong>오타/불일치 완전 제거</strong>.</blockquote>
+                <figure class="project-image"><img src="../images/C_Game_Server_TCP__24.png" loading="lazy"><figcaption>자동생성 흐름</figcaption></figure>
+                <details class="code-toggle"><summary>📝 PDL.xml + 배치 스크립트</summary>
+<pre><code class="language-xml">&lt;!-- PDL.xml --&gt;
+&lt;PDL&gt;
+  &lt;packet name="S_Chat"&gt;
+    &lt;string name="chat"/&gt;
+    &lt;int name="playerId"/&gt;
+  &lt;/packet&gt;
+&lt;/PDL&gt;</code></pre>
+<pre><code class="language-batch">:: GenPackets.bat
+START PacketGenerator.exe
+XCOPY /Y GenPackets.cs "..\Server\Packet\"
+XCOPY /Y GenPackets.cs "..\Client\Packet\"
+XCOPY /Y PacketManager.cs "..\Common\"</code></pre></details>
+            </section>
+
+            <!-- ===== JobQueue ===== -->
+            <section class="feature-card" id="jobqueue">
+                <div class="feature-header"><h2>JobQueue</h2><span class="feature-badge">Command Pattern / 배치 송신</span></div>
+                <blockquote><strong>요청(Push)</strong>과 <strong>실행(Flush)</strong> 분리. <strong>Queue&lt;Action&gt; + _flush 플래그</strong>로 단일 실행 흐름. 락 경합 최소화 + <strong>이벤트 순서 보장</strong>. <strong>_pendingList</strong>에 축적 → <strong>Flush()</strong> 배치 송신으로 <strong>시스템콜 감소</strong>.</blockquote>
+                <div class="feature-grid triple">
+                    <figure class="project-image"><img src="../images/C_Game_Server_TCP__25.png" loading="lazy"><figcaption>문제 상황</figcaption></figure>
+                    <figure class="project-image"><img src="../images/C_Game_Server_TCP__26.png" loading="lazy"><figcaption>해결 구조</figcaption></figure>
+                    <figure class="project-image"><img src="../images/C_Game_Server_TCP__27.png" loading="lazy"><figcaption>JobQueue 동작</figcaption></figure>
+                </div>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/C_Game_Server_TCP__28.png" loading="lazy"><figcaption>Packet Gathering 1</figcaption></figure>
+                    <figure class="project-image"><img src="../images/C_Game_Server_TCP__29.png" loading="lazy"><figcaption>Packet Gathering 2</figcaption></figure>
+                </div>
+                <details class="code-toggle"><summary>📝 JobQueue Push/Flush 핵심</summary>
+<pre><code class="language-csharp">public void Push(Action job) {
+    lock (_lock) {
+        _jobQueue.Enqueue(job);
+        if (_flush == false) {
+            _flush = true;  // 최초 Push한 스레드만 Flush 진입
+        }
+    }
+}
+public void Flush() {
+    while (true) {
+        Action action;
+        lock (_lock) {
+            if (_jobQueue.Count == 0) {
+                _flush = false;
+                return;
+            }
+            action = _jobQueue.Dequeue();
+        }
+        action.Invoke();
+    }
+}</code></pre></details>
+            </section>
+
+            <!-- ===== JobTimer ===== -->
+            <section class="feature-card" id="jobtimer">
+                <div class="feature-header"><h2>JobTimer</h2><span class="feature-badge">우선순위 큐 / O(logN)</span></div>
+                <blockquote><strong>PriorityQueue&lt;execTick, Action&gt;</strong> 기반 틱 스케줄러. <strong>Push(action, tickAfter)</strong> 예약 → <strong>Flush()</strong>에서 현재 시각분만 꺼내 <strong>락 밖에서 실행</strong>. Flush/리트라이/주기 작업의 <strong>타이밍 중앙 통제</strong>.</blockquote>
+                <div class="feature-grid triple">
+                    <figure class="project-image"><img src="../images/C_Game_Server_TCP__30.png" loading="lazy"><figcaption>JobTimer 구조</figcaption></figure>
+                    <figure class="project-image"><img src="../images/C_Game_Server_TCP__31.png" loading="lazy"><figcaption>Push/Flush 흐름</figcaption></figure>
+                    <figure class="project-image"><img src="../images/C_Game_Server_TCP__32.png" loading="lazy"><figcaption>실행 타이밍</figcaption></figure>
+                </div>
+                <details class="code-toggle"><summary>📝 JobTimer Push + Flush 핵심</summary>
+<pre><code class="language-csharp">public static void Push(Action action, int tickAfter = 0) {
+    lock (_lock) {
+        _pq.Push(new JobTimerElem {
+            execTick = Environment.TickCount64 + tickAfter,
+            action = action
+        });
+    }
+}
+public static void Flush() {
+    while (true) {
+        lock (_lock) {
+            if (_pq.Count == 0) return;
+            if (_pq.Peek().execTick > Environment.TickCount64) return;
+            action = _pq.Pop().action;
+        }
+        action.Invoke();
+    }
+}</code></pre></details>
+            </section>
+        </div>
+
+        <div class="project-nav">
+            <a href="../index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> 프로젝트 목록으로</a>
+        </div>
+    </div></article>
+    <footer class="footer"><p>&copy; 2026 김남영. All rights reserved.</p></footer>
+    <script src="project.js"></script>
+</body>
+</html>

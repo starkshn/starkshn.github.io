@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>테트리스 (2D) | 김남영 포트폴리오</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="project.css">
+    <link rel="stylesheet" href="gunfire.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">NY</a>
+            <a href="../index.html#projects" class="back-link"><i class="fas fa-arrow-left"></i> 프로젝트 목록</a>
+        </div>
+    </nav>
+    <article class="project-detail">
+        <div class="container">
+            <div class="project-meta-card">
+  <p class="meta-desc">WIN32 API, C++로 테트리스를 제작한 프로젝트입니다.</p>
+  <div class="meta-tags"><span class="tag">C++</span><span class="tag">win32api</span></div>
+  <div class="meta-info">
+  </div>
+</div>
+
+            <h1 class="project-detail-title">테트리스 (2D)</h1>
+            <div class="project-content">
+                <p>깃허브 링크: https://github.com/starkshn/Tetris_Temp</p>
+<h1>영상</h1>
+<a href="https://www.youtube.com/watch?v=KGX1d_1a52I" target="_blank" class="video-thumbnail"><img src="https://img.youtube.com/vi/KGX1d_1a52I/maxresdefault.jpg" alt="영상" loading="lazy"><div class="play-button"><i class="fas fa-play"></i></div></a>
+<p>C++과 WIN32API로 제작한 테트리스 게임입니다.</p>
+<p>제작자 : 김남영(본인)</p>
+<p>제작 년도 : 2024.04.10~2024.04.20</p>
+<p>제작 기간 : 10일</p>
+<hr>
+<p>사용된 언어 및 라이브러리</p>
+<ul>
+<li>C++11</li>
+<li>Win32API</li>
+</ul>
+<p>구현 컨텐츠</p>
+<ul>
+<li>블록 생성 및 삭제</li>
+</ul>
+<ol>
+<li>2차원 배열기반으로 게임 보드를 관리하며 보드내의 타일들의 상태 관리 구현.</li>
+<li>블록들의 위치를 게임 보드의 인덱스를 활용하여 위치 설정 및 회전과 충돌 구현.</li>
+<li>블록 삭제와 생성에 대한 로직 처리 구현.</li>
+<li>삭제된 행에 해당하는 점수를 부여하는 시스템 구현.</li>
+</ol>
+<ul>
+<li>블록 이동 및 컨트롤(임시 보관 기능)</li>
+</ul>
+<ol>
+<li>현재 인덱스와 다음 인덱스를 나눗셈과 나머지 연산을 활용하여 블록들의 충돌 처리 구현.</li>
+</ol>
+<hr>
+<h1>조작 방법</h1>
+<p>SPACE : 블록 내리기</p>
+<p>C : HOLD칸으롤 블록 임시 보관</p>
+<p>방향키 ← , → : 블록들을 좌/우 로 이동</p>
+<hr>
+<h1>블록 생성 및 삭제</h1>
+<h3>구현 과정</h3>
+<ul>
+<li>블록 생성</li>
+</ul>
+<p>> BlockContainer(BC)객채와 Block객체를 구분하여 BC객체가 Block을 가지고 있는 구조로 블록들을 생성할 수 있도록 구현하였습니다. BC의 자식 클래스로 Yellow, Blue, Green 등이 있으면 각 BlockContainer에 맞는 이동, 회전, 블록 개수를 설정할 수 있도록 하였습니다.</p>
+<p>더이상 이동을 못하거나 회전을 못하는 경우에 충돌체를 따로 만들지 않고 Board라는 객체에 접근하여 현재 블록 개수에 따라 회전, 이동을 행과 열에 비교하여 가능한지 아닌지를 확인하는 식으로 구현하였습니다.</p>
+<p>또한 이미 생성된 블록들을 오른쪽에 UI처럼 띄워 예상할 수 있도록 구현하였습니다.</p>
+<p>></p>
+<ul>
+<li>블록 삭제</li>
+</ul>
+<p>> Board라는 객체에서 블록을 내린 순간 행을 순회하며 꽉찬 행이 있는지 없는지 검사합니다. 꽉찬 행이 있다면 꽉찬 행의 개수가 몇개인지 계산하여 밑으로 당길 행의 수를 계산해서 위에 있던 블록들을 계산한 행의 수만큼 밑으로 내리는 아이디어로 구현하였습니다.</p>
+<p>></p>
+<h3>Code</h3>
+<figure class="project-image"><img src="../images/테트리스_2D__1.png" alt="image.png" loading="lazy"></figure>
+<ul>
+<li>Code</li>
+</ul>
+<details class="code-toggle"><summary>📝 Code</summary>
+<pre><code class="language-cpp">    public:
+    	// 컨테이너 생성 함수
+    	// EventManager가 다음틱에 씬에 추가한다.
+    	template &lt;typename T&gt;
+    	BlockContainer* CreateContainer()
+    	{
+    		Object* newBlockContainer = new T();
+    		newBlockContainer-&gt;SetObjectName(L"BlockContainer");
+    
+    		// EventManager에 등록
+    		CreateObject(newBlockContainer, OBJECT_TYPE::BLOCK_CONTAINER);
+    
+    		// container's offset 설정
+    		NULL_PTR_CHECK(_gamePanelUI);
+    		Vec2 offset = _gamePanelUI-&gt;GetPos();
+    		newBlockContainer-&gt;SetPos(offset);
+    		
+    		// Create Blocks
+    		{
+    			vector&lt;Block*&gt; vecBlocks;
+    			for (uint32 i = 0; i &lt; 4; ++i)
+    			{
+    				Object* newBlock = new Block();
+    				newBlock-&gt;SetObjectName(L"newBlock");
+    				vecBlocks.push_back(static_cast&lt;Block*&gt;(newBlock));
+    				static_cast&lt;Block*&gt;(newBlock)-&gt;SetOwner(static_cast&lt;BlockContainer*&gt;(newBlockContainer));
+    
+    				// EventManager에 등록
+    				CreateObject(newBlock, OBJECT_TYPE::BLOCK);
+    			}
+    			// 추가한 Block들 이동으로 넘겨줌...
+    			// (이동으로 넘겨주긴 했지만 Object 들은 실제 이동을 하지 않는다... 아마도 이부분 추후에 수정해야함)
+    			static_cast&lt;BlockContainer*&gt;(newBlockContainer)-&gt;SetBlockObject(std::move(vecBlocks));
+    		}
+    
+    		return static_cast&lt;BlockContainer*&gt;(newBlockContainer);
+    	}</code></pre>
+</details>
+<p>블록 컨테이너를 생성하는 코드입니다.</p>
+<p>템플릿 함수로 구현하여 랜덤한 값을 통해 간편하게 블록 컨테이너를 생성할 수 있도록 하였습니다.</p>
+<figure class="project-image"><img src="../images/테트리스_2D__2.png" alt="image.png" loading="lazy"></figure>
+<figure class="project-image"><img src="../images/테트리스_2D__3.png" alt="image.png" loading="lazy"></figure>
+<ul>
+<li>Code</li>
+</ul>
+<details class="code-toggle"><summary>📝 Code</summary>
+<pre><code class="language-cpp">    void BoardManager::CheckBoardSomthingErase()
+    {
+    	// 모든 행을 돌며 삭제할 행이 있는지 확인한다.
+    	for (int32 row = GAMEBOARD_MAX_HEIGHT - 1; row &gt;= 0; --row)
+    	{
+    		// 해당행의 삭제할 블록이 몇개 있는지 확인하는 변수
+    		int32 blockCount = 0;
+    		
+    		// row행의 모든 열을 돌면서 블록이 있는지 확인한다.
+    		for (int32 col = 0; col &lt; GAMEBOARD_MAX_WIDTH; ++col)
+    			if (CheckBlockInBoard(row * GAMEBOARD_MAX_WIDTH + col) == BOARD_STATE::OBJECT) ++blockCount;
+    
+    		// 해당 행의 블록이 꽉차 있었다면 큐에 해당 행을 넣고 이동할 행수를 증가 시킨다.
+    		if (blockCount == GAMEBOARD_MAX_WIDTH)
+    		{
+    			_queueErase.push(row);
+    			++_moveRow;
+    		}
+    		else
+    		{
+    			// 꽉찬 행이 아닌경우
+    			// 이동해야 할 행의 수가 0이라면 continue한다.
+    			if (_moveRow == 0) continue;
+    			else
+    			{
+    				// 이동해야할 행의 수가 1이상인 경우
+    				// 해당행의 모든 블록들에 대해서 이동해야할 행의 수를 셋팅하기 위해 다시 해당행의 모든 열을 돌면서 _moveRow값을 셋팅해준다.
+    				// 
+    				// 이렇게 하는 이유는 아래와 같은경우
+    				// [x][x][x][x][x] 0행
+    				// [x][x][o][x][x] 1행
+    				// [x][o][o][x][x] 2행
+    				// [o][o][o][o][o] 3행 -&gt; 삭제할 행
+    				// [x][o][o][o][x] 4행
+    				// [o][o][o][o][o] 5행 -&gt; 삭제할 행
+    				// [o][o][o][o][x] 6행
+    				// 현재 지워져야 하는 행은 5행 3행이다.
+    				// 4행은 _moveRow가 1행이 되어야 하고 3행 미만의 행들은 _moveRow가 2행이 되어야한다.
+    				// 따라서 해당 행이 꽉찬경우에만 _moveRow를 증가시키고 꽉차지 않은 행을 만나면 해당행의 모든 열의 블록들에 대해서 _moveRow의 값을 셋팅해준다.
+    				// 이렇게 해주어야지만 3행 미만의 행들의 모든 블록들은 _moveRow의 값이 2가 되어 2행씩 내려오게 된다.
+    				for (int32 reCol = 0; reCol &lt; GAMEBOARD_MAX_WIDTH; ++reCol)
+    				{
+    					Block* block = _gameBoard[IDX(row, reCol)];
+    					if (nullptr != block)
+    						block-&gt;SetMoveRow(_moveRow);
+    				}
+    			}
+    		}
+    	}
+    }</code></pre>
+</details>
+<p>삭제할 행을 찾고 몇칸 씩 블록들을 내릴지 계산하는 코드.</p>
+<hr>
+<h1>블록 이동 및 컨트롤(임시 보관 기능)</h1>
+<h3>구현 과정</h3>
+<ul>
+<li>블록 이동</li>
+</ul>
+<p>> 블록 컨테이너의 상태값을 주고 현재 상태가 사용가능한 상태이고 이동키를 누른경우 Board에서 현재 블록 컨테이너가 차지하는 행과 열에 대한 정보를 없애고 이동(및 회전이)이 가능하다면 해당 행과 열로 정보를 옮기고 이동(및 회전)이 불가 하다면 다시 원복 시켜주는 방식으로 구현하였습니다.</p>
+<p>></p>
+<ul>
+<li>블록 임시 보관 기능</li>
+</ul>
+<p>> 블록 컨테이너 마다 HOLD, USE 등의 상태값을 주고 해당 상태에서 수행할 수 있는 기능들을 예외처리하여 임시보관하거나 스페이스바를 눌러 아래로 떨어트리는 식으로 구현을 하였습니다.</p>
+<p>></p>
+<h3>Code</h3>
+<figure class="project-image"><img src="../images/테트리스_2D__4.png" alt="image.png" loading="lazy"></figure>
+<ul>
+<li>Code</li>
+</ul>
+<details class="code-toggle"><summary>📝 Code</summary>
+<pre><code class="language-cpp">    void BlockContainer::DefaultChangePos(BC_DIR dir)
+    {
+        // 현재 컨테이너 블록들을 보드의 인덱스에서 지운다.
+        ClearBlockIdxInBoard();
+    
+        // dir 방향으로 갈 수 있는지 없는지 확인한다.
+        if (CheckCanGo(dir))
+        {
+            for (uint32 i = 0; i &lt; _vecBlocks.size(); ++i)
+            {
+                uint32 idx = _vecBlocks[i]-&gt;GetIdxInBoard();
+                uint32 row = GAMEBOARD_ROW(idx);
+                uint32 col = GAMEBOARD_COL(idx);
+    
+                if (dir == BC_DIR::LEFT)		col -= 1;
+                else if (dir == BC_DIR::RIGHT)  col += 1;
+                else if (dir == BC_DIR::DOWN)	row += 1;
+    
+                idx = IDX(row, col);
+                BOARD-&gt;SetBlockInBoard(idx, _vecBlocks[i], GetContainerType());
+                _vecBlocks[i]-&gt;SetIdxInBoard(idx);
+            }
+        }
+        // 갈 수 없는경우 clear한 인덱스들을 원복 해준다.
+        else ResetBlockIdxInBoard();
+    }</code></pre>
+</details>
+<p>블록 컨테이너가 이동할 수 있는지 없는지 확인하는 코드입니다.</p>
+<figure class="project-image"><img src="../images/테트리스_2D__5.png" alt="image.png" loading="lazy"></figure>
+<ul>
+<li>Code</li>
+</ul>
+<details class="code-toggle"><summary>📝 Code</summary>
+<pre><code class="language-cpp">    void StartScene::Update()
+    {
+    	BlockContainer* curBoardBC	= BOARD-&gt;GetCurBlockContainer();
+    	
+    	// BoardManager에서 어떠한 상태 변화가 발생했다.
+    	if (nullptr == curBoardBC)
+    	{
+    		BlockContainer* frontBC		= GetFrontContainer();
+    		BlockContainer* prevBC		= nullptr;
+    		STATE			curState	= frontBC-&gt;GetState();
+    		STATE			prevState	= frontBC-&gt;GetPrevState();
+    		int32			waitVecSize = int32(_waitContainer.size());
+    
+    		// 최초로 C키(Hold키) 누른 경우
+    		if (curState == STATE::HOLD &amp;&amp; prevState == STATE::USE)
+    		{
+    			// 최초에 BC 스폰을 4개를 했기 때문에 개수가 맞는지 예외 확인
+    			if (waitVecSize != 4) assert(-1);
+    
+    			// [A][B][C][D] 상태에서 [A] erase한다. (_waitContainer의 가장 앞 BC를 erase한다.)
+    			EraseFrontContainer();
+    
+    			// [B][C][D] 상태에서 [R] 추가한다. (_waitContainer의 뒤에다가 [RandomContainer] 추가한다.)
+    			AddRandomContainer();
+    
+    			// [R](새 컨테이너가) 추가 되었다고 BoardManager에게 알려준다.
+    			BOARD-&gt;AlertNewContainer();
+    
+    			// [B][C][D][R] 에서 [B]를 가져오고 [B]-&gt;Start호출 
+    			frontBC = GetFrontContainer();
+    			frontBC-&gt;Start();
+    		}
+    		// _holdBoard에 있던 녀석과 스왑이 된 BlockContainer인 경우
+    		else if (curState == STATE::USE &amp;&amp; prevState == STATE::HOLD)
+    		{
+    			// [H]			: HOLD	, USE
+    			// [A]			: USE	, WAIT
+    			// [B][C][D]	: WAIT	, WAIT
+    			// 위 상태에서 [H] &lt;-&gt; [A] 스왑하면 아래의 상태가 된다.
+    			// 
+    			// [H]			: USE	, HOLD
+    			// [A]			: HOLD	, USE
+    			// [B][C][D]	: WAIT	, WAIT
+    
+    			// [H][B][C][D]의 순서대로 _waitContainer에 들어가있는 상태이다
+    
+    			if (waitVecSize != 4) assert(-1);
+    
+    			frontBC = GetFrontContainer();
+    			frontBC-&gt;Start();
+    		}
+    		// 사용중이던 BC가(USE 상태이던 BC가) 어딘가 고정이 된 경우(DOWN_HOLD인 경우)
+    		else if (curState == STATE::DOWN_HOLD &amp;&amp; prevState == STATE::USE)
+    		{
+    			EraseFrontContainer();
+    			AddRandomContainer();
+    
+    			frontBC = GetFrontContainer();
+    			frontBC-&gt;Start();
+    
+    			// 새 컨테이너가 추가 되었다고 알려준다.
+    			BOARD-&gt;AlertNewContainer();
+    
+    			// 새 컨테이너가 추가 되었기 때문에 HoldKeyCount를 원래대로 돌려준다.
+    			BOARD-&gt;ResetHoldKeyCount();
+    		}
+    		// 사용중이던 BC가 스페이스바를 눌러서 HOLD_DOWN(고정)이 되었고 이전 상태가 스페이바를 누른 상태였다면
+    		else if (curState == STATE::DOWN_HOLD &amp;&amp; prevState == STATE::GO_DOWN)
+    		{
+    			frontBC = GetFrontContainer();
+    			EraseFrontContainer();
+    
+    			if (frontBC-&gt;GetState() == STATE::HOLD)
+    			{
+    				frontBC = GetContainer(1);
+    			}
+    			else
+    			{
+    				frontBC = GetFrontContainer();
+    				AddRandomContainer();
+    			}
+    
+    			frontBC-&gt;Start();
+    
+    			// 새 컨테이너가 추가 되었다고 알려준다.
+    			BOARD-&gt;AlertNewContainer();
+    
+    			// 새 컨테이너가 추가 되었기 때문에 HoldKeyCount를 원래대로 돌려준다.
+    			BOARD-&gt;ResetHoldKeyCount();
+    		}
+    	}
+    	
+    	Scene::Update();
+    }</code></pre>
+</details>
+<p>블록 컨테이너를 HOLD칸으로 옮길지 SPACE바를 누를 수 있는지 없는지에 대한 처리와 키입력에 따른 블록 컨테이너 처리 코드입니다.</p>
+<hr>
+
+            </div>
+            <div class="project-nav">
+                <a href="../index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> 프로젝트 목록으로</a>
+            </div>
+        </div>
+    </article>
+    <footer class="footer"><p>&copy; 2026 김남영. All rights reserved.</p></footer>
+    <script src="project.js"></script>
+</body>
+</html>

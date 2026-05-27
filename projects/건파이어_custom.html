@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XDD814ZBH2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XDD814ZBH2');
+</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>건파이어 리본 (GunFire Reborn) | 김남영 포트폴리오</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="project.css">
+    <link rel="stylesheet" href="gunfire.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <nav class="nav"><div class="nav-container">
+        <a href="../index.html" class="nav-logo">NY</a>
+        <a href="../index.html#projects" class="back-link"><i class="fas fa-arrow-left"></i> 프로젝트 목록</a>
+    </div></nav>
+
+    <article class="project-detail"><div class="container">
+        <div class="project-meta-card">
+            <p class="meta-desc">DirectX11를 활용하여 스팀의 'GunFire Reborn'을 모작한 개인 프로젝트. SRT 행렬곱, 좌표계 변환, 선형대수 활용 컨텐츠 제작과 중급 이상 HLSL 구현.</p>
+            <div class="meta-tags">
+                <span class="tag tag-primary">DX11</span><span class="tag tag-primary">C++11</span><span class="tag tag-primary">HLSL</span>
+                <span class="tag">ImGui</span><span class="tag">XML</span><span class="tag">DirectXCollision</span><span class="tag">DLL</span>
+            </div>
+            <div class="meta-info">
+                <span><i class="fas fa-user"></i> 1인 개발</span>
+                <span><i class="fas fa-calendar"></i> 2024.10 ~ 2024.12</span>
+            </div>
+        </div>
+
+        <h1 class="project-detail-title">건파이어 리본 (GunFire Reborn)</h1>
+        <a href="https://www.youtube.com/watch?v=lWySF9iwnh4" target="_blank" class="video-thumbnail">
+            <img src="https://img.youtube.com/vi/lWySF9iwnh4/maxresdefault.jpg" alt="프로젝트 영상" loading="lazy">
+            <div class="play-button"><i class="fas fa-play"></i></div>
+        </a>
+
+        <div class="project-content">
+            <div class="feature-summary"><h2>구현 기능</h2>
+                <div class="feature-chips">
+                    <a href="#toon" class="chip">카툰 쉐이딩</a><a href="#glow" class="chip">Glow</a>
+                    <a href="#rimlight" class="chip">Rim Light</a><a href="#dissolve" class="chip">Dissolve</a>
+                    <a href="#billboard" class="chip">BillBoard</a><a href="#trail" class="chip">Trail</a>
+                    <a href="#particle" class="chip">Particle</a><a href="#navmesh" class="chip">NavMesh</a>
+                    <a href="#anim" class="chip">Animation</a><a href="#ui" class="chip">UI</a>
+                    <a href="#player" class="chip">Player</a><a href="#monster" class="chip">Monsters</a>
+                </div>
+            </div><hr>
+
+            <!-- ===== 카툰 쉐이딩 ===== -->
+            <section class="feature-card" id="toon">
+                <div class="feature-header"><h2>카툰 쉐이딩</h2><span class="feature-badge">HLSL / Deferred Shading</span></div>
+                <blockquote><strong>깊이 버퍼</strong> 기반 외곽선 검출(<strong>DetectDepthEdges</strong>) + <strong>법선 벡터</strong> 기반 보완(<strong>DetectNormalEdges</strong>)으로 섬세한 외곽선 표현. <strong>스펙큘러 강도를 낮춰</strong> 만화 스타일 구현.</blockquote>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__1.png" loading="lazy"><figcaption>적용 전</figcaption></figure>
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__2.png" loading="lazy"><figcaption>적용 후</figcaption></figure>
+                </div>
+                <p>중심 픽셀과 <strong>상하좌우 4방향</strong> 주변 픽셀의 깊이값 차이를 누적하여 <strong>엣지 강도(EdgeStrength)</strong>를 구하고, <strong>saturate</strong>로 0~1 클램핑하여 최종 외곽선을 생성합니다. 깊이 변화가 작은 굴곡진 표면에서는 <strong>법선 벡터의 유클리드 거리</strong>를 기반으로 보완 검출합니다. 두 검출 결과를 조합하여 깊이 엣지가 0.9 이상이고 법선 엣지가 0.5 이상인 픽셀만 <strong>검은색 외곽선</strong>으로 렌더링하여, Deferred Shading 파이프라인의 <strong>후처리 단계</strong>에서 카툰 쉐이딩을 완성합니다.</p>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__3.png" loading="lazy"><figcaption>깊이 기반 코드</figcaption></figure>
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__4.png" loading="lazy"><figcaption>법선 기반 코드</figcaption></figure>
+                </div>
+                <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__5.png" loading="lazy"><figcaption>최종 합성 — DetectDepthEdges > 0.9 &amp;&amp; DetectNormalEdges > 0.5 → 검은색 외곽선</figcaption></figure>
+                <details class="code-toggle"><summary>📝 DetectDepthEdges 핵심 코드</summary>
+<pre><code class="language-cpp">float DetectDepthEdges(float2 uv, float2 PixelSize) {
+    float fViewZ = g_DepthTexture.Sample(LinearSampler, uv).y * 1000.f;
+    float DepthOffsets[4];
+    DepthOffsets[0] = g_DepthTexture.Sample(LinearSamplerClamp, uv + float2(-PixelSize.x, 0)).y * 1000.f;
+    DepthOffsets[1] = g_DepthTexture.Sample(LinearSamplerClamp, uv + float2(PixelSize.x, 0)).y * 1000.f;
+    DepthOffsets[2] = g_DepthTexture.Sample(LinearSamplerClamp, uv + float2(0, -PixelSize.y)).y * 1000.f;
+    DepthOffsets[3] = g_DepthTexture.Sample(LinearSamplerClamp, uv + float2(0, PixelSize.y)).y * 1000.f;
+    float fEdgeStrength = 0.0f;
+    for (int i = 0; i &lt; 4; ++i)
+        fEdgeStrength += abs(fViewZ - DepthOffsets[i]);
+    return saturate(fEdgeStrength * 15.f);
+}</code></pre></details>
+            </section>
+
+            <!-- ===== Glow ===== -->
+            <section class="feature-card" id="glow">
+                <div class="feature-header"><h2>Glow (불꽃 이펙트)</h2><span class="feature-badge">Noise / Gaussian Blur / BillBoard</span></div>
+                <blockquote><strong>노이즈 텍스처</strong>로 <strong>UV 왜곡</strong> → 이글거리는 불꽃 표현. <strong>다운샘플링</strong> → <strong>가우시안 블러</strong>(X/Y축 분리) → <strong>업샘플링</strong>으로 빛 번짐 효과. <strong>빌보드</strong> 기법으로 카메라 방향 고정.</blockquote>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__6.gif" loading="lazy"><figcaption>최종 결과</figcaption></figure>
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__7.gif" loading="lazy"><figcaption>Glow 적용 결과</figcaption></figure>
+                </div>
+                <p>시간에 따라 <strong>Noise 텍스처의 UV를 변화</strong>시키고, 왜곡된 UV로 fire 텍스처에서 샘플링. <strong>lerp</strong>로 주황→노란 <strong>그라디언트</strong> 적용하여 자연스러운 불꽃 색상을 구현.</p>
+                <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__8.png" loading="lazy"><figcaption>Noise + Fire 텍스처</figcaption></figure>
+                <p><strong>다운샘플링</strong>(해상도 1/2 축소)으로 연산량을 줄인 뒤 <strong>가우시안 블러</strong> X축 → Y축 순으로 적용, <strong>업샘플링</strong>하여 <strong>백버퍼</strong>에 합성. 저해상도에서 블러 처리하여 성능 최적화.</p>
+                <div class="feature-grid triple">
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__10.png" loading="lazy"><figcaption>가우시안 블러 X축</figcaption></figure>
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__11.png" loading="lazy"><figcaption>다운샘플링 반환</figcaption></figure>
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__13.png" loading="lazy"><figcaption>업샘플링 + 합성</figcaption></figure>
+                </div>
+                <details class="code-toggle"><summary>📝 Noise + Glow HLSL</summary>
+<pre><code class="language-cpp">PS_OUT PS_MAIN_EFFECT_TORCH(PS_IN In) {
+    PS_OUT Out = (PS_OUT)0;
+    Out.vColor = g_Texture.Sample(LinearSampler, In.vTexcoord);
+    if (Out.vColor.a &lt; 0.1f) discard;
+    float2 noiseUV = In.vTexcoord + float2(g_fNoiseCurTime * 0.5f, g_fNoiseCurTime * 0.7f);
+    float2 noiseValue = g_TextureNoise.Sample(LinearSampler, noiseUV).rg;
+    float2 distortedUV = In.vTexcoord + (noiseValue - 0.5f) * 0.05f;
+    Out.vColor = g_Texture.Sample(LinearSampler, distortedUV);
+    Out.vColor.a *= noiseValue.r;
+    float3 gradient = lerp(float3(1,0.5,0), float3(1,1,0), noiseValue.r);
+    Out.vColor.rgb *= gradient;
+    return Out;
+}</code></pre></details>
+            </section>
+
+            <!-- ===== Rim Light ===== -->
+            <section class="feature-card" id="rimlight">
+                <div class="feature-header"><h2>Rim Light (외곽선 강조)</h2><span class="feature-badge">Sobel Filter / 후처리</span></div>
+                <blockquote>별도 <strong>렌더 타겟(TargetOuter)</strong>에 오브젝트를 <strong>초록색</strong>으로 렌더링 → <strong>소벨 필터(Sobel Filter)</strong>로 경계 검출 → <strong>빨간 외곽선만</strong> 추출. <strong>깊이 테스트 무시</strong>로 벽 뒤 적 위치 표시 가능.</blockquote>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__14.png" loading="lazy"><figcaption>렌더 타겟별 결과 (좌하: 외곽선, 중하: 초록색)</figcaption></figure>
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__15.png" loading="lazy"><figcaption>벽 뒤 적 위치 표시</figcaption></figure>
+                </div>
+                <p>일반적인 Rim Light를 적용하면 모든 외곽선에 빨간 선이 칠해지지만, 원하는 결과는 <strong>완전 겉 테두리만</strong> 적용하는 것이었습니다. 이를 위해 <strong>별도 렌더 타겟의 ClearColor를 검은색</strong>으로 설정하여 대비를 높이고, 초록색으로 렌더링한 오브젝트에 <strong>소벨 필터</strong>를 적용하여 검은색과 초록색이 만나는 <strong>정확한 경계면</strong>만 빨간색으로 추출했습니다.</p>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__16.png" loading="lazy"><figcaption>❌ 모든 외곽선 (원하지 않음)</figcaption></figure>
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__17.png" loading="lazy"><figcaption>✅ 겉 테두리만 (원하는 결과)</figcaption></figure>
+                </div>
+                <details class="code-toggle"><summary>📝 소벨 필터 HLSL</summary>
+<pre><code class="language-cpp">PS_OUT_OUTER PS_MAIN_OUTER(PS_IN In) {
+    PS_OUT_OUTER Out = (PS_OUT_OUTER)0;
+    float4 vColor = g_OuterPreTexture.Sample(LinearSampler, In.vTexcoord);
+    float2 UV = float2(1.0f/1280.0f, 1.0f/720.0f);
+    float4 L = g_OuterPreTexture.Sample(LinearSampler, In.vTexcoord - float2(UV.x, 0));
+    float4 R = g_OuterPreTexture.Sample(LinearSampler, In.vTexcoord + float2(UV.x, 0));
+    float4 U = g_OuterPreTexture.Sample(LinearSampler, In.vTexcoord - float2(0, UV.y));
+    float4 D = g_OuterPreTexture.Sample(LinearSampler, In.vTexcoord + float2(0, UV.y));
+    float edge = sqrt(pow(abs(R.g-L.g),2) + pow(abs(D.g-U.g),2));
+    if (vColor.g > 0.9f &amp;&amp; edge > 0.1f)
+        Out.vColor = float4(1,0,0,1);
+    else discard;
+    return Out;
+}</code></pre></details>
+            </section>
+
+            <!-- ===== Dissolve ===== -->
+            <section class="feature-card" id="dissolve">
+                <div class="feature-header"><h2>Dissolve (소멸 이펙트)</h2><span class="feature-badge">Noise Texture / discard</span></div>
+                <blockquote><strong>노이즈 텍스처의 Alpha값</strong>과 <strong>시간 비율</strong>을 비교, 비율보다 작은 알파값은 <strong>discard</strong>하여 타들어가는 효과 연출. 보스 사망 시 사용. 경계면에 <strong>Burn Glow</strong> 색상을 추가하여 불타는 느낌 강화.</blockquote>
+                <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__23.gif" loading="lazy"><figcaption>보스 Dissolve 이펙트</figcaption></figure>
+                <p>보스 몬스터가 쓰러진 뒤, <strong>노이즈 텍스처</strong>(NoiseFire01.png)를 셰이더에 바인딩하고 <strong>디졸브 종료 시간까지의 비율</strong>을 매 틱 계산합니다. 현재 비율보다 노이즈 텍스처의 <strong>R값이 작으면 해당 픽셀을 폐기(discard)</strong>하고, 경계면에는 <strong>주황색 Burn Glow</strong>를 추가하여 불타는 느낌을 강화했습니다.</p>
+                <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__24.png" loading="lazy"><figcaption>NoiseFire01.png 리소스</figcaption></figure>
+                <details class="code-toggle"><summary>📝 Dissolve HLSL</summary>
+<pre><code class="language-cpp">PS_OUT PS_MAIN_BOSS(PS_IN In) {
+    PS_OUT Out = (PS_OUT)0;
+    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    if (Out.vColor.a &lt; 0.1f) discard;
+    // Dissolve
+    float noise = g_NoiseTexture.Sample(LinearSampler, In.vTexcoord).r;
+    float dissolveRatio = g_fDissolveTime / g_fDissolveMaxTime;
+    if (noise &lt; dissolveRatio) discard;
+    // 경계 번 효과
+    if (noise &lt; dissolveRatio + g_NoiseStrength) {
+        Out.vColor.rgb += float3(1, 0.3, 0) * g_BurnGlowIntensity;
+    }
+    return Out;
+}</code></pre></details>
+            </section><hr>
+
+            <!-- ===== BillBoard ===== -->
+            <section class="feature-card" id="billboard">
+                <div class="feature-header"><h2>BillBoard</h2><span class="feature-badge">카메라 방향 고정</span></div>
+                <blockquote>횟불, 이펙트 등이 어느 위치에서 바라봐도 같은 모습을 보여주기 위해 항상 카메라를 바라보도록 <strong>빌보드(BillBoard)</strong> 기법 적용. 카메라의 <strong>Look 벡터</strong> 기준으로 <strong>Right/Up 벡터를 재계산</strong>하여 월드 행렬 갱신.</blockquote>
+                <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__27.gif" loading="lazy"><figcaption>빌보드 적용 — 횟불</figcaption></figure>
+                <p>카메라의 <strong>뷰 행렬(View Matrix)을 역행렬</strong>하여 카메라의 Look 벡터를 추출하고, 이를 기준으로 오브젝트의 <strong>Right/Up 벡터를 외적(Cross Product)</strong>으로 재계산합니다. 매 프레임 <strong>월드 행렬을 갱신</strong>하여 항상 카메라를 정면으로 바라보도록 구현했습니다. 횟불뿐 아니라 모든 이펙트 클래스에서 공용으로 호출합니다.</p>
+                <details class="code-toggle"><summary>📝 BillBoard 코드</summary>
+<pre><code class="language-cpp">void CEffect::BillBoard() {
+    _matrix ViewMatrix = m_pGameInst->GetTransformMatrix(CPipeLine::D3DTS_VIEW);
+    _matrix ViewInverse = XMMatrixInverse(nullptr, ViewMatrix);
+    _float3 vCamLook = XMVector3Normalize(ViewInverse.r[2]);
+    _float3 vUp = _float3(0.f, 1.f, 0.f);
+    _float3 vRight = XMVector3Normalize(XMVector3Cross(vUp, vCamLook));
+    vUp = XMVector3Normalize(XMVector3Cross(vCamLook, vRight));
+    m_pTransform->SetState(CTransform::STATE_RIGHT, vRight);
+    m_pTransform->SetState(CTransform::STATE_UP, vUp);
+    m_pTransform->SetState(CTransform::STATE_LOOK, vCamLook);
+}</code></pre></details>
+            </section>
+
+            <!-- ===== Trail ===== -->
+            <section class="feature-card" id="trail">
+                <div class="feature-header"><h2>Trail Effect</h2><span class="feature-badge">버퍼 기반 / BillBoard</span></div>
+                <blockquote>총알 궤적을 <strong>덱(Deque) 자료구조</strong> 기반 버퍼에 위치/시간 저장 → 일정 시간 후 자동 소멸. 빌보드 기법 적용.</blockquote>
+                <p>TrailHigh/TrailLow 두 꼭짓점을 매 프레임 <strong>덱의 뒤(back)에 push</strong>하고, 수명이 다한 정점은 <strong>앞(front)에서 pop</strong>하여 자연스러운 궤적 소멸을 구현했습니다. 덱(Deque)을 사용한 이유는 트레일 정점이 <strong>생성 순서대로 소멸</strong>되어야 하면서도, 양쪽 끝에서 삽입/삭제가 O(1)로 가능하기 때문입니다. 일반 큐와 달리 필요 시 뒤에서도 제거할 수 있어 트레일 길이 제한이나 즉시 초기화에도 유연하게 대응 가능합니다.</p>
+                <p>빌보드를 적용하여 어느 방향에서든 궤적이 정면으로 보이도록 했습니다.</p>
+                <div class="feature-grid triple">
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__31.gif" loading="lazy"><figcaption>트레일 버퍼 1</figcaption></figure>
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__29.gif" loading="lazy"><figcaption>트레일 버퍼 2</figcaption></figure>
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__30.gif" loading="lazy"><figcaption>트레일 버퍼 3</figcaption></figure>
+                </div>
+                <details class="code-toggle"><summary>📝 Trail 정점 생성 코드 (CVIBufferTrail::AddVertices)</summary>
+<pre><code class="language-cpp">void CVIBufferTrail::AddVertices(_fmatrix WorldMatrix, _float fTimeDelta)
+{
+    // 정점 수가 최대치를 넘으면 오래된 정점 2개(High/Low)를 pop_back
+    if (m_iNumMaxVertices &lt; m_TrailVertices.size() + 2)
+    {
+        m_TrailVertices.pop_back();
+        m_TrailVertices.pop_back();
+    }
+
+    // 로컬 좌표계의 상/하 정점을 월드 좌표계로 변환
+    _float fHighY = m_vLocalTrailHigh.y * m_fOffset;
+    _float fLowY  = m_vLocalTrailLow.y * m_fOffset;
+    _vector vLocalTrailHigh = XMVectorSet(m_vLocalTrailHigh.x, fHighY, m_vLocalTrailHigh.z, 1.f);
+    _vector vLocalTrailLow  = XMVectorSet(m_vLocalTrailLow.x, fLowY, m_vLocalTrailLow.z, 1.f);
+
+    VTX_POSTEX_TIME VtxTrailHigh = {}, VtxTrailLow = {};
+    _vector vVtxTrailHighPos = XMVector3TransformCoord(vLocalTrailHigh, WorldMatrix);
+    _vector vVtxTrailLowPos  = XMVector3TransformCoord(vLocalTrailLow, WorldMatrix);
+
+    // LifeTime: x=최대수명, y=현재경과시간
+    VtxTrailHigh.fLifeTime.x = m_fLifeTime;
+    VtxTrailLow.fLifeTime.x  = m_fLifeTime;
+    VtxTrailHigh.fLifeTime.y = 0.f;
+    VtxTrailLow.fLifeTime.y  = 0.f;
+
+    XMStoreFloat3(&amp;VtxTrailHigh.vPosition, vVtxTrailHighPos);
+    XMStoreFloat3(&amp;VtxTrailLow.vPosition, vVtxTrailLowPos);
+
+    // 새 정점을 deque 앞에 추가 (오래된 것은 뒤에서 제거)
+    m_TrailVertices.push_front(VtxTrailHigh);
+    m_TrailVertices.push_front(VtxTrailLow);
+
+    m_iUsingCnt += 2;
+    m_iUsingCnt = min(m_iUsingCnt, m_iNumMaxVertices);
+
+    // Map/Unmap으로 GPU 버퍼 갱신
+    D3D11_MAPPED_SUBRESOURCE SubResource{};
+    m_pContext-&gt;Map(m_pVB, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &amp;SubResource);
+    VTX_POSTEX_TIME* pVertices = (VTX_POSTEX_TIME*)SubResource.pData;
+    for (_uint i = 0; i &lt; m_iUsingCnt; i += 2)
+    {
+        pVertices[i].vPosition     = m_TrailVertices[i].vPosition;
+        pVertices[i + 1].vPosition = m_TrailVertices[i + 1].vPosition;
+        pVertices[i].fLifeTime     = m_TrailVertices[i].fLifeTime;
+        pVertices[i + 1].fLifeTime = m_TrailVertices[i + 1].fLifeTime;
+        // UV 비율 계산
+        float fRatio = float(i) / float(m_iUsingCnt);
+        pVertices[i].vTexcoord     = { fRatio, 0.0f };
+        pVertices[i + 1].vTexcoord = { fRatio, 1.0f };
+    }
+    m_pContext-&gt;Unmap(m_pVB, 0);
+
+    m_iNumIndices = 3 * 2 * (m_iUsingCnt / 2 - 1);
+
+    // 모든 정점의 경과 시간 갱신
+    for (_int i = 0; i &lt; m_iUsingCnt; ++i)
+        m_TrailVertices[i].fLifeTime.y += fTimeDelta;
+}</code></pre></details>
+            </section>
+
+            <!-- ===== Particle ===== -->
+            <section class="feature-card" id="particle">
+                <div class="feature-header"><h2>Particle &amp; Instancing</h2><span class="feature-badge">Geometry Shader / GPU Instancing</span></div>
+                <blockquote><strong>Geometry Shader</strong>로 <strong>점(Point) → 사각형(Quad)</strong> 확장하여 파티클 생성, <strong>GPU Instancing</strong>으로 수백 개를 <strong>1 Draw Call</strong>로 렌더링. 파티클별 <strong>수명/속도/크기를 랜덤 설정</strong>하여 자연스러운 이펙트.</blockquote>
+                <div class="feature-grid triple">
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__38.gif" loading="lazy"><figcaption>총알 Wall Hit</figcaption></figure>
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__39.gif" loading="lazy"><figcaption>보스 돌덩이 공격</figcaption></figure>
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__40.gif" loading="lazy"><figcaption>문고리 이펙트</figcaption></figure>
+                </div>
+                <div class="feature-grid triple">
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__43.gif" loading="lazy"><figcaption>몬스터 생성 + 피격</figcaption></figure>
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__44.gif" loading="lazy"><figcaption>보스 내려치기</figcaption></figure>
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__45.gif" loading="lazy"><figcaption>보스 메테오</figcaption></figure>
+                </div>
+                <details class="code-toggle"><summary>📝 파티클 Descriptor 설정 (보스 메테오 파티클)</summary>
+<pre><code class="language-cpp">// ParticleBossRockDust — 보스 몬스터 메테오 모을 때 생기는 파티클
+CVIBufferParticleInstance::PARTICLE_DESC ParticleBossRockDesc = {};
+ParticleBossRockDesc.iNumInstances = 300;          // 인스턴스 수
+ParticleBossRockDesc.vCenter = _float3(0.f, 0.f, 0.f);
+ParticleBossRockDesc.vRange  = _float3(20.f, 20.f, 20.f); // 생성 범위
+ParticleBossRockDesc.vSpeed  = _float2(25.f, 35.f);       // 속도 (min, max)
+ParticleBossRockDesc.vLifeTime = _float2(0.3f, 0.5f);     // 수명 (min, max)
+ParticleBossRockDesc.vSize   = _float2(0.1f, 0.15f);      // 크기 (min, max)
+ParticleBossRockDesc.bIsLoop = true;</code></pre></details>
+                <details class="code-toggle"><summary>📝 파티클 역방향 수렴 (ReverseSpreadParticles)</summary>
+<pre><code class="language-cpp">void CVIBufferParticleInstance::ReverseSpreadParticles(_float fTimeDelta)
+{
+    if (false == IsActivate()) return;
+
+    D3D11_MAPPED_SUBRESOURCE SubResource{};
+    m_pContext-&gt;Map(m_pVBInstance, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &amp;SubResource);
+    VTX_INSTANCE* pVertices = static_cast&lt;VTX_INSTANCE*&gt;(SubResource.pData);
+
+    for (size_t i = 0; i &lt; m_iNumInstances; i++)
+    {
+        // 현재 위치 → 중심(Pivot)으로 향하는 방향 계산
+        _vector vDir = XMLoadFloat4(&amp;pVertices[i].vTranslation)
+                     - XMVectorSetW(XMLoadFloat3(&amp;m_vPivot), 1.f);
+        vDir = -vDir;  // 방향 반전 (바깥→안쪽 수렴)
+
+        // 이동
+        XMStoreFloat4(&amp;pVertices[i].vTranslation,
+            XMLoadFloat4(&amp;pVertices[i].vTranslation)
+            + XMVector3Normalize(vDir) * m_pSpeeds[i] * fTimeDelta);
+
+        pVertices[i].vLifeTime.y += fTimeDelta;
+
+        if (pVertices[i].vLifeTime.y &gt;= pVertices[i].vLifeTime.x)
+        {
+            if (m_bIsLoopParticle) {
+                // 루프: 초기 위치로 리셋
+                pVertices[i].vTranslation = m_pInstanceVertices[i].vTranslation;
+                pVertices[i].vLifeTime.y = 0.f;
+            } else {
+                pVertices[i].vLifeTime.y = pVertices[i].vLifeTime.x;
+                if (AlmostEqual(pVertices[i].vLifeTime.y, m_fMaxLifeTime, 0.01f))
+                    DeActivate();
+            }
+        }
+    }
+    m_pContext-&gt;Unmap(m_pVBInstance, 0);
+}</code></pre></details>
+            </section><hr>
+
+            <!-- ===== NavMesh ===== -->
+            <section class="feature-card" id="navmesh">
+                <div class="feature-header"><h2>Navigation Mesh</h2><span class="feature-badge">Pathfinding / Picking / 슬라이딩 벡터</span></div>
+                <blockquote><strong>마우스 Picking</strong>으로 삼각형을 직접 배치하여 <strong>NavMesh를 제작</strong>. 몬스터가 NavMesh 위에서만 이동하며 <strong>플레이어를 추적</strong>. 벽 충돌 시 <strong>슬라이딩 벡터</strong>를 적용하여 벽을 타고 자연스럽게 방향 전환.</blockquote>
+                <p><strong>레이캐스팅(Ray-Triangle Intersection)</strong>으로 마우스 클릭 위치에 삼각형 꼭짓점을 배치하여 NavMesh를 직접 제작합니다. 이동 시 현재 위치가 어떤 <strong>삼각형 위에 있는지 판별</strong>하고, 삼각형 밖으로 나가면 <strong>인접 삼각형으로 전환</strong>합니다. 벽(NavMesh 경계)에 충돌하면 이동 벡터를 벽의 <strong>법선에 투영</strong>하여 슬라이딩 벡터를 계산, 벽을 타고 자연스럽게 미끄러지도록 합니다.</p>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__49.gif" loading="lazy"><figcaption>NavMesh 제작 과정</figcaption></figure>
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__50.gif" loading="lazy"><figcaption>걷기 테스트</figcaption></figure>
+                </div>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__54.gif" loading="lazy"><figcaption>몬스터 NavMesh 이동</figcaption></figure>
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__55.gif" loading="lazy"><figcaption>슬라이딩 벡터</figcaption></figure>
+                </div>
+            </section>
+
+            <!-- ===== Animation ===== -->
+            <section class="feature-card" id="anim">
+                <div class="feature-header"><h2>Animation</h2><span class="feature-badge">KeyFrame / FBX / 블렌딩</span></div>
+                <blockquote><strong>FBX</strong> 모델에서 <strong>뼈대(Bone) 데이터</strong>를 로드하고 <strong>인덱스</strong>를 부여하여 관리. <strong>키프레임 애니메이션</strong> 재생, <strong>블렌딩(보간)</strong>, <strong>상하체 분리</strong>를 직접 구현.</blockquote>
+                <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__63.gif" loading="lazy"><figcaption>Animation IDLE</figcaption></figure>
+                <p><strong>Assimp</strong> 라이브러리로 FBX를 로드하여 <strong>계층적 뼈 구조</strong>를 파싱하고, 각 뼈에 <strong>고유 인덱스</strong>를 부여합니다. 애니메이션 재생 시 <strong>키프레임 간 보간(SQT: Scale/Quaternion/Translation)</strong>을 수행하며, 특정 뼈 인덱스를 기준으로 <strong>상체/하체를 분리</strong>하여 걷기(하체) + 공격(상체)을 동시 재생할 수 있도록 구현했습니다. 애니메이션 전환 시 <strong>블렌딩</strong>을 적용하여 끊김 없는 자연스러운 전환을 구현합니다.</p>
+            </section>
+
+            <!-- ===== UI ===== -->
+            <section class="feature-card" id="ui">
+                <div class="feature-header"><h2>UI 시스템</h2><span class="feature-badge">직교투영 / 원근투영 / 미니맵</span></div>
+                <blockquote><strong>직교투영</strong>으로 2D HUD(HP Bar, 스킬 아이콘), <strong>원근투영</strong>으로 3D 월드 내 UI(데미지 폰트, 몬스터 HP Bar, 문 상호작용). 별도 <strong>렌더 타겟</strong>에 <strong>탑뷰 카메라</strong>로 그려서 <strong>미니맵</strong> 구현.</blockquote>
+                <p>직교투영 UI는 스크린 좌표를 <strong>NDC 좌표계</strong>로 변환하여 <strong>뷰포트 중심 기준</strong>으로 배치합니다. 원근투영 UI(데미지 폰트, 몬스터 HP Bar)는 3D 월드 좌표에 그려져 <strong>거리에 따라 크기가 변하며</strong>, 카메라와의 거리가 멀수록 자연스럽게 작아집니다. 미니맵은 <strong>별도 렌더 타겟</strong>에 탑뷰 카메라로 씬을 렌더링한 뒤, HUD에 <strong>텍스처로 출력</strong>하는 방식입니다.</p>
+                <div class="feature-grid triple">
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__66.gif" loading="lazy"><figcaption>Player HP Bar</figcaption></figure>
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__70.gif" loading="lazy"><figcaption>데미지 폰트</figcaption></figure>
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__71.gif" loading="lazy"><figcaption>몬스터 HP Bar</figcaption></figure>
+                </div>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__72.gif" loading="lazy"><figcaption>문 원근투영 UI</figcaption></figure>
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__76.gif" loading="lazy"><figcaption>미니맵</figcaption></figure>
+                </div>
+            </section><hr>
+
+            <!-- ===== Player ===== -->
+            <section class="feature-card" id="player">
+                <div class="feature-header"><h2>Player</h2><span class="feature-badge">FSM / State Machine</span></div>
+                <blockquote><strong>FSM(Finite State Machine)</strong> 기반 플레이어 상태 관리 (<strong>Idle/Walk/Run/Jump/Attack/Dash</strong>). 상태별 <strong>애니메이션 블렌딩</strong> 전환 + <strong>총기 교체</strong> 시스템(1/2/3 슬롯).</blockquote>
+                <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__79.gif" loading="lazy"><figcaption>플레이어 상태 제어</figcaption></figure>
+                <p>키 입력에 따라 <strong>FSM 상태를 전환</strong>하고, 각 상태에 매핑된 애니메이션을 <strong>블렌딩</strong>하여 재생합니다. 총기는 1/2/3 슬롯으로 교체 가능하며, 총기별 <strong>발사 로직/이펙트/데미지</strong>가 다르게 적용됩니다. 이동 시 <strong>NavMesh 위에서만 이동</strong>하도록 제한하고, 점프/대쉬 시에는 <strong>충돌 판정</strong>을 별도로 처리합니다.</p>
+            </section>
+
+            <!-- ===== Monsters ===== -->
+            <section class="feature-card" id="monster">
+                <div class="feature-header"><h2>Monsters &amp; Boss</h2><span class="feature-badge">FSM / AI / 다중 패턴</span></div>
+                <blockquote><strong>FSM</strong> 기반 몬스터 AI. <strong>5종 일반 몬스터</strong>(각각 고유 공격 패턴) + <strong>보스</strong>(점프내려찍기, 일반내려찍기, 메테오, 몬스터 소환, 컷씬 등 <strong>다중 패턴</strong>). <strong>NavMesh 기반 추적</strong> + <strong>구/AABB 충돌</strong>로 공격 범위 판정.</blockquote>
+                <p>일반 몬스터는 <strong>Idle → Detect → Chase → Attack → Die</strong> 상태를 순환하며, 감지 범위 내 플레이어가 있으면 <strong>NavMesh 경로</strong>를 따라 추적합니다. 보스는 <strong>체력 구간별로 패턴이 변경</strong>되며, 컷씬 → 일반 공격 → 특수 패턴(메테오, 몬스터 소환) 순으로 전투가 진행됩니다. 모든 공격은 <strong>구(Sphere)/AABB 충돌 판정</strong>으로 데미지를 적용합니다.</p>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__89.gif" loading="lazy"><figcaption>몬스터 1 기본 패턴</figcaption></figure>
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__90.gif" loading="lazy"><figcaption>몬스터 2 기본 패턴</figcaption></figure>
+                </div>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__91.gif" loading="lazy"><figcaption>몬스터 3 패턴</figcaption></figure>
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__92.gif" loading="lazy"><figcaption>몬스터 5 패턴</figcaption></figure>
+                </div>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__96.gif" loading="lazy"><figcaption>보스 컷씬</figcaption></figure>
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__98.gif" loading="lazy"><figcaption>보스 점프 내려찍기</figcaption></figure>
+                </div>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__97.gif" loading="lazy"><figcaption>보스 일반 내려찍기</figcaption></figure>
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__99.gif" loading="lazy"><figcaption>보스 메테오</figcaption></figure>
+                </div>
+                <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__100.gif" loading="lazy"><figcaption>보스 몬스터 소환 패턴</figcaption></figure>
+            </section>
+        </div>
+
+        <div class="project-nav">
+            <a href="../index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> 프로젝트 목록으로</a>
+        </div>
+    </div></article>
+    <footer class="footer"><p>&copy; 2026 김남영. All rights reserved.</p></footer>
+    <script src="project.js"></script>
+</body>
+</html>

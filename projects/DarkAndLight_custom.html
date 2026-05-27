@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XDD814ZBH2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XDD814ZBH2');
+</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>DarkAndLight | 김남영 포트폴리오</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="project.css">
+    <link rel="stylesheet" href="gunfire.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <nav class="nav"><div class="nav-container">
+        <a href="../index.html" class="nav-logo">NY</a>
+        <a href="../index.html#projects" class="back-link"><i class="fas fa-arrow-left"></i> 프로젝트 목록</a>
+    </div></nav>
+
+    <article class="project-detail"><div class="container">
+        <div class="project-meta-card">
+            <p class="meta-desc">Unreal Engine 5로 제작한 대학교 졸업작품. 1인칭 고프로캠 스타일 FPS 공포 로그라이크. 스팀 출시, KCI 논문 게재, 코엑스 전시.</p>
+            <div class="meta-tags">
+                <span class="tag tag-primary">C++</span><span class="tag tag-primary">Unreal Engine 5</span>
+            </div>
+            <div class="meta-info">
+                <span><i class="fas fa-users"></i> 3인 팀 (김남영: 팀장/메인개발)</span>
+                <span><i class="fas fa-calendar"></i> 2023.05 ~ 2023.10</span>
+            </div>
+            <div class="meta-info" style="margin-top: 8px;">
+                <a href="https://store.steampowered.com/app/2700060/DarkAndLight/" target="_blank" style="color: var(--accent); font-size: 13px;"><i class="fab fa-steam"></i> Steam Store</a>
+                <a href="https://koreascience.or.kr/article/JAKO202408557627571.page" target="_blank" style="color: var(--accent); font-size: 13px;"><i class="fas fa-file-alt"></i> KCI 논문</a>
+            </div>
+        </div>
+
+        <h1 class="project-detail-title">DarkAndLight</h1>
+        <a href="https://www.youtube.com/watch?v=FqUKFtnhnkY" target="_blank" class="video-thumbnail">
+            <img src="https://img.youtube.com/vi/FqUKFtnhnkY/maxresdefault.jpg" alt="프로젝트 영상" loading="lazy">
+            <div class="play-button"><i class="fas fa-play"></i></div>
+        </a>
+
+        <div class="project-content">
+            <div class="feature-summary"><h2>주요 내용</h2>
+                <div class="feature-chips">
+                    <a href="#overview" class="chip">프로젝트 개요</a><a href="#role" class="chip">주요 업무</a>
+                    <a href="#coex" class="chip">코엑스 전시</a><a href="#lessons" class="chip">배운 점</a>
+                </div>
+            </div><hr>
+
+            <!-- ===== 프로젝트 개요 ===== -->
+            <section class="feature-card" id="overview">
+                <div class="feature-header"><h2>프로젝트 개요</h2><span class="feature-badge">스팀 출시 / KCI 논문</span></div>
+                <blockquote><strong>1인칭 고프로캠 FPS</strong> 공포 로그라이크. 좀비를 죽이며 <strong>미로형 벙커</strong>를 탈출. <strong>플래시 라이트 배터리</strong> 관리 + <strong>퍼즐</strong> + <strong>발전기 가동</strong>으로 게이트를 열어가는 방식. 스팀 $3.9 출시.</blockquote>
+                <p>202x년, 알 수 없는 좀비 바이러스가 전 세계를 휩쓸고 문명이 멸망합니다. 플레이어는 살아남은 도굴꾼으로서, 벙커 깊은 곳에 남겨진 물자를 찾아 어둠 속으로 들어갑니다.</p>
+                <figure class="project-image"><img src="../images/DarkAndLight_1.png" loading="lazy"><figcaption>팀원 사진</figcaption></figure>
+                <p style="margin-top: 24px; margin-bottom: 8px; color: #fff; font-weight: 600;">유튜버 플레이 영상</p>
+                <a href="https://www.youtube.com/watch?v=bpApDbsY_e4" target="_blank" class="video-thumbnail">
+                    <img src="https://img.youtube.com/vi/bpApDbsY_e4/maxresdefault.jpg" alt="유튜버 플레이 영상" loading="lazy">
+                    <div class="play-button"><i class="fas fa-play"></i></div>
+                </a>
+            </section>
+
+            <!-- ===== 주요 업무 ===== -->
+            <section class="feature-card" id="role">
+                <div class="feature-header"><h2>주요 업무</h2><span class="feature-badge">팀장 / 전반 개발</span></div>
+                <blockquote><strong>몬스터 스폰~절단~사망</strong>, <strong>플레이어 스왑/HP/카메라/무기(Shotgun, Axe)</strong>, <strong>몬스터 AI(이동/추적/공격)</strong>, <strong>점프 스케어</strong>, <strong>오브젝트 상호작용(문/발전기/아이템)</strong>, <strong>최적화(프로파일링/LOD/그림자 제거)</strong>, <strong>SVN 버전관리</strong>, <strong>스팀 출시 서류</strong>.</blockquote>
+                <p>팀장 역할로 기획 방향성 설정, 코드 리뷰, 일정 조율, 개발 규약 수립을 담당했습니다. 지원 사업 문서 작성(한이음 ICT 150만원 + 안양 청년 100만원)도 직접 수행했습니다.</p>
+            </section>
+
+            <!-- ===== 코엑스 전시 ===== -->
+            <section class="feature-card" id="coex">
+                <div class="feature-header"><h2>코엑스 전시</h2><span class="feature-badge">2023.10.25</span></div>
+                <blockquote>서울 삼성역 <strong>코엑스</strong>에서 성결대 학우들과 프로젝트 전시. <strong>데모 버전</strong> 플레이 제공, 사용자 피드백 수집.</blockquote>
+                <div class="feature-grid triple">
+                    <figure class="project-image"><img src="../images/DarkAndLight_2.jpg" loading="lazy"><figcaption>코엑스 전시 1</figcaption></figure>
+                    <figure class="project-image"><img src="../images/DarkAndLight_3.jpg" loading="lazy"><figcaption>코엑스 전시 2</figcaption></figure>
+                    <figure class="project-image"><img src="../images/DarkAndLight_4.jpg" loading="lazy"><figcaption>코엑스 전시 3</figcaption></figure>
+                </div>
+                <p>같은 팀원끼리 테스트할 때 생각 못한 부분, 놓친 부분, 필요한 부분이 많이 발견되었습니다. 사용자는 개발자 의도대로 플레이하지 않는다는 점을 크게 깨달았습니다.</p>
+            </section><hr>
+
+            <!-- ===== 배운 점 ===== -->
+            <section class="feature-card" id="lessons">
+                <div class="feature-header"><h2>배운 점</h2><span class="feature-badge">회고</span></div>
+                <p><strong>기획의 중요성</strong> — 기획이 구체적이고 치밀하지 않으면 불필요한 기능과 레벨이 생기고, 팀원 간 충돌이 발생합니다. 초반에 확실한 기획을 잡는 것이 개발 속도보다 중요했습니다.</p>
+                <p><strong>팀장의 역할</strong> — 개발 외에도 문서 작성, 의견 조율, 일감 분배, 팀 사기 관리까지 신경 써야 했습니다. 코드만 잘 짜서는 프로젝트가 완성되지 않는다는 것을 체감했습니다.</p>
+                <p><strong>최적화</strong> — "나중에 하자"며 미뤘더니 중반에 10~15fps까지 떨어졌습니다. 프로파일링으로 Hits 원인을 분석하고, LOD 낮추기와 그림자 제거를 적용하여 60fps로 복구했습니다.</p>
+                <p><strong>출시 경험</strong> — 스팀 서류, 영문 주소, 은행 정보 작성이 까다로웠습니다. 포트폴리오로만 만들었으면 겪지 못했을 QA, 버그 수정, 연출, 최적화 과정을 실제로 경험했습니다.</p>
+                <p><strong>외부 도움</strong> — 패키징 이슈를 2주간 해결하지 못하다가, 인강 강사님에게 구글 드라이브로 프로젝트를 전달하여 해결했습니다. 혼자 끙끙대는 것보다 적극적으로 도움을 구하는 것이 효율적이었습니다.</p>
+            </section>
+        </div>
+
+        <div class="project-nav">
+            <a href="../index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> 프로젝트 목록으로</a>
+        </div>
+    </div></article>
+    <footer class="footer"><p>&copy; 2026 김남영. All rights reserved.</p></footer>
+    <script src="project.js"></script>
+</body>
+</html>

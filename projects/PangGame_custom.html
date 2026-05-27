@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XDD814ZBH2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XDD814ZBH2');
+</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Pang Game! (1학년) | 김남영 포트폴리오</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="project.css">
+    <link rel="stylesheet" href="gunfire.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <nav class="nav"><div class="nav-container">
+        <a href="../index.html" class="nav-logo">NY</a>
+        <a href="../index.html#projects" class="back-link"><i class="fas fa-arrow-left"></i> 프로젝트 목록</a>
+    </div></nav>
+
+    <article class="project-detail"><div class="container">
+        <div class="project-meta-card">
+            <p class="meta-desc">Python으로 만든 첫 게임 프로젝트. 플레이어 이동, 투사체(연필) 발사, 공 충돌 판정 및 분리 구현.</p>
+            <div class="meta-tags">
+                <span class="tag tag-primary">Python</span>
+            </div>
+            <div class="meta-info">
+                <span><i class="fas fa-user"></i> 1인 개발</span>
+                <span><i class="fas fa-calendar"></i> 2022.03</span>
+            </div>
+            <div class="meta-info" style="margin-top: 8px;">
+                <a href="https://github.com/starkshn/20min_pang_game" target="_blank" style="color: var(--accent); font-size: 13px;"><i class="fab fa-github"></i> GitHub</a>
+            </div>
+        </div>
+
+        <h1 class="project-detail-title">Pang Game! (1학년)</h1>
+
+        <div class="project-content">
+            <div class="feature-summary"><h2>주요 내용</h2>
+                <div class="feature-chips">
+                    <a href="#overview" class="chip">플레이어</a><a href="#player" class="chip">투사체</a>
+                    <a href="#collision" class="chip">충돌 판정</a>
+                </div>
+            </div><hr>
+
+            <!-- ===== 프로젝트 개요 ===== -->
+            <section class="feature-card" id="overview">
+                <div class="feature-header"><h2>프로젝트 개요</h2><span class="feature-badge">첫 게임 프로그래밍</span></div>
+                <blockquote>대학교 입학 후 첫 게임 프로그래밍 수업에서 <strong>"아무거나 만들어봐라"</strong>라는 교수님 말씀에 무작정 시도. <strong>학교 도서관</strong>과 <strong>유튜브(나도 코딩)</strong> 참고하여 제작.</blockquote>
+                <p>아무런 기초 지식 없이 시작한 첫 프로젝트로, 게임 프로그래밍의 기본 구조(입력 → 업데이트 → 렌더링)를 체험했습니다.</p>
+            </section>
+
+            <!-- ===== 플레이어 & 투사체 ===== -->
+            <section class="feature-card" id="player">
+                <div class="feature-header"><h2>플레이어 &amp; 투사체</h2><span class="feature-badge">키 입력 / 좌표 이동</span></div>
+                <blockquote>플레이어는 <strong>마우스 입력</strong>으로 x좌표를 변화시켜 이동. <strong>Space키</strong>로 <strong>투사체(연필)</strong>를 생성하고 매 틱 <strong>x, y좌표를 업데이트</strong>하여 위로 발사.</blockquote>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/Pang_Game!_1학년,_개인_프로젝트__1.png" loading="lazy"><figcaption>플레이어 이동 1</figcaption></figure>
+                    <figure class="project-image"><img src="../images/Pang_Game!_1학년,_개인_프로젝트__2.png" loading="lazy"><figcaption>플레이어 이동 2</figcaption></figure>
+                </div>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/Pang_Game!_1학년,_개인_프로젝트__3.png" loading="lazy"><figcaption>투사체(연필) 발사 1</figcaption></figure>
+                    <figure class="project-image"><img src="../images/Pang_Game!_1학년,_개인_프로젝트__4.png" loading="lazy"><figcaption>투사체(연필) 발사 2</figcaption></figure>
+                </div>
+            </section>
+
+            <!-- ===== 충돌 판정 및 공 분리 ===== -->
+            <section class="feature-card" id="collision">
+                <div class="feature-header"><h2>충돌 판정 및 공 분리</h2><span class="feature-badge">중심점 / 영역 판정</span></div>
+                <blockquote>공의 <strong>가로/세로 절반</strong>으로 중심점 설정. 투사체가 중심점 기준 <strong>가로 절반 영역 안</strong>에 들어오면 충돌로 판정. 충돌 시 <strong>공을 여러 개로 분리</strong>.</blockquote>
+                <p>별도의 충돌 라이브러리 없이 직접 좌표 기반 충돌 판정을 구현하여, 2D 게임의 기본적인 물리 처리 원리를 학습했습니다.</p>
+                <div class="feature-grid triple">
+                    <figure class="project-image"><img src="../images/Pang_Game!_1학년,_개인_프로젝트__5.png" loading="lazy"><figcaption>충돌 판정 1</figcaption></figure>
+                    <figure class="project-image"><img src="../images/Pang_Game!_1학년,_개인_프로젝트__6.png" loading="lazy"><figcaption>충돌 판정 2</figcaption></figure>
+                    <figure class="project-image"><img src="../images/Pang_Game!_1학년,_개인_프로젝트__7.png" loading="lazy"><figcaption>공 분리</figcaption></figure>
+                </div>
+            </section>
+        </div>
+
+        <div class="project-nav">
+            <a href="../index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> 프로젝트 목록으로</a>
+        </div>
+    </div></article>
+    <footer class="footer"><p>&copy; 2026 김남영. All rights reserved.</p></footer>
+    <script src="project.js"></script>
+</body>
+</html>

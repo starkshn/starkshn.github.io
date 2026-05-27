@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XDD814ZBH2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XDD814ZBH2');
+</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Orbital Bullet 모작 (2.5D) | 김남영 포트폴리오</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="project.css">
+    <link rel="stylesheet" href="gunfire.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <nav class="nav"><div class="nav-container">
+        <a href="../index.html" class="nav-logo">NY</a>
+        <a href="../index.html#projects" class="back-link"><i class="fas fa-arrow-left"></i> 프로젝트 목록</a>
+    </div></nav>
+
+    <article class="project-detail"><div class="container">
+        <div class="project-meta-card">
+            <p class="meta-desc">DX9, C++로 오비탈 불릿을 모작. 원형 스테이지 중심점 기반 부모 좌표계 행렬 연산, 비트 상태 관리, 카메라 선형보간/쉐이킹.</p>
+            <div class="meta-tags">
+                <span class="tag tag-primary">C++</span><span class="tag tag-primary">DX9</span>
+            </div>
+            <div class="meta-info">
+                <span><i class="fas fa-users"></i> 4인 팀 (김남영: 플레이어/카메라)</span>
+                <span><i class="fas fa-calendar"></i> 2024.08 ~ 2024.09</span>
+                <span><a href="https://github.com/starkshn/Orbiral-" target="_blank"><i class="fab fa-github"></i> GitHub</a></span>
+            </div>
+        </div>
+
+        <h1 class="project-detail-title">Orbital Bullet 모작 (2.5D)</h1>
+        <a href="https://www.youtube.com/watch?v=R-4KWs9VKEw" target="_blank" class="video-thumbnail">
+            <img src="https://img.youtube.com/vi/R-4KWs9VKEw/maxresdefault.jpg" alt="프로젝트 영상" loading="lazy">
+            <div class="play-button"><i class="fas fa-play"></i></div>
+        </a>
+
+        <div class="project-content">
+            <div class="feature-summary"><h2>구현 기능</h2>
+                <div class="feature-chips">
+                    <a href="#player" class="chip">플레이어 상태</a>
+                    <a href="#camera" class="chip">카메라</a>
+                    <a href="#lessons" class="chip">배운 점</a>
+                </div>
+            </div><hr>
+
+            <!-- ===== 플레이어 이동 및 상태 제어 ===== -->
+            <section class="feature-card" id="player">
+                <div class="feature-header"><h2>플레이어 이동 및 상태 제어</h2><span class="feature-badge">비트 연산 / 부모 좌표계</span></div>
+                <blockquote><strong>비트 연산(OR/AND/NOT)</strong>으로 중첩 상태 관리 &mdash; 이동+점프+대쉬 동시 판정. 원형 스테이지의 <strong>중심점을 부모 행렬</strong>로 설정하여 <strong>행렬 연산</strong>으로 회전 이동.</blockquote>
+                <p>게임이 <strong>중심점을 기준으로 원형 궤도를 도는</strong> 형태이므로, 플레이어의 <strong>부모 행렬을 스테이지 중심</strong>으로 설정하고 행렬 연산을 수행했습니다. 상태가 많아 <strong>enum 값만으로는 예외 처리가 복잡</strong>해지는 문제가 있어, 비트 연산으로 여러 상태를 동시에 관리하도록 전환했습니다. 대쉬 시에는 최대 회전값만큼 회전할 수 있게 하고, 점프 시에는 <strong>포물선 방정식</strong>을 활용하여 안쪽/바깥쪽 점프를 구현했습니다.</p>
+                <div class="feature-grid triple">
+                    <figure class="project-image"><img src="../images/Orbital_Bullet_모작_2_5D__1.png" loading="lazy"><figcaption>비트 상태 관리</figcaption></figure>
+                    <figure class="project-image"><img src="../images/Orbital_Bullet_모작_2_5D__2.png" loading="lazy"><figcaption>대쉬 구현</figcaption></figure>
+                    <figure class="project-image"><img src="../images/Orbital_Bullet_모작_2_5D__3.png" loading="lazy"><figcaption>점프 구현</figcaption></figure>
+                </div>
+                <details class="code-toggle"><summary>비트 상태 관리 핵심</summary>
+<pre><code class="language-cpp">// 상태 추가 (OR)
+void Add_State(STATE eState) {
+    m_dwState |= (DWORD)eState;
+}
+// 상태 제거 (AND + NOT)
+void Sub_State(STATE eState) {
+    m_dwState &amp;= ~(DWORD)eState;
+}
+// 상태 체크 (AND)
+bool Check_State(STATE eState) {
+    return (m_dwState &amp; (DWORD)eState) != 0;
+}
+
+// 사용 예시: 이동+점프 동시 판정
+if (Check_State(STATE::MOVE) &amp;&amp; Check_State(STATE::JUMP)) {
+    // 공중 이동 처리
+}</code></pre></details>
+            </section>
+
+            <!-- ===== 카메라 이동 및 쉐이킹 ===== -->
+            <section class="feature-card" id="camera">
+                <div class="feature-header"><h2>카메라 이동 및 쉐이킹</h2><span class="feature-badge">선형보간 / 랜덤 쉐이킹</span></div>
+                <blockquote>안쪽/바깥쪽 이동 시 <strong>반지름을 선형보간(Lerp)</strong>하여 줌인/줌아웃. 피격/보스 입장 시 <strong>카메라 At 좌표를 랜덤 미세 변경</strong>하여 쉐이킹 효과.</blockquote>
+                <p>플레이어가 안쪽/바깥쪽으로 이동할 때 스테이지 중심점으로부터의 <strong>반지름 길이 자체를 선형보간</strong>하여 줄이거나 늘려, 부드러운 줌인/줌아웃 효과를 구현했습니다. 카메라 쉐이킹은 <strong>At 위치의 x, y값을 미세한 랜덤값</strong>으로 매 틱 변경하여 덜덜 떨리는 효과를 만들었습니다. 플레이어 피격과 보스 스테이지 입장 시 활성화됩니다.</p>
+                <figure class="project-image"><img src="../images/Orbital_Bullet_모작_2_5D__4.png" loading="lazy"><figcaption>선형보간 코드</figcaption></figure>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/Orbital_Bullet_모작_2_5D__5.png" loading="lazy"><figcaption>쉐이킹 코드 1</figcaption></figure>
+                    <figure class="project-image"><img src="../images/Orbital_Bullet_모작_2_5D__6.png" loading="lazy"><figcaption>쉐이킹 코드 2</figcaption></figure>
+                </div>
+                <details class="code-toggle"><summary>Linear_InterPolation + Cam_Shake 핵심</summary>
+<pre><code class="language-cpp">// 선형보간 — 반지름 기반 줌
+void Linear_InterPolation(float fTargetRadius) {
+    float fCurRadius = Get_Radius();
+    float fLerp = fCurRadius + (fTargetRadius - fCurRadius) * m_fLerpSpeed * fDeltaTime;
+    Set_Radius(fLerp);
+}
+
+// 카메라 쉐이킹
+void Cam_Shake(float fIntensity, float fDuration) {
+    if (m_fShakeTimer > 0.f) {
+        float offsetX = (rand() % 100 / 100.f - 0.5f) * fIntensity;
+        float offsetY = (rand() % 100 / 100.f - 0.5f) * fIntensity;
+        m_vAt.x += offsetX;
+        m_vAt.y += offsetY;
+        m_fShakeTimer -= fDeltaTime;
+    }
+}</code></pre></details>
+            </section>
+
+            <!-- ===== 배운 점 ===== -->
+            <section class="feature-card" id="lessons">
+                <div class="feature-header"><h2>배운 점</h2><span class="feature-badge">회고</span></div>
+                <p><strong>좌표계 변환과 행렬</strong>: 부모 좌표계 중심으로 원형 궤도 이동을 구현하면서 월드/로컬 좌표 변환과 행렬 연산에 대한 깊은 이해를 얻었습니다.</p>
+                <p><strong>비트 연산 상태 관리</strong>: enum만으로는 복잡한 중첩 상태(이동+점프+대쉬 동시)를 처리하기 어렵다는 것을 깨닫고, 비트 플래그 방식으로 유연한 상태 관리를 학습했습니다.</p>
+                <p><strong>팀 협업</strong>: 첫 DirectX 팀 프로젝트로, 매일 수식을 손으로 써가며 학습하고 팀원과 공유하는 과정에서 협업 역량을 키웠습니다.</p>
+            </section>
+        </div>
+
+        <div class="project-nav">
+            <a href="../index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> 프로젝트 목록으로</a>
+        </div>
+    </div></article>
+    <footer class="footer"><p>&copy; 2026 김남영. All rights reserved.</p></footer>
+    <script src="project.js"></script>
+</body>
+</html>

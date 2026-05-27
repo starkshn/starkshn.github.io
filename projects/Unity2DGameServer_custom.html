@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XDD814ZBH2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XDD814ZBH2');
+</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>2D Unity 자체 제작 게임 (+GameServer) | 김남영 포트폴리오</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="project.css">
+    <link rel="stylesheet" href="gunfire.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <nav class="nav"><div class="nav-container">
+        <a href="../index.html" class="nav-logo">NY</a>
+        <a href="../index.html#projects" class="back-link"><i class="fas fa-arrow-left"></i> 프로젝트 목록</a>
+    </div></nav>
+
+    <article class="project-detail"><div class="container">
+        <div class="project-meta-card">
+            <p class="meta-desc">C# 자체 제작 게임서버 + Unity 2D 멀티플레이. 서버 권위 기반 이동/스폰/디스폰 동기화, 투사체 동기화, 데미지/죽음 판정, 이모티콘, 채팅, 몬스터 AI(FSM), 데이터 관리, 맵 자동화, 스킬 시스템.</p>
+            <div class="meta-tags">
+                <span class="tag tag-primary">C#</span><span class="tag tag-primary">Unity</span>
+                <span class="tag">Google Protobuf</span><span class="tag">XML</span>
+            </div>
+            <div class="meta-info">
+                <span><i class="fas fa-user"></i> 1인 개발</span>
+                <span><i class="fas fa-calendar"></i> 2025.11</span>
+                <span><a href="https://github.com/starkshn/MMORPG_ClientAndServer" target="_blank"><i class="fab fa-github"></i> GitHub</a></span>
+            </div>
+        </div>
+
+        <h1 class="project-detail-title">2D Unity 자체 제작 게임 (+GameServer)</h1>
+        <a href="https://www.youtube.com/watch?v=wc5RNquQ9LA" target="_blank" class="video-thumbnail">
+            <img src="https://img.youtube.com/vi/wc5RNquQ9LA/maxresdefault.jpg" alt="프로젝트 영상" loading="lazy">
+            <div class="play-button"><i class="fas fa-play"></i></div>
+        </a>
+
+        <div class="project-content">
+            <div class="feature-summary"><h2>구현 기능</h2>
+                <div class="feature-chips">
+                    <a href="#connect" class="chip">멀티테스트 툴</a><a href="#move" class="chip">이동 동기화</a>
+                    <a href="#projectile" class="chip">투사체</a><a href="#damage" class="chip">데미지</a>
+                    <a href="#chat" class="chip">이모티콘</a><a href="#chat" class="chip">채팅</a>
+                    <a href="#monster" class="chip">몬스터 AI</a><a href="#data" class="chip">데이터 관리</a>
+                    <a href="#skill" class="chip">스킬</a>
+                </div>
+            </div><hr>
+
+            <!-- ===== 접속 & 패킷 흐름 ===== -->
+            <section class="feature-card" id="connect">
+                <div class="feature-header"><h2>접속 &amp; 패킷 흐름</h2><span class="feature-badge">서버 권위 / 도식화</span></div>
+                <blockquote>클라→서버 접속 후 <strong>Spawn/Despawn 패킷</strong> 교환. <strong>서버 권위</strong> 기반 — 클라는 요청만, 서버가 검증 후 <strong>브로드캐스트</strong>. 전체 흐름을 <strong>3장의 도식</strong>으로 정리.</blockquote>
+                <div class="feature-grid triple">
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__1.png" loading="lazy"><figcaption>접속 흐름 1</figcaption></figure>
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__2.png" loading="lazy"><figcaption>접속 흐름 2</figcaption></figure>
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__3.png" loading="lazy"><figcaption>접속 흐름 3</figcaption></figure>
+                </div>
+            </section>
+
+            <!-- ===== 멀티플레이 테스트 툴 ===== -->
+            <section class="feature-card" id="multitool">
+                <div class="feature-header"><h2>멀티플레이 테스트 툴</h2><span class="feature-badge">Unity Editor / 자동 빌드</span></div>
+                <blockquote><strong>Unity Editor MenuItem</strong>으로 2~4명 클라이언트 <strong>자동 빌드 &amp; 실행</strong>. <strong>BuildPipeline.BuildPlayer</strong> + <strong>AutoRunPlayer</strong> 옵션. 일일이 빌드하는 번거로움 제거.</blockquote>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__4.gif" loading="lazy"><figcaption>멀티 테스트 결과</figcaption></figure>
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__5.png" loading="lazy"><figcaption>빌드 코드</figcaption></figure>
+                </div>
+                <details class="code-toggle"><summary>📝 PerformWin64Build 핵심</summary>
+<pre><code class="language-csharp">[MenuItem("Tools/Build Multi Client")]
+static void PerformWin64Build() {
+    var scenes = EditorBuildSettings.scenes
+        .Where(s => s.enabled).Select(s => s.path).ToArray();
+    BuildPipeline.BuildPlayer(scenes, buildPath,
+        BuildTarget.StandaloneWindows64,
+        BuildOptions.AutoRunPlayer);
+}</code></pre></details>
+            </section>
+
+            <!-- ===== 이동 동기화 & 스폰/디스폰 ===== -->
+            <section class="feature-card" id="move">
+                <div class="feature-header"><h2>이동 동기화 &amp; 스폰/디스폰</h2><span class="feature-badge">서버 권위 / 보간</span></div>
+                <blockquote>클라가 <strong>PosInfo 패킷</strong>으로 좌표/방향/상태 전송 → 서버 검증 → <strong>브로드캐스트</strong>. 피격 시 <strong>서버 좌표 기준 보간(interpolation)</strong>. 스폰은 접속 시 서버가 생성, 디스폰은 연결 끊김 감지 → 패킷 전송 → 삭제.</blockquote>
+                <div class="feature-grid triple">
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__6.png" loading="lazy"><figcaption>스폰 코드 1</figcaption></figure>
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__7.png" loading="lazy"><figcaption>스폰 코드 2</figcaption></figure>
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__8.png" loading="lazy"><figcaption>스폰 코드 3</figcaption></figure>
+                </div>
+                <div class="feature-grid triple">
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__9.png" loading="lazy"><figcaption>디스폰 코드 1</figcaption></figure>
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__10.png" loading="lazy"><figcaption>디스폰 코드 2</figcaption></figure>
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__11.png" loading="lazy"><figcaption>이동 코드 1</figcaption></figure>
+                </div>
+                <div class="feature-grid triple">
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__12.png" loading="lazy"><figcaption>이동 코드 2</figcaption></figure>
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__13.png" loading="lazy"><figcaption>이동 코드 3</figcaption></figure>
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__14.png" loading="lazy"><figcaption>이동 코드 4</figcaption></figure>
+                </div>
+                <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__15.png" loading="lazy"><figcaption>이동 코드 5</figcaption></figure>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__16.gif" loading="lazy"><figcaption>이동 동기화</figcaption></figure>
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__17.gif" loading="lazy"><figcaption>디스폰</figcaption></figure>
+                </div>
+                <div class="feature-grid triple">
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__18.png" loading="lazy"><figcaption>도식 1</figcaption></figure>
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__19.png" loading="lazy"><figcaption>도식 2</figcaption></figure>
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__20.png" loading="lazy"><figcaption>도식 3</figcaption></figure>
+                </div>
+            </section>
+
+            <!-- ===== 투사체 동기화 ===== -->
+            <section class="feature-card" id="projectile">
+                <div class="feature-header"><h2>투사체 동기화</h2><span class="feature-badge">Cell 기반 / 서버 권위</span></div>
+                <blockquote>스킬 사용 패킷 → 서버가 <strong>투사체 생성 + 이동 + 충돌 판정</strong>. 클라는 서버 위치를 <strong>보간하여 렌더링만</strong>. <strong>Cell 기반 이동</strong>으로 빠른 투사체도 충돌 누락 방지.</blockquote>
+                <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__21.gif" loading="lazy"><figcaption>투사체 동기화 결과</figcaption></figure>
+                <div class="feature-grid triple">
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__22.png" loading="lazy"><figcaption>투사체 코드 1</figcaption></figure>
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__23.png" loading="lazy"><figcaption>투사체 코드 2</figcaption></figure>
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__24.png" loading="lazy"><figcaption>투사체 코드 3</figcaption></figure>
+                </div>
+                <div class="feature-grid triple">
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__25.png" loading="lazy"><figcaption>충돌 판정</figcaption></figure>
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__26.png" loading="lazy"><figcaption>Cell 이동</figcaption></figure>
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__27.png" loading="lazy"><figcaption>도식</figcaption></figure>
+                </div>
+            </section>
+
+            <!-- ===== 데미지 & 죽음 판정 ===== -->
+            <section class="feature-card" id="damage">
+                <div class="feature-header"><h2>데미지 &amp; 죽음 판정</h2><span class="feature-badge">서버 권위 / S_ChangeHp</span></div>
+                <blockquote><strong>공격력/방어력/스킬 계수</strong>를 서버에서 계산 → <strong>S_ChangeHp/S_Dead 패킷</strong> 전송. 클라는 <strong>HP UI/피격 애니메이션만</strong> 처리. 몬스터 사망 시 일정 시간 후 <strong>서버 자동 리스폰</strong>. 치트 가능성 <strong>완전 제거</strong>.</blockquote>
+                <div class="feature-grid triple">
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__28.png" loading="lazy"><figcaption>데미지 도식</figcaption></figure>
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__29.png" loading="lazy"><figcaption>서버 데미지 코드</figcaption></figure>
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__30.png" loading="lazy"><figcaption>HP 패킷</figcaption></figure>
+                </div>
+                <div class="feature-grid triple">
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__31.png" loading="lazy"><figcaption>Dead 패킷</figcaption></figure>
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__32.png" loading="lazy"><figcaption>리스폰 로직</figcaption></figure>
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__33.png" loading="lazy"><figcaption>클라 HP UI</figcaption></figure>
+                </div>
+                <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__34.gif" loading="lazy"><figcaption>플레이어 죽음</figcaption></figure>
+                <div class="feature-grid triple">
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__35.png" loading="lazy"><figcaption>흐름 1</figcaption></figure>
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__36.png" loading="lazy"><figcaption>흐름 2</figcaption></figure>
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__37.png" loading="lazy"><figcaption>흐름 3</figcaption></figure>
+                </div>
+                <div class="feature-grid triple">
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__38.png" loading="lazy"><figcaption>흐름 4</figcaption></figure>
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__39.png" loading="lazy"><figcaption>흐름 5</figcaption></figure>
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__40.png" loading="lazy"><figcaption>흐름 6</figcaption></figure>
+                </div>
+            </section><hr>
+
+            <!-- ===== 이모티콘 & 채팅 ===== -->
+            <section class="feature-card" id="chat">
+                <div class="feature-header"><h2>이모티콘 &amp; 채팅</h2><span class="feature-badge">브로드캐스트 / ScrollView</span></div>
+                <blockquote><strong>이모티콘</strong>: 키입력 → 서버 <strong>브로드캐스트</strong> → 모든 클라에 표시. <strong>채팅</strong>: InputField → <strong>C_Chat 패킷</strong> → 서버 → <strong>S_Chat 브로드캐스트</strong> → ChatLog UI. <strong>ScrollView + TextMeshPro</strong> 자동 정렬.</blockquote>
+                <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__41.gif" loading="lazy"><figcaption>이모티콘 동기화</figcaption></figure>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__42.png" loading="lazy"><figcaption>이모티콘 코드 1</figcaption></figure>
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__43.png" loading="lazy"><figcaption>이모티콘 코드 2</figcaption></figure>
+                </div>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__44.png" loading="lazy"><figcaption>이모티콘 코드 3</figcaption></figure>
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__45.png" loading="lazy"><figcaption>이모티콘 코드 4</figcaption></figure>
+                </div>
+                <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__46.gif" loading="lazy"><figcaption>채팅 동기화</figcaption></figure>
+                <div class="feature-grid triple">
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__47.png" loading="lazy"><figcaption>채팅 코드 1</figcaption></figure>
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__48.png" loading="lazy"><figcaption>채팅 코드 2</figcaption></figure>
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__49.png" loading="lazy"><figcaption>채팅 코드 3</figcaption></figure>
+                </div>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__50.png" loading="lazy"><figcaption>채팅 코드 4</figcaption></figure>
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__51.png" loading="lazy"><figcaption>채팅 코드 5</figcaption></figure>
+                </div>
+            </section>
+
+            <!-- ===== 몬스터 AI ===== -->
+            <section class="feature-card" id="monster">
+                <div class="feature-header"><h2>몬스터 AI</h2><span class="feature-badge">FSM / 서버 Tick / A*</span></div>
+                <blockquote>서버 <strong>5ms Tick</strong> 기반 FSM: <strong>Idle→Moving→Skill→Hit→Dead</strong>. 주변 플레이어 탐색 → <strong>A* 경로 탐색</strong> → 추적 → 공격. <strong>SpawnPoint 데이터</strong> 기반 패트롤/리콜/리스폰. 클라는 <strong>서버 상태 수신 + 보간</strong>만.</blockquote>
+                <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__52.gif" loading="lazy"><figcaption>몬스터 AI 결과</figcaption></figure>
+                <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__53.png" loading="lazy"><figcaption>FSM 도식</figcaption></figure>
+                <div class="feature-grid triple">
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__54.png" loading="lazy"><figcaption>AI 코드 1</figcaption></figure>
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__55.png" loading="lazy"><figcaption>AI 코드 2</figcaption></figure>
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__56.png" loading="lazy"><figcaption>AI 코드 3</figcaption></figure>
+                </div>
+            </section>
+
+            <!-- ===== 데이터 관리 & 맵 자동화 ===== -->
+            <section class="feature-card" id="data">
+                <div class="feature-header"><h2>데이터 관리 &amp; 맵 자동화</h2><span class="feature-badge">JSON / ILoader / Tilemap</span></div>
+                <blockquote><strong>JSON 파일</strong>(Stat/Skill)을 <strong>DataManager</strong>가 로드 → <strong>ILoader 인터페이스</strong>로 <strong>Dictionary</strong> 자동 변환. 서버 재시작 없이 데이터 반영. <strong>Tilemap_Collision</strong> 팔레트로 이동 불가 영역 칠하기 → <strong>텍스트 파일 자동 저장</strong>.</blockquote>
+                <div class="feature-grid triple">
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__57.png" loading="lazy"><figcaption>JSON 데이터</figcaption></figure>
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__58.png" loading="lazy"><figcaption>DataManager</figcaption></figure>
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__59.png" loading="lazy"><figcaption>ILoader 인터페이스</figcaption></figure>
+                </div>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__60.png" loading="lazy"><figcaption>Tilemap 팔레트</figcaption></figure>
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__61.png" loading="lazy"><figcaption>충돌 영역 칠하기</figcaption></figure>
+                </div>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__62.png" loading="lazy"><figcaption>텍스트 파일 저장</figcaption></figure>
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__63.png" loading="lazy"><figcaption>맵 자동화 코드</figcaption></figure>
+                </div>
+            </section><hr>
+
+            <!-- ===== 스킬 시스템 ===== -->
+            <section class="feature-card" id="skill">
+                <div class="feature-header"><h2>스킬 시스템</h2><span class="feature-badge">SRP / ScriptableObject / 콤보</span></div>
+                <blockquote><strong>관심사 분리</strong>: Player=입력/이동, <strong>SkillRunner</strong>=캐스팅/콤보 판정, <strong>SkillAsset(ScriptableObject)</strong>=메타데이터. <strong>lockTime/comboInputWindow</strong> 타임스탬프로 콤보 판정. 방향 변경 시 <strong>첫타 리셋</strong>.</blockquote>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__64.png" loading="lazy"><figcaption>관계도</figcaption></figure>
+                    <figure class="project-image"><img src="../images/2D_Unity_자체_제작_게임_+GameServer__65.png" loading="lazy"><figcaption>스킬 Flow</figcaption></figure>
+                </div>
+            </section>
+        </div>
+
+        <div class="project-nav">
+            <a href="../index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> 프로젝트 목록으로</a>
+        </div>
+    </div></article>
+    <footer class="footer"><p>&copy; 2026 김남영. All rights reserved.</p></footer>
+    <script src="project.js"></script>
+</body>
+</html>

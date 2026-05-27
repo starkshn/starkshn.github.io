@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XDD814ZBH2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XDD814ZBH2');
+</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>무한 달리기 (출시) | 김남영 포트폴리오</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="project.css">
+    <link rel="stylesheet" href="gunfire.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <nav class="nav"><div class="nav-container">
+        <a href="../index.html" class="nav-logo">NY</a>
+        <a href="../index.html#projects" class="back-link"><i class="fas fa-arrow-left"></i> 프로젝트 목록</a>
+    </div></nav>
+
+    <article class="project-detail"><div class="container">
+        <div class="project-meta-card">
+            <p class="meta-desc">Unity, C#으로 제작하여 Google Play Store에 출시한 모바일 게임. 오브젝트 풀링, 무한 타일 생성, 점수 시스템.</p>
+            <div class="meta-tags">
+                <span class="tag tag-primary">Unity</span><span class="tag">C#</span>
+            </div>
+            <div class="meta-info">
+                <span><i class="fas fa-user"></i> 1인 개발</span>
+                <span><i class="fas fa-calendar"></i> 2022.10 ~ 2022.11</span>
+            </div>
+            <div class="meta-info" style="margin-top: 8px;">
+                <a href="https://play.google.com/store/apps/details?id=com.Dgmmer.ZigZagVersion5&pli=1" target="_blank" style="color: var(--accent); font-size: 13px;"><i class="fab fa-google-play"></i> Google Play</a>
+            </div>
+        </div>
+
+        <h1 class="project-detail-title">무한 달리기 (출시)</h1>
+        <a href="https://www.youtube.com/watch?v=6RqL2DNmxFM" target="_blank" class="video-thumbnail">
+            <img src="https://img.youtube.com/vi/6RqL2DNmxFM/maxresdefault.jpg" alt="프로젝트 영상" loading="lazy">
+            <div class="play-button"><i class="fas fa-play"></i></div>
+        </a>
+
+        <div class="project-content">
+            <div class="feature-summary"><h2>주요 내용</h2>
+                <div class="feature-chips">
+                    <a href="#overview" class="chip">오브젝트 풀링</a><a href="#features" class="chip">프리팹 설계</a>
+                    <a href="#features" class="chip">점수 시스템</a><a href="#lessons" class="chip">출시 경험</a>
+                </div>
+            </div><hr>
+
+            <!-- ===== 프로젝트 개요 ===== -->
+            <section class="feature-card" id="overview">
+                <div class="feature-header"><h2>프로젝트 개요</h2><span class="feature-badge">Google Play 출시</span></div>
+                <blockquote>게임 프로그래밍 시작 초기에 <strong>'출시'라는 미지의 영역</strong>을 경험하기 위해 시작한 프로젝트. <strong>랜덤 무한 생성 타일</strong>을 밟으며 점수를 올리는 방식. <strong>Google Ads</strong> 광고 기능 포함.</blockquote>
+                <p>화면 터치로 캐릭터의 이동 방향을 전환하며, 타일 위를 달려 점수를 올립니다. 속도 증가 아이템을 회피하며 최대한 오래 살아남는 것이 목표입니다.</p>
+            </section>
+
+            <!-- ===== 구현 기능 ===== -->
+            <section class="feature-card" id="features">
+                <div class="feature-header"><h2>구현 기능</h2><span class="feature-badge">풀링 / 프리팹</span></div>
+                <blockquote><strong>오브젝트 풀링</strong>으로 타일 300개를 사전 로드 → 떨어진 타일을 재활용하여 랜덤 위치에 재배치. <strong>프리팹</strong> 설계로 타일+아이템을 하나로 묶어 조건부 표시. <strong>점수 시스템</strong>은 로컬 저장소에서 최고점과 비교/갱신.</blockquote>
+                <p>게임 특성상 타일이 무한히 생성되므로 매번 생성/삭제하면 성능 문제가 발생합니다. 시작 UI 화면에서 미리 300개를 로드해두고, 화면 밖으로 떨어진 타일부터 순서대로 풀링하여 재사용합니다.</p>
+            </section><hr>
+
+            <!-- ===== 배운 점 ===== -->
+            <section class="feature-card" id="lessons">
+                <div class="feature-header"><h2>배운 점 &amp; 후기</h2><span class="feature-badge">첫 출시</span></div>
+                <p><strong>출시의 전과정</strong> — 구글 개발자 콘솔, 개발자 계정, 빌드 버전 정책 등 게임을 만드는 것이 끝이 아니라는 것을 체감했습니다.</p>
+                <p><strong>오브젝트 풀링</strong> — 최적화의 기본 개념을 직접 구현하며 학습했습니다. 단순히 이론으로 아는 것과 실제로 300개 오브젝트를 관리하는 것은 완전히 달랐습니다.</p>
+                <p>게임 프로그래밍 시작 초기의 첫 출시로, 간단한 게임이지만 기획부터 출시까지 전 과정을 경험할 수 있었습니다.</p>
+            </section>
+        </div>
+
+        <div class="project-nav">
+            <a href="../index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> 프로젝트 목록으로</a>
+        </div>
+    </div></article>
+    <footer class="footer"><p>&copy; 2026 김남영. All rights reserved.</p></footer>
+    <script src="project.js"></script>
+</body>
+</html>

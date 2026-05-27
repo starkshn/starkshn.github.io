@@ -1,0 +1,100 @@
+/* ==================== 건파이어 리본 전용 스타일 ==================== */
+
+/* 기능 요약 칩 */
+.feature-summary { margin: 32px 0; }
+.feature-summary h2 { font-size: 20px; margin-bottom: 16px; color: #fff; }
+
+.feature-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.chip {
+    display: inline-block;
+    padding: 6px 16px;
+    background: rgba(108, 99, 255, 0.08);
+    border: 1px solid rgba(108, 99, 255, 0.2);
+    border-radius: 20px;
+    font-size: 13px;
+    color: var(--accent);
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.chip:hover {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+}
+
+/* 기능 카드 */
+.feature-card {
+    margin: 40px 0;
+    scroll-margin-top: 80px;
+}
+
+.feature-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+
+.feature-header h2 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.feature-header h2::before { display: none; }
+
+.feature-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    background: rgba(108, 99, 255, 0.1);
+    border: 1px solid rgba(108, 99, 255, 0.2);
+    border-radius: 4px;
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* 이미지 그리드 — 2열 */
+.feature-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 16px 0;
+}
+
+/* 3열 */
+.feature-grid.triple {
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.feature-grid .project-image {
+    margin: 0;
+}
+
+.feature-grid .project-image figcaption {
+    text-align: center;
+    font-size: 11px;
+}
+
+/* 카드 내 blockquote */
+.feature-card blockquote {
+    margin: 8px 0 16px;
+    font-style: normal;
+    font-size: 14px;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+    .feature-grid { grid-template-columns: 1fr; }
+    .feature-grid.triple { grid-template-columns: 1fr; }
+    .feature-header { flex-direction: column; align-items: flex-start; }
+}

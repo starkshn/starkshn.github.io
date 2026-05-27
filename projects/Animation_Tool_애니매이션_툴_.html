@@ -1,0 +1,1961 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animation Tool (애니매이션 툴) | 김남영 포트폴리오</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="project.css">
+    <link rel="stylesheet" href="gunfire.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">NY</a>
+            <a href="../index.html#projects" class="back-link"><i class="fas fa-arrow-left"></i> 프로젝트 목록</a>
+        </div>
+    </nav>
+    <article class="project-detail">
+        <div class="container">
+            <div class="project-meta-card">
+  <p class="meta-desc">DX11를 사용해 만든 애니매이션 툴입니다.</p>
+  <div class="meta-tags"><span class="tag">DX11</span><span class="tag">C++11</span><span class="tag">ImGui</span><span class="tag">XML</span></div>
+  <div class="meta-info">
+    <span><i class="fas fa-user"></i> 1인 개발</span>
+    <span><i class="fas fa-calendar"></i> 2025/02/01</span>
+  </div>
+</div>
+
+            <h1 class="project-detail-title">Animation Tool (애니매이션 툴)</h1>
+            <div class="project-content">
+                <hr>
+<h1>프로젝트 소개</h1>
+<blockquote>본 프로젝트는 <strong>DirectX 11</strong>을 활용하여 제작된 애니메이션 툴입니다. <strong>C++11</strong>, <strong>ImGui</strong>, <strong>XML</strong>, <strong>DirectXCollision</strong> 등의 기술을 사용하여 애니메이션 및 뼈대 데이터를 시각화하고 조작 및 학습을 할 수 있도록 구현되었습니다.</blockquote>
+<p>(모든 것을 직접 제작하였습니다)</p>
+<p>></p>
+<hr>
+<p>개발환경</p>
+<ul>
+<li>C++11</li>
+<li>DirectX11</li>
+<li>ImGui</li>
+<li>tinyxml2</li>
+<li>DirectXCollision</li>
+<li>Assimp</li>
+</ul>
+<p>구현기능</p>
+<ul>
+<li>위치, 회전 스케일 제어 기능</li>
+<li>fbx 모델 뼈 인덱스화 및 관리 기능 구현</li>
+<li>애니매이션 제어</li>
+<li>애니매이션 키프레임 이벤트 기능</li>
+<li>애니매이션 블렌딩 (애니매이션간 변경)</li>
+<li>애니매이션 상하체 분리 기능</li>
+<li>모델 뼈 확인 기능</li>
+<li>물체를 특정 뼈를 회전 시키는 기능</li>
+</ul>
+<hr>
+<h1>애니매이션 & 툴 기능</h1>
+<h2>위치, 회전, 스케일 제어</h2>
+<h3>구현 결과</h3>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__1.png" alt="image.png" loading="lazy"></figure>
+<p>위치 조절</p>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__2.png" alt="image.png" loading="lazy"></figure>
+<p>회전 조절</p>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__3.png" alt="image.png" loading="lazy"></figure>
+<p>스케일 조절</p>
+<hr>
+<h3>구현 과정</h3>
+<ul>
+<li>위치 : ImGui를 통해 설정한 값을 위 오브젝트의 월드 행렬 3행 성분에 대입하여 위치를 조절하였습니다.</li>
+<li>회전 : ImGui를 통해 설정한 회전 값을 특정 축을 중심으로 회전하는 회전 행렬을 만들어 오브젝트의 Right, Up, Look 벡터에 곱하여 회전값을 조절하였습니다.</li>
+<li>크기 : ImGui를 통해 설정한 스케일 값을 Right, Up, Look 벡터에 각각 곱하여 크기를 조절하였습니다.</li>
+</ul>
+<hr>
+<h3>Code</h3>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__4.png" alt="image.png" loading="lazy"></figure>
+<p>enum값을 월드행렬의 행에 접근하는 인덱스로 활용하여 매개 변수로 들어어온 vState라는 값을 대입하여 위치를 조절하는 코드입니다.</p>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__5.png" alt="image.png" loading="lazy"></figure>
+<p>직교하는 좌표계를 만들고 특정 회전축(vAxis)로 회전하는 회전행렬을 만들어 회전시킨 각 축을 현재 오브젝트의 Right, Up, Look에 대입하여 회전을 시키는 코드입니다.</p>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__6.png" alt="image.png" loading="lazy"></figure>
+<p>오브젝트의 Right, Up, Look 벡터를 정규화 한 후 매개 변수로 들어온 값을 곱하여 크기를 조절하는 코드입니다.</p>
+<hr>
+<h2>FBX 모델 뼈 인덱스화 및 관리 기능 구현</h2>
+<h3>구현결과</h3>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__7.png" alt="image.png" loading="lazy"></figure>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__8.png" alt="image.png" loading="lazy"></figure>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__9.png" alt="image.png" loading="lazy"></figure>
+<hr>
+<h3>구현과정</h3>
+<p>Model 클래스(fbx 파일로 부터 읽은 데이터 전체를 담당), Bone클래스, Channel클래스로 구분하여 뼈 데이터를 관리하였습니다.</p>
+<p>fbx파일을 로드함과 동시에 재귀적으로 fbx모델의 뼈 데이터를 읽도록 한뒤 이를 imgui라이브러리를 통해 계층 구조로 렌더링 하여 툴상에서 시각적으로 확인할 수 있도록 기능을 구현하였습니다.</p>
+<p>계층적으로 읽음과 동시에 fbx모델 뼈에 대해 인덱스 번호를 설정하는 아이디어를 통해 보다 효율적으로 관리할 수 있도록 하는 시스템을 도입하였습니다.</p>
+<p>그리고 계층적으로 로드한 뼈 데이터에 부위별 이름지정과 로드시 설정한 인덱스 지정을 할 수 있는 기능을 만들고 XML로 저장할 수 있도록 하고 시각적으로 확을 할 수 있도록 하였습니다.</p>
+<p>이를 통해 부위별 애니매이션 재생시 부위마다 애니매이션을 지정하여 해당 부위에 맞는 애니매이션을 적절히 선택할 수 있게 기능 지원을 하였습니다.</p>
+<p>클래스를 만들고 관리하는 과정에서 복잡한 부분들은 아래와 같이 직접 도식화 하여 관리하였습니다.</p>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__10.png" alt="image.png" loading="lazy"></figure>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__11.png" alt="image.png" loading="lazy"></figure>
+<hr>
+<h3>Code</h3>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__12.png" alt="image.png" loading="lazy"></figure>
+<p>ReadBone함수를 재귀적으로 호출하여 XML부모 노드에 자식 노드의 데이터를 기입하였습니다.</p>
+<p>툴상에서 설정한 뼈들에 대한 정보를 XML로 저장할 수 있게하였습니다.</p>
+<hr>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__13.png" alt="image.png" loading="lazy"></figure>
+<p>XML데이터를 XML_ParseBone_Recursion함수로 재귀적으로 읽고 툴상에서 재귀적으로 읽은 순서를 기억하여 이를 ImGui로 렌더링할 수 있게 하였습니다.</p>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__14.png" alt="image.png" loading="lazy"></figure>
+<p>툴상에서 저장한 뼈의 정보를 재귀적으로 읽고 뼈의 정보를 부위별로 저장하는 함수입니다.</p>
+<p>자식 뼈의 개수, 부모 뼈 인덱스 등에 대한 정보를 XML로 저장할 수 있게 하였습니다.</p>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__15.png" alt="image.png" loading="lazy"></figure>
+<p>XML파일 내에 전체 뼈개수를 저장할때 사용한 함수입니다. 뼈 개수만큼 재귀함수를 돌면서 읽은 데이터의 개수만큼 iNumTotChildBone이라는 변수에 누적을 하여 해당 변수를 반환하여 XML파일에서도 전체 뼈를 읽을 수 있게 하였습니다.</p>
+<h2>애니매이션 제어</h2>
+<h3>구현 결과</h3>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__16.gif" alt="기본 재생.gif" loading="lazy"></figure>
+<ol>
+<li>루트 애니매이션이 적용이 안된 원본 애니매이션을 재생하는 모습입니다.</li>
+</ol>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__17.gif" alt="루트 모션 제어.gif" loading="lazy"></figure>
+<ol>
+<li>루트 애니매이션을 적용한 후 재생 모습과 TrackBar로 제어하는 모습입니다.</li>
+</ol>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__18.gif" alt="Track 제어.gif" loading="lazy"></figure>
+<ol>
+<li>TrackBar로 애니매이션을 제어하는 모습입니다.</li>
+</ol>
+<hr>
+<h3>구현 과정</h3>
+<ol>
+<li>애니매이션 재생 시간에 따라 TrackBar의 위치를 조절하면서 현재 애니매이션을 확인할 수 있도록 하였습니다.</li>
+<li>TrackBar의 위치를 애니매이션 재생 시간으로 변환하여 TrackBar위치에 따라 행렬을 재구성하여 제어할 수 있도록 하였습니다.</li>
+<li>루트뼈에 대한 이동값을 없애는 방식으로 애니매이션이 원점에서 재생될 수 있도록 하였습니다.</li>
+</ol>
+<hr>
+<h3>Code</h3>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__19.png" alt="image.png" loading="lazy"></figure>
+<p>애니매이션 재생코드입니다.</p>
+<p>루트뼈 부터 순차적으로 부모뼈(부모 좌표계)곱하여 각 뼈들이 가지고 있는 정점들에 행렬곱을 수행하여 애니매이션이 올바르게 재생될 수 있도록 하였습니다.</p>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__20.png" alt="image.png" loading="lazy"></figure>
+<ul>
+<li>Code</li>
+</ul>
+<details class="code-toggle"><summary>📝 Code</summary>
+<pre><code class="language-cpp">    pair&lt;_bool, _bool&gt; CLevel_AnimTool::DrawOn_TrackPosBar(ImDrawList* pDrawList, _float* pCurTrackPos, _float fFrameLineStartX, _float fFrameLineStartY, _float fFrameLineEndX, _float fTrackPosBarSizeY, _float fFrameStep)
+    {
+        // 현재 선택된 키프레임의 인덱스 (-1이면 선택 안됨)
+        static _bool isDragging = false; // 키프레임이 드래그 중인지 확인하는 플래그
+    
+        _float fNewTrackPosBarPosX = fFrameLineStartX + *pCurTrackPos * fFrameStep; // 타임 라인 위치로 좌표계 변환
+    
+        // 키프레임 사각형 영역 계산
+        ImVec2 keyframeMin(fNewTrackPosBarPosX - 4.f, fFrameLineStartY);                     // 사각형의 왼쪽 위
+        ImVec2 keyframeMax(fNewTrackPosBarPosX + 4.f, fFrameLineStartY + fTrackPosBarSizeY); // 사각형의 오른쪽 아래
+    
+        // 마우스 이벤트 처리
+        ImGuiIO&amp; io = ImGui::GetIO();
+        ImVec2 mousePos = io.MousePos; // 현재 마우스 위치
+    
+        // 마우스가 키프레임 영역 안에 있는지 확인
+        _bool isHovered = (mousePos.x &gt;= keyframeMin.x &amp;&amp; mousePos.x &lt;= keyframeMax.x &amp;&amp; mousePos.y &gt;= keyframeMin.y &amp;&amp; mousePos.y &lt;= keyframeMax.y);
+    
+        // 마우스 클릭 시 드래그 시작
+        if (isHovered &amp;&amp; ImGui::IsMouseClicked(0)) // 왼쪽 클릭
+        {
+            // TrackPosBar 건드리면 멈춘다.
+            {
+                if (m_pAT_PartAnimObj_Model-&gt;Get_CurAnim_PlayState())
+                {
+                    m_pAT_PartAnimObj_Model-&gt;Stop_CurAnim();
+                }
+            }
+           
+            isDragging = true;
+        }
+    
+        // 드래그 중일 때 마우스 이동에 따라 키프레임 위치 업데이트
+        if (isDragging &amp;&amp; ImGui::IsMouseDown(0)) // 클릭을 유지하면 드래그 상태
+        {
+            fNewTrackPosBarPosX = mousePos.x;   // 마우스 X 좌표를 키프레임의 새로운 위치로 설정
+    
+            // 타임라인 범위를 벗어나지 않도록 제한
+            if (fNewTrackPosBarPosX &lt; fFrameLineStartX) fNewTrackPosBarPosX = fFrameLineStartX;
+            if (fNewTrackPosBarPosX &gt; fFrameLineEndX) fNewTrackPosBarPosX = fFrameLineEndX;
+    
+            // 키프레임의 새로운 위치를 애니메이션 프레임 값으로 변환
+            *pCurTrackPos = ((fNewTrackPosBarPosX - fFrameLineStartX) / fFrameStep);
+    
+            keyframeMin = { fNewTrackPosBarPosX - 4.f, fFrameLineStartY };                     // 사각형의 왼쪽 위
+            keyframeMax = { fNewTrackPosBarPosX + 4.f, fFrameLineStartY + fTrackPosBarSizeY }; // 사각형의 오른쪽 아래
+    
+            m_pAT_PartAnimObj_Model-&gt;Set_CurAnim_TrackPos(*pCurTrackPos);
+        }
+    
+        // 마우스 버튼을 떼면 드래그 종료
+        if (!ImGui::IsMouseDown(0))
+        {
+            // 애니매이션이 재생 중이라면 멈춘다.
+            if (isDragging)
+            {
+                if (m_pAT_PartAnimObj_Model-&gt;Get_CurAnim_PlayState())
+                    m_pAT_PartAnimObj_Model-&gt;Stop_CurAnim();
+    
+                isDragging = false;
+    
+                fNewTrackPosBarPosX = mousePos.x;   // 마우스 X 좌표를 키프레임의 새로운 위치로 설정
+    
+                // 타임라인 범위를 벗어나지 않도록 제한
+                if (fNewTrackPosBarPosX &lt; fFrameLineStartX) fNewTrackPosBarPosX = fFrameLineStartX;
+                if (fNewTrackPosBarPosX &gt; fFrameLineEndX) fNewTrackPosBarPosX = fFrameLineEndX;
+    
+                // 키프레임의 새로운 위치를 애니메이션 프레임 값으로 변환
+                *pCurTrackPos = ((fNewTrackPosBarPosX - fFrameLineStartX) / fFrameStep);
+    
+                keyframeMin = { fNewTrackPosBarPosX - 4.f, fFrameLineStartY };                     // 사각형의 왼쪽 위
+                keyframeMax = { fNewTrackPosBarPosX + 4.f, fFrameLineStartY + fTrackPosBarSizeY }; // 사각형의 오른쪽 아래
+    
+                m_pAT_PartAnimObj_Model-&gt;Set_CurAnim_TrackPos(*pCurTrackPos);
+            }
+        }
+    
+        // 키프레임 색상 선택 (드래그 중이면 초록색, 기본은 빨간색)
+        ImU32 keyframeColor = isDragging ? IM_COL32(0, 255, 0, 255) : IM_COL32(255, 0, 0, 255);
+    
+        // 키프레임 사각형 그리기
+        pDrawList-&gt;AddRectFilled(keyframeMin, keyframeMax, keyframeColor);
+        
+        return make_pair(isHovered, isDragging);
+    }</code></pre>
+</details>
+<p>현재 애니매이션 재생시간에 따라 TrackBar의 위치를 설정하고 TrackBar를 제어하는 코드입니다.</p>
+<p>TrackBar의 위치를 계산하고 이를 해당 애니매이션 총 재생시간에 비율로 계산을 하여 현재 TrackBar의 위치가 현재 애니매이션의 어떤 재생위치에 있는지를 계산하고 해당 재생시간으로 행렬곱을 역으로 계산하거나 순차적으로 계산하여 되감기하는 듯한 효과를 볼 수 있습니다.</p>
+<h2>애니매이션 키프레임 이벤트 기능</h2>
+<blockquote>애니매이션의 특정 키프레임에 데이터를 사입하는 기능을 구현하였습니다. 이벤트들을 map<string, map<string, vector<pair<string, _float>>>> m_Events;로 관리하고 이를 XML로 저장하고 불러올 수 있는 기능을 제공하였습니다.</blockquote>
+<p>></p>
+<h3>구현 결과</h3>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__21.gif" alt="이벤트 추가.gif" loading="lazy"></figure>
+<ol>
+<li>애니매이션 키프레임 이벤트 추가</li>
+</ol>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__22.gif" alt="이벤트 삭제.gif" loading="lazy"></figure>
+<ol>
+<li>애니매이션 키프레임 이벤트 불러오기</li>
+</ol>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__23.gif" alt="이벤트 불러오기.gif" loading="lazy"></figure>
+<ol>
+<li>애니매이션 키프레임 이벤트 삭제</li>
+</ol>
+<hr>
+<h3>구현 과정</h3>
+<ol>
+<li>TrackBar와 비슷한 변환 과정을 통해 해당 위치에 이벤트를 추가하고 시각적으로 확인할 수 있도록 동그라미 표시도 렌더링 하여 구현하였습니다.</li>
+</ol>
+<p>Layer가 여러 이벤트들을 가지고 있는 방식으로 아래와 같이 자료구조를 선언하여 관리하였습니다.</p>
+<details class="code-toggle"><summary>📝 Code</summary>
+<pre><code class="language-cpp">    // map&lt;애니매이션 이름, map&lt;이벤트 레이어 이름, vector&lt;이벤트 이름, 시간&gt;&gt;&gt;
+    map&lt;string, map&lt;string, vector&lt;pair&lt;string, _float&gt;&gt;&gt;&gt; m_Events;</code></pre>
+</details>
+<ol>
+<li>1번 에서 저장한 Key을 통해 이벤트를 관리하고 있는 map에 접근하여 해당 이벤트를 찾은 후 없애는 방식으로 구현하였습니다.</li>
+<li>저장한 데이터는 Layer → EventName → Time순으로 XML에 저장하고 불러올 때도 XML데이터를 읽어 해당 위치에 이벤트들을 시각적으로 알 수 있도록 렌더링 하였습니다.</li>
+</ol>
+<p>TrackBar, 키프레임 이벤트 표시(동그라미)등은 현재 화면 넓이를 계산해서 그리고 밖으로 벗어 나지 못하도록 처리도 진행하였습니다.</p>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__24.png" alt="image.png" loading="lazy"></figure>
+<p>3번 과정을 통해 저장한 XML 데이터 파일(테스트용)</p>
+<hr>
+<h3>Code</h3>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__25.png" alt="image.png" loading="lazy"></figure>
+<ul>
+<li>Code</li>
+</ul>
+<details class="code-toggle"><summary>📝 Code</summary>
+<pre><code class="language-cpp">    if (strLayerName != "" &amp;&amp; strEventName != "")
+    {
+        auto pCurAnim = m_pAT_PartAnimObj_Model-&gt;Get_CurAnim();
+        string strCurAnimName = pCurAnim-&gt;Get_AnimName();
+    
+        // 같은 이름의 이벤트가 있는지 찾는다.
+        vector&lt;pair&lt;string, _float&gt;&gt;&amp; vecEvents = m_Events[strCurAnimName][strLayerName];
+        for (auto iter = vecEvents.begin(); iter != vecEvents.end();)
+        {
+            if (iter-&gt;first == strEventName)
+                iter = vecEvents.erase(iter);
+            else
+                ++iter;
+        }
+    
+        //m_Events[strCurAnimName]가 존재하지 않으면 자동으로** 빈 map&lt;string, vector&lt;pair&lt;string, _float&gt;&gt;&gt;** 을 생성.
+        //    m_Events[strCurAnimName][strLayerName]가 존재하지 않으면 자동으로** 빈 vector&lt;pair&lt;string, _float&gt;&gt;** 을 생성.
+        //operator[]는 키가 존재하면 해당 값을 반환하고, 존재하지 않으면 새로 생성하여 반환.
+        //    이미 존재하는 키에 대해 emplace_back()을 호출하면 기존 데이터에 추가만 됨.
+        //    새로운 키를 사용할 경우, 자동으로 새로운 map과 vector가 생성되므로 직접 존재 여부를 확인할 필요 없음.
+        m_Events[strCurAnimName][strLayerName].emplace_back(make_pair(strEventName, fCurTrackPos));
+    
+        strLayerName = "";
+        strEventName = "";
+        memset(LayerBuffer, '\0', sizeof LayerBuffer);
+        memset(EventBuffer, '\0', sizeof EventBuffer);
+        bOpen = false;
+        ImGui::CloseCurrentPopup();
+    
+        item = 0;
+    }</code></pre>
+</details>
+<p>std::map에 이벤트를 추가하는 코드입니다. ImGui버튼을 누르면 현재 지정한 Layer의 이름과 Event이름을 통해 레이어로부터 같은 이름의 이벤트가 있는지 찾고 없다면 키프레임 이벤트를 해당 레이어에 추가할 수 있도록 하였습니다.</p>
+<p>std::map은 중복을 하용하지 않는다는 점을 적극활용하여 이벤트 데이터를 쉽게 추가 및 삭제할 수 있었습니다.</p>
+<hr>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__26.png" alt="image.png" loading="lazy"></figure>
+<ul>
+<li>Code</li>
+</ul>
+<details class="code-toggle"><summary>📝 Code</summary>
+<pre><code class="language-cpp">    HRESULT CLevel_AnimTool::XML_Load_Events(const WCHAR* strXMLFilePath)
+    {
+        xml::XMLDocument doc;
+        if (doc.LoadFile(CONVERTTOSTRING(strXMLFilePath).c_str()) != xml::XML_SUCCESS)
+            return E_FAIL;
+    
+        xml::XMLElement* pRoot = doc.FirstChildElement("AnimationEvent");
+        if (!pRoot)
+            return E_FAIL;
+    
+        _int iNumAnim{};
+        pRoot-&gt;QueryAttribute("NumAnim", &amp;iNumAnim);
+    
+        xml::XMLElement* pAnimEle = pRoot-&gt;FirstChildElement();
+        if (!pAnimEle)
+            return E_FAIL;
+    
+        for (_int i = 0; i &lt; iNumAnim; ++i)
+        {
+            const _char* pAnimName = nullptr;
+            pAnimEle-&gt;QueryAttribute("Name", &amp;pAnimName);
+            if (!pAnimName)
+                return E_FAIL;
+    
+            string strAnimName = pAnimName;
+            _int iNumLayer{};
+            pAnimEle-&gt;QueryIntAttribute("NumLayer", &amp;iNumLayer);
+            
+            xml::XMLElement* pLayerEle = pAnimEle-&gt;FirstChildElement();
+            if (!pLayerEle)
+                return E_FAIL;
+    
+            for (_int j = 0; j &lt; iNumLayer; ++j)
+            {
+                const _char* pLayerName = nullptr;
+                pLayerEle-&gt;QueryAttribute("Name", &amp;pLayerName);
+                if (!pLayerName)
+                    return E_FAIL;
+    
+                string strLayerName = pLayerName;
+                _int iNumEvent;
+                pLayerEle-&gt;QueryIntAttribute("NumEvent", &amp;iNumEvent);
+                
+                xml::XMLElement* pEventEle = pLayerEle-&gt;FirstChildElement();
+                if (!pEventEle)
+                    return E_FAIL;
+    
+                for (_int k = 0; k &lt; iNumEvent; ++k)
+                {
+                    const _char* pEventName = nullptr;
+                    pEventEle-&gt;QueryAttribute("Name", &amp;pEventName);
+                    if (!pEventName)
+                        return E_FAIL;
+                    
+                    string strEventName = pEventName;
+                    _float fTrackPos{};
+                    pEventEle-&gt;QueryFloatAttribute("TrackPos", &amp;fTrackPos);
+    
+                    m_Events[strAnimName][strLayerName].emplace_back(strEventName, fTrackPos);
+                    
+                    pEventEle = pEventEle-&gt;NextSiblingElement();
+                }
+    
+                pLayerEle = pLayerEle-&gt;NextSiblingElement();
+    
+            }
+            
+            pAnimEle = pAnimEle-&gt;NextSiblingElement();
+        }
+    
+        return S_OK;
+    }</code></pre>
+</details>
+<p>저정한 키프레임 이벤트들을 읽어들이는 코드입니다. XML로 저장한 데이터 파일로 부터 애니매이션 이름과 레이어 이름을 읽어들이고 해당하는 애니매이션 이름과 레이어를 찾고 레이어가 가지고 있는 이벤트데이터를 읽어들여 m_Events 자료구조에 저장하도록 하였습니다.</p>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__27.png" alt="image.png" loading="lazy"></figure>
+<ul>
+<li>Code</li>
+</ul>
+<details class="code-toggle"><summary>📝 Code</summary>
+<pre><code class="language-cpp">     for (_int i = 0; i &lt; vecLayerEvents.size(); ++i)
+     {
+         string strEvName = vecLayerEvents[i].first; // i번 이벤트 이름
+         _float fTrackPos = vecLayerEvents[i].second; // i번 이벤트의 track pos
+    
+         _float fEventPosX = Cal_TrackPosX(m_fFrameLineStartX, fTrackPos, fFrameStep); // i번 이벤트가 위치해야할 스크린 상 좌표 X
+         _float2 CirClePos = { fEventPosX,  fStartPosY + m_fFrameLineLen / 2.f };        //  i번 이벤트 원 위치
+         _float fMinX = CirClePos.x - fEventRadius / 2.f;
+         _float fMaxX = CirClePos.x + fEventRadius / 2.f;
+         _float fMinY = CirClePos.y - fEventRadius / 2.f;
+         _float fMaxY = CirClePos.y + fEventRadius / 2.f;
+    
+         _bool bHover = (mousePos.x &gt;= fMinX &amp;&amp; mousePos.x &lt;= fMaxX &amp;&amp; mousePos.y &gt;= fMinY &amp;&amp; mousePos.y &lt;= fMaxY);
+         
+         _float fNewPosX = fEventPosX;
+    
+         if (bHover)
+         {
+             ImGui::SetTooltip("EventName : %s\nTrackPos : %.2f", strEvName.c_str(), fTrackPos);
+    
+             // i번 이벤트 우클릭
+             {
+                 if (ImGui::IsMouseClicked(ImGuiMouseButton_Right))
+                 {
+                     bRightClick = true;
+                     strFocusedEventName = strEvName;
+                     strFocusedLayerName = strEventLayerName;
+                 }
+             }
+         }
+    
+         // 우클릭 이벤트 처리
+         {
+             if (bRightClick)
+             {
+                 if (strFocusedEventName == strEvName &amp;&amp; strFocusedLayerName == strEventLayerName)
+                 {
+                     ImGui::OpenPopup("Edit Event");
+                     if (ImGui::BeginPopup("Edit Event"))
+                     {
+                         if (ImGui::MenuItem("Edit Event Name"))
+                         {
+                             strFocusedEventName = "";
+                             strFocusedLayerName = "";
+                             bRightClick = false;
+                         }
+    
+                         if (ImGui::MenuItem("Delete Event"))
+                         {
+                             auto iterErase = vecLayerEvents.begin() + i;
+                             vecLayerEvents.erase(iterErase);
+    
+                             strFocusedEventName = "";
+                             strFocusedLayerName = "";
+    
+                             bRightClick = false;
+                         }
+    
+                         if (ImGui::MenuItem("Close"))
+                         {
+                             strFocusedEventName = "";
+                             strFocusedLayerName = "";
+    
+                             bRightClick = false;
+                         }
+    
+                         ImGui::EndPopup();
+                     }
+                 }
+             }
+         }</code></pre>
+</details>
+<p>선택한 이벤트를 삭제하는 코드입니다. 현재 마우스의 위치를 계산하고 마우스를 올린 위치에 동그라미표시(이벤트 위치)가 있다면 해당 이벤트를 Events자료구조로 부터 찾아 삭제할 수 있도록 하였습니다.</p>
+<h2>애니매이션 블렌딩 (애니매이션간 변경)</h2>
+<h3>구현 결과</h3>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__28.gif" alt="애니매이션 보간.gif" loading="lazy"></figure>
+<p>걷는 애니매이션(A)이 끝나면 칼을 휘두르는 애니매이션(B)으로 부드럽게 변화할 수 있도록 하였습니다.</p>
+<p>A애니매이션 끝 키프레임에서 B애니매이션 시작 키프레임 사이를 ‘선형보간’하여 부드럽게 전환될 수 있도록 하였고 보간을 수행하는 시간은 0.2초로 두어 해당값을 비율로 사용하였습니다.</p>
+<hr>
+<h3>구현 과정</h3>
+<p>우선 툴 상에서 애니매이션 블렌딩을 할 수 있도록 툴을 만들었습니다.</p>
+<p>애니매이션이 재생될 때 각 뼈의 Scale, Rotaion, Position값을 추적하는 변수(A)를 매틱 업데이트를 하다 블렌딩을 해야하는 상황에서 다음 애니매이션의 첫 Sacle, Rotaion, Position값(B)으로 섞일 수 있도록 하였습니다. 섞는 과정은 <strong>선형보간</strong>을 통해서 진행하였습니다.</p>
+<hr>
+<h3>Code</h3>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__29.png" alt="image.png" loading="lazy"></figure>
+<ul>
+<li>Code</li>
+</ul>
+<details class="code-toggle"><summary>📝 Code</summary>
+<pre><code class="language-cpp">    void CChannel::Update_TransformationMatrix(_float fCurrentTrackPosition, _uint* pKeyFrameIndex, const vector&lt;class CBone*&gt;&amp; Bones)
+    {
+    	if (0.f == fCurrentTrackPosition)
+    		*pKeyFrameIndex = 0;
+    
+    	if (Bones.size() &lt;= m_iBoneIndex)
+    		return;
+    
+    	static KEYFRAME		LastKeyFrame = m_KeyFrames.back();
+    	LastKeyFrame = m_KeyFrames.back();
+    
+    	_float3			vScale;
+    	_float4			vRotation;
+    	_float3			vPosition;
+    
+    	if (fCurrentTrackPosition &gt;= LastKeyFrame.fKeyFramePosition)
+    	{
+    		vScale = LastKeyFrame.vScale;
+    		vRotation = LastKeyFrame.vRotation;
+    		vPosition = LastKeyFrame.vPosition;
+    	}
+    	else
+    	{
+    		// 키프레임을 벗어나는 경우 적절한 키프레임 위치를 찾기 위한 예외 코드
+    		while (fCurrentTrackPosition &gt;= m_KeyFrames[*pKeyFrameIndex + 1].fKeyFramePosition)
+    			++*pKeyFrameIndex;
+    
+    		_float			fRatio = (fCurrentTrackPosition - m_KeyFrames[*pKeyFrameIndex].fKeyFramePosition) / (m_KeyFrames[*pKeyFrameIndex + 1].fKeyFramePosition - m_KeyFrames[*pKeyFrameIndex].fKeyFramePosition);
+    		fRatio = min(max(0.f, fRatio), 1.f);
+    
+    		_float3			vLeftScale, vRightScale;
+    		_float4			vLeftRotation, vRightRotation;
+    		_float3			vLeftPosition, vRightPosition;
+    
+    		vLeftScale = m_KeyFrames[*pKeyFrameIndex].vScale;
+    		vLeftRotation = m_KeyFrames[*pKeyFrameIndex].vRotation;
+    		vLeftPosition = m_KeyFrames[*pKeyFrameIndex].vPosition;
+    
+    		vRightScale = m_KeyFrames[*pKeyFrameIndex + 1].vScale;
+    		vRightRotation = m_KeyFrames[*pKeyFrameIndex + 1].vRotation;
+    		vRightPosition = m_KeyFrames[*pKeyFrameIndex + 1].vPosition;
+    
+    		XMStoreFloat3(&amp;vScale, XMVectorLerp(XMLoadFloat3(&amp;vLeftScale), XMLoadFloat3(&amp;vRightScale), fRatio));
+    		XMStoreFloat4(&amp;vRotation, XMQuaternionSlerp(XMLoadFloat4(&amp;vLeftRotation), XMLoadFloat4(&amp;vRightRotation), fRatio));
+    		XMStoreFloat3(&amp;vPosition, XMVectorLerp(XMLoadFloat3(&amp;vLeftPosition), XMLoadFloat3(&amp;vRightPosition), fRatio));
+    
+    		m_vCurScale = vScale;
+    		m_vCurRotation = vRotation;
+    		m_vCurPosition = vPosition;
+    
+    		m_vCurScaleTrace = vScale;			// 매틱 Scale을 추적하는 변수 : 보간에 사용
+    		m_vCurRotationTrace = vRotation;	// 매틱 Rotation을 추적하는 변수 : 보간에 사용
+    		m_vCurPositionTrace = vPosition;	// 매틱 Position을 추적하는 변수 : 보간에 사용
+    	}
+    
+    	// 회전을 나타내는 RotationQuaternion 매개변수는 쿼터니언이며, 이를 기반으로 회전 행렬을 생성
+    	Bones[m_iBoneIndex]-&gt;Set_TransformationMatrix(XMMatrixAffineTransformation(XMLoadFloat3(&amp;vScale), XMVectorSet(0.f, 0.f, 0.f, 1.f), XMLoadFloat4(&amp;vRotation), XMVectorSetW(XMLoadFloat3(&amp;vPosition), 1.f)));
+    }</code></pre>
+</details>
+<p>애니매이션을 재생 시키는 코드입니다.</p>
+<p>애니매이션 재생 시간(TrackPos)값에 따라 각 뼈가 구성해야할 Scale, Rotation, Position값을 매틱 업데이트 시켜주는 코드입니다.</p>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__30.png" alt="image.png" loading="lazy"></figure>
+<ul>
+<li>Code</li>
+</ul>
+<details class="code-toggle"><summary>📝 Code</summary>
+<pre><code class="language-cpp">    void CChannel::Update_TransformationMatrix_Interpolation(_float fCurInterTrackPos, const _float fInterTime, _uint* pKeyFrameIndex, KEYFRAME InterSrcKeyFrame, KEYFRAME InterDstKeyFrame, const vector&lt;class CBone*&gt;&amp; Bones, _bool bChainInterpolation)
+    {
+    	_float3 vScale, vPosition;
+    	_float4 vRotation;
+    
+    	// 보간 비율 계산
+    	_float fRatio = fCurInterTrackPos / fInterTime;
+    	fRatio = min(max(0.f, fRatio), 1.f);
+    
+    	_float3	vS0{}, vS1{}, vP0{}, vP1{};
+    	_float4	vR0{}, vR1{};
+    	
+    	// 시작 키프레임
+    	vS0 = m_vCurStartScale;
+    	vR0 = m_vCurStartRot;
+    	vP0 = m_vCurStartPos;
+    
+    	// 목적지 키프레임
+    	vS1 = InterDstKeyFrame.vScale;
+    	vR1 = InterDstKeyFrame.vRotation;
+    	vP1 = InterDstKeyFrame.vPosition;
+    
+    	// 스케일, 회전, 위치 보간
+    	XMStoreFloat3(&amp;vScale, XMVectorLerp(XMLoadFloat3(&amp;vS0), XMLoadFloat3(&amp;vS1), fRatio));
+    	XMStoreFloat4(&amp;vRotation, XMQuaternionSlerp(XMLoadFloat4(&amp;vR0), XMLoadFloat4(&amp;vR1), fRatio));
+    	XMStoreFloat3(&amp;vPosition, XMVectorLerp(XMLoadFloat3(&amp;vP0), XMLoadFloat3(&amp;vP1), fRatio));
+    
+    	// 보간이든 보보간이든 언제든지 scale, rot, pos를 추적
+    	m_vCurScaleTrace = vScale;
+    	m_vCurRotationTrace = vRotation;
+    	m_vCurPositionTrace = vPosition;
+    
+    	// 최종 변환 행렬 계산 및 설정
+    	Bones[m_iBoneIndex]-&gt;Set_TransformationMatrix(XMMatrixAffineTransformation(XMLoadFloat3(&amp;vScale), XMVectorSet(0.f, 0.f, 0.f, 1.f), XMLoadFloat4(&amp;vRotation), XMVectorSetW(XMLoadFloat3(&amp;vPosition), 1.f)));
+    }</code></pre>
+</details>
+<p>블렌딩이 시작되면(보간이 시작되면)매틱 불리는 함수입니다.</p>
+<p>블렌딩 ‘시작 vS0, vR0, vP0’ 에서 부터 ‘목적지 vS1, vR1, vP1’ 로의 선형보간을 수행하여 A애니매이션과 B애니매이션이 자연스럽게 이어지도록 구현하였습니다.</p>
+<h2>애니매이션 상하체 분리 기능</h2>
+<h3>구현 결과</h3>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__31.gif" alt="휘두르기 상체.gif" loading="lazy"></figure>
+<ol>
+<li>상체에 사용한 애니매이션입니다.</li>
+</ol>
+<hr>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__32.gif" alt="걷기 하체.gif" loading="lazy"></figure>
+<ol>
+<li>하체에 사용한 애니매이션입니다.</li>
+</ol>
+<hr>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__33.gif" alt="상하체.gif" loading="lazy"></figure>
+<ol>
+<li>1,번, 2번 애니매이션을 상하체에 따로 적용한 결과입니다.</li>
+</ol>
+<hr>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__34.gif" alt="상하체 보간.gif" loading="lazy"></figure>
+<p>블렌딩 하는 시간을 길게 설정하여 정확히 블렌딩이 되는지 파악할 수 있게 하고</p>
+<p>하체 : 앉아서 걷기, 상체 : 칼 휘두르기 애니매이션 재생 상태에서 전신을 휘두르기 애니매이션으로 전환시 하체에 대해서만 부분적으로 블렌딩을 수행하는 기능 구현하였습니다.</p>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__35.gif" alt="보간 시각화.gif" loading="lazy"></figure>
+<p>블렌딩 중인 부위(하체 노란색), 블렌딩 최종 목적지 부위(파란색)으로 텍스트를 보여주고 블렌딩이 끝난 시점 어떤 부위과 활성화 되어 있는지 빨간색 텍스트로 표현해주는 기능 구현하였습니다.</p>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__36.gif" alt="팔상하체.gif" loading="lazy"></figure>
+<p>양팔, 상체, 하체에 4개의 애니매이션을 수행하는 기능 구현하였습니다.</p>
+<hr>
+<h3>구현 과정</h3>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__37.png" alt="image.png" loading="lazy"></figure>
+<p>뼈들의 정보를 모두 인덱스화 해서 XML 파일로 저장하고 각 부위 별로 사용할 뼈의 인덱스 범위를 지정하는 방식으로 구현하였습니다.</p>
+<p>전체 뼈 개수가 200개인 경우 상체가 사용할 뼈의 범위는 100~200번까지 할당해주고 하체가 사용할 뼈의 인덱스 범위를 0~99번까지 할당하여 애니매이션을 재생할 때 자신의 부위의 해당 범위 내에서만 행렬 연산을 수행하도록 하여 상하체 분리 기능을 구현하였습니다.</p>
+<hr>
+<h3>Code</h3>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__38.png" alt="image.png" loading="lazy"></figure>
+<ul>
+<li>Code</li>
+</ul>
+<details class="code-toggle"><summary>📝 Code</summary>
+<pre><code class="language-cpp">    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;!--Generated on: 2025-02-28 10:36:43--&gt;
+    &lt;BlendBones Num="6"&gt;
+        &lt;BlendBone BlendBoneName="Root" BlendBoneIndex="2" BlendBoneType="6" BlendBoneTypeName="Total"/&gt;
+        &lt;BlendBone BlendBoneName="Spine_1" BlendBoneIndex="4" BlendBoneType="2" BlendBoneTypeName="UpperBody"/&gt;
+        &lt;BlendBone BlendBoneName="Waist" BlendBoneIndex="151" BlendBoneType="1" BlendBoneTypeName="LowerBody"/&gt;
+        &lt;BlendBone BlendBoneName="Clavicle_L" BlendBoneIndex="6" BlendBoneType="3" BlendBoneTypeName="ArmLeft"/&gt;
+        &lt;BlendBone BlendBoneName="Clavicle_R" BlendBoneIndex="40" BlendBoneType="4" BlendBoneTypeName="ArmRight"/&gt;
+        &lt;BlendBone BlendBoneName="Head" BlendBoneIndex="75" BlendBoneType="5" BlendBoneTypeName="Head"/&gt;
+    &lt;/BlendBones&gt;
+    
+    &lt;BlendBoneParentName Name="Root" Type="Total" MinBoneIdx="2" MaxBoneIdx="196"&gt;
+        &lt;Bone Name="Root" Index="2" ParentIndex="1" NumChild="2" NumTotalChildBone="194"&gt;
+            &lt;Bone Name="Skl_Root" Index="3" ParentIndex="2" NumChild="2" NumTotalChildBone="191"&gt;
+                &lt;Bone Name="Spine_1" Index="4" ParentIndex="3" NumChild="1" NumTotalChildBone="146"&gt;
+                    &lt;Bone Name="Spine_2" Index="5" ParentIndex="4" NumChild="4" NumTotalChildBone="145"&gt;
+                        &lt;Bone Name="Clavicle_L" Index="6" ParentIndex="5" NumChild="2" NumTotalChildBone="33"&gt;
+                            &lt;Bone Name="Arm_1_L" Index="7" ParentIndex="6" NumChild="2" NumTotalChildBone="30"&gt;
+                                &lt;Bone Name="Arm_1_Assist_L" Index="8" ParentIndex="7" NumChild="1" NumTotalChildBone="1"&gt;
+                                    &lt;Bone Name="Arm_1_Assist_L_end" Index="9" ParentIndex="8" NumChild="0" NumTotalChildBone="0"/&gt;
+                                &lt;/Bone&gt;
+                                &lt;Bone Name="Arm_2_L" Index="10" ParentIndex="9" NumChild="3" NumTotalChildBone="27"&gt;
+                                    &lt;Bone Name="Elbow_L" Index="11" ParentIndex="10" NumChild="1" NumTotalChildBone="1"&gt;
+                                        &lt;Bone Name="Elbow_L_end" Index="12" ParentIndex="11" NumChild="0" NumTotalChildBone="0"/&gt;
+                                    &lt;/Bone&gt;
+                                    &lt;Bone Name="Wrist_Assist_L" Index="13" ParentIndex="12" NumChild="1" NumTotalChildBone="1"&gt;
+                                        &lt;Bone Name="Wrist_Assist_L_end" Index="14" ParentIndex="13" NumChild="0" NumTotalChildBone="0"/&gt;
+                                    &lt;/Bone&gt;
+                                    &lt;Bone Name="Wrist_L" Index="15" ParentIndex="14" NumChild="6" NumTotalChildBone="22"&gt;
+                                        &lt;Bone Name="Finger_A_1_L" Index="16" ParentIndex="15" NumChild="1" NumTotalChildBone="3"&gt;
+                                            &lt;Bone Name="Finger_A_2_L" Index="17" ParentIndex="16" NumChild="1" NumTotalChildBone="2"&gt;
+                                                &lt;Bone Name="Finger_A_3_L" Index="18" ParentIndex="17" NumChild="1" NumTotalChildBone="1"&gt;
+                                                    &lt;Bone Name="Finger_A_3_L_end" Index="19" ParentIndex="18" NumChild="0" NumTotalChildBone="0"/&gt;
+                                                &lt;/Bone&gt;
+                                            &lt;/Bone&gt;
+                                        &lt;/Bone&gt;
+                                        &lt;Bone Name="Finger_B_1_L" Index="20" ParentIndex="19" NumChild="1" NumTotalChildBone="3"&gt;
+                                            &lt;Bone Name="Finger_B_2_L" Index="21" ParentIndex="20" NumChild="1" NumTotalChildBone="2"&gt;
+                                                &lt;Bone Name="Finger_B_3_L" Index="22" ParentIndex="21" NumChild="1" NumTotalChildBone="1"&gt;
+                                                    &lt;Bone Name="Finger_B_3_L_end" Index="23" ParentIndex="22" NumChild="0" NumTotalChildBone="0"/&gt;
+                                                &lt;/Bone&gt;
+                                            &lt;/Bone&gt;
+                                        &lt;/Bone&gt;
+                                        &lt;Bone Name="Finger_C_1_L" Index="24" ParentIndex="23" NumChild="1" NumTotalChildBone="3"&gt;
+                                            &lt;Bone Name="Finger_C_2_L" Index="25" ParentIndex="24" NumChild="1" NumTotalChildBone="2"&gt;
+                                                &lt;Bone Name="Finger_C_3_L" Index="26" ParentIndex="25" NumChild="1" NumTotalChildBone="1"&gt;
+                                                    &lt;Bone Name="Finger_C_3_L_end" Index="27" ParentIndex="26" NumChild="0" NumTotalChildBone="0"/&gt;
+                                                &lt;/Bone&gt;
+                                            &lt;/Bone&gt;
+                                        &lt;/Bone&gt;
+                                        &lt;Bone Name="Finger_D_1_L" Index="28" ParentIndex="27" NumChild="1" NumTotalChildBone="3"&gt;
+                                            &lt;Bone Name="Finger_D_2_L" Index="29" ParentIndex="28" NumChild="1" NumTotalChildBone="2"&gt;
+                                                &lt;Bone Name="Finger_D_3_L" Index="30" ParentIndex="29" NumChild="1" NumTotalChildBone="1"&gt;
+                                                    &lt;Bone Name="Finger_D_3_L_end" Index="31" ParentIndex="30" NumChild="0" NumTotalChildBone="0"/&gt;
+                                                &lt;/Bone&gt;
+                                            &lt;/Bone&gt;
+                                        &lt;/Bone&gt;
+                                        &lt;Bone Name="Finger_E_1_L" Index="32" ParentIndex="31" NumChild="1" NumTotalChildBone="3"&gt;
+                                            &lt;Bone Name="Finger_E_2_L" Index="33" ParentIndex="32" NumChild="1" NumTotalChildBone="2"&gt;
+                                                &lt;Bone Name="Finger_E_3_L" Index="34" ParentIndex="33" NumChild="1" NumTotalChildBone="1"&gt;
+                                                    &lt;Bone Name="Finger_E_3_L_end" Index="35" ParentIndex="34" NumChild="0" NumTotalChildBone="0"/&gt;
+                                                &lt;/Bone&gt;
+                                            &lt;/Bone&gt;
+                                        &lt;/Bone&gt;
+                                        &lt;Bone Name="Weapon_L" Index="36" ParentIndex="35" NumChild="1" NumTotalChildBone="1"&gt;
+                                            &lt;Bone Name="Weapon_L_end" Index="37" ParentIndex="36" NumChild="0" NumTotalChildBone="0"/&gt;
+                                        &lt;/Bone&gt;
+                                    &lt;/Bone&gt;
+                                &lt;/Bone&gt;
+                            &lt;/Bone&gt;
+                            &lt;Bone Name="Clavicle_Assist_L" Index="38" ParentIndex="37" NumChild="1" NumTotalChildBone="1"&gt;
+                                &lt;Bone Name="Clavicle_Assist_L_end" Index="39" ParentIndex="38" NumChild="0" NumTotalChildBone="0"/&gt;
+                            &lt;/Bone&gt;
+                        &lt;/Bone&gt;
+                        &lt;Bone Name="Clavicle_R" Index="40" ParentIndex="39" NumChild="2" NumTotalChildBone="33"&gt;
+                            &lt;Bone Name="Arm_1_R" Index="41" ParentIndex="40" NumChild="2" NumTotalChildBone="30"&gt;
+                                &lt;Bone Name="Arm_1_Assist_R" Index="42" ParentIndex="41" NumChild="1" NumTotalChildBone="1"&gt;
+                                    &lt;Bone Name="Arm_1_Assist_R_end" Index="43" ParentIndex="42" NumChild="0" NumTotalChildBone="0"/&gt;
+                                &lt;/Bone&gt;
+                                &lt;Bone Name="Arm_2_R" Index="44" ParentIndex="43" NumChild="3" NumTotalChildBone="27"&gt;
+                                    &lt;Bone Name="Elbow_R" Index="45" ParentIndex="44" NumChild="1" NumTotalChildBone="1"&gt;
+                                        &lt;Bone Name="Elbow_R_end" Index="46" ParentIndex="45" NumChild="0" NumTotalChildBone="0"/&gt;
+                                    &lt;/Bone&gt;
+                                    &lt;Bone Name="Wrist_Assist_R" Index="47" ParentIndex="46" NumChild="1" NumTotalChildBone="1"&gt;
+                                        &lt;Bone Name="Wrist_Assist_R_end" Index="48" ParentIndex="47" NumChild="0" NumTotalChildBone="0"/&gt;
+                                    &lt;/Bone&gt;
+                                    &lt;Bone Name="Wrist_R" Index="49" ParentIndex="48" NumChild="6" NumTotalChildBone="22"&gt;
+                                        &lt;Bone Name="Finger_A_1_R" Index="50" ParentIndex="49" NumChild="1" NumTotalChildBone="3"&gt;
+                                            &lt;Bone Name="Finger_A_2_R" Index="51" ParentIndex="50" NumChild="1" NumTotalChildBone="2"&gt;
+                                                &lt;Bone Name="Finger_A_3_R" Index="52" ParentIndex="51" NumChild="1" NumTotalChildBone="1"&gt;
+                                                    &lt;Bone Name="Finger_A_3_R_end" Index="53" ParentIndex="52" NumChild="0" NumTotalChildBone="0"/&gt;
+                                                &lt;/Bone&gt;
+                                            &lt;/Bone&gt;
+                                        &lt;/Bone&gt;
+                                        &lt;Bone Name="Finger_B_1_R" Index="54" ParentIndex="53" NumChild="1" NumTotalChildBone="3"&gt;
+                                            &lt;Bone Name="Finger_B_2_R" Index="55" ParentIndex="54" NumChild="1" NumTotalChildBone="2"&gt;
+                                                &lt;Bone Name="Finger_B_3_R" Index="56" ParentIndex="55" NumChild="1" NumTotalChildBone="1"&gt;
+                                                    &lt;Bone Name="Finger_B_3_R_end" Index="57" ParentIndex="56" NumChild="0" NumTotalChildBone="0"/&gt;
+                                                &lt;/Bone&gt;
+                                            &lt;/Bone&gt;
+                                        &lt;/Bone&gt;
+                                        &lt;Bone Name="Finger_C_1_R" Index="58" ParentIndex="57" NumChild="1" NumTotalChildBone="3"&gt;
+                                            &lt;Bone Name="Finger_C_2_R" Index="59" ParentIndex="58" NumChild="1" NumTotalChildBone="2"&gt;
+                                                &lt;Bone Name="Finger_C_3_R" Index="60" ParentIndex="59" NumChild="1" NumTotalChildBone="1"&gt;
+                                                    &lt;Bone Name="Finger_C_3_R_end" Index="61" ParentIndex="60" NumChild="0" NumTotalChildBone="0"/&gt;
+                                                &lt;/Bone&gt;
+                                            &lt;/Bone&gt;
+                                        &lt;/Bone&gt;
+                                        &lt;Bone Name="Finger_D_1_R" Index="62" ParentIndex="61" NumChild="1" NumTotalChildBone="3"&gt;
+                                            &lt;Bone Name="Finger_D_2_R" Index="63" ParentIndex="62" NumChild="1" NumTotalChildBone="2"&gt;
+                                                &lt;Bone Name="Finger_D_3_R" Index="64" ParentIndex="63" NumChild="1" NumTotalChildBone="1"&gt;
+                                                    &lt;Bone Name="Finger_D_3_R_end" Index="65" ParentIndex="64" NumChild="0" NumTotalChildBone="0"/&gt;
+                                                &lt;/Bone&gt;
+                                            &lt;/Bone&gt;
+                                        &lt;/Bone&gt;
+                                        &lt;Bone Name="Finger_E_1_R" Index="66" ParentIndex="65" NumChild="1" NumTotalChildBone="3"&gt;
+                                            &lt;Bone Name="Finger_E_2_R" Index="67" ParentIndex="66" NumChild="1" NumTotalChildBone="2"&gt;
+                                                &lt;Bone Name="Finger_E_3_R" Index="68" ParentIndex="67" NumChild="1" NumTotalChildBone="1"&gt;
+                                                    &lt;Bone Name="Finger_E_3_R_end" Index="69" ParentIndex="68" NumChild="0" NumTotalChildBone="0"/&gt;
+                                                &lt;/Bone&gt;
+                                            &lt;/Bone&gt;
+                                        &lt;/Bone&gt;
+                                        &lt;Bone Name="Weapon_R" Index="70" ParentIndex="69" NumChild="1" NumTotalChildBone="1"&gt;
+                                            &lt;Bone Name="Weapon_R_end" Index="71" ParentIndex="70" NumChild="0" NumTotalChildBone="0"/&gt;
+                                        &lt;/Bone&gt;
+                                    &lt;/Bone&gt;
+                                &lt;/Bone&gt;
+                            &lt;/Bone&gt;
+                            &lt;Bone Name="Clavicle_Assist_R" Index="72" ParentIndex="71" NumChild="1" NumTotalChildBone="1"&gt;
+                                &lt;Bone Name="Clavicle_Assist_R_end" Index="73" ParentIndex="72" NumChild="0" NumTotalChildBone="0"/&gt;
+                            &lt;/Bone&gt;
+                        &lt;/Bone&gt;
+                        &lt;Bone Name="Neck" Index="74" ParentIndex="73" NumChild="1" NumTotalChildBone="74"&gt;
+                            &lt;Bone Name="Head" Index="75" ParentIndex="74" NumChild="4" NumTotalChildBone="73"&gt;
+                                &lt;Bone Name="Ear_L" Index="76" ParentIndex="75" NumChild="1" NumTotalChildBone="1"&gt;
+                                    &lt;Bone Name="Ear_L_end" Index="77" ParentIndex="76" NumChild="0" NumTotalChildBone="0"/&gt;
+                                &lt;/Bone&gt;
+                                &lt;Bone Name="Ear_R" Index="78" ParentIndex="77" NumChild="1" NumTotalChildBone="1"&gt;
+                                    &lt;Bone Name="Ear_R_end" Index="79" ParentIndex="78" NumChild="0" NumTotalChildBone="0"/&gt;
+                                &lt;/Bone&gt;
+                                &lt;Bone Name="Face_Root" Index="80" ParentIndex="79" NumChild="28" NumTotalChildBone="65"&gt;
+                                    &lt;Bone Name="Cheek_D_L" Index="81" ParentIndex="80" NumChild="1" NumTotalChildBone="1"&gt;
+                                        &lt;Bone Name="Cheek_D_L_end" Index="82" ParentIndex="81" NumChild="0" NumTotalChildBone="0"/&gt;
+                                    &lt;/Bone&gt;
+                                    &lt;Bone Name="Cheek_D_R" Index="83" ParentIndex="82" NumChild="1" NumTotalChildBone="1"&gt;
+                                        &lt;Bone Name="Cheek_D_R_end" Index="84" ParentIndex="83" NumChild="0" NumTotalChildBone="0"/&gt;
+                                    &lt;/Bone&gt;
+                                    &lt;Bone Name="Cheek_U_L" Index="85" ParentIndex="84" NumChild="1" NumTotalChildBone="1"&gt;
+                                        &lt;Bone Name="Cheek_U_L_end" Index="86" ParentIndex="85" NumChild="0" NumTotalChildBone="0"/&gt;
+                                    &lt;/Bone&gt;
+                                    &lt;Bone Name="Cheek_U_R" Index="87" ParentIndex="86" NumChild="1" NumTotalChildBone="1"&gt;
+                                        &lt;Bone Name="Cheek_U_R_end" Index="88" ParentIndex="87" NumChild="0" NumTotalChildBone="0"/&gt;
+                                    &lt;/Bone&gt;
+                                    &lt;Bone Name="Chin" Index="89" ParentIndex="88" NumChild="5" NumTotalChildBone="10"&gt;
+                                        &lt;Bone Name="Chin_Point" Index="90" ParentIndex="89" NumChild="1" NumTotalChildBone="1"&gt;
+                                            &lt;Bone Name="Chin_Point_end" Index="91" ParentIndex="90" NumChild="0" NumTotalChildBone="0"/&gt;
+                                        &lt;/Bone&gt;
+                                        &lt;Bone Name="Lip_D" Index="92" ParentIndex="91" NumChild="1" NumTotalChildBone="1"&gt;
+                                            &lt;Bone Name="Lip_D_end" Index="93" ParentIndex="92" NumChild="0" NumTotalChildBone="0"/&gt;
+                                        &lt;/Bone&gt;
+                                        &lt;Bone Name="Lip_D_L_1" Index="94" ParentIndex="93" NumChild="1" NumTotalChildBone="1"&gt;
+                                            &lt;Bone Name="Lip_D_L_1_end" Index="95" ParentIndex="94" NumChild="0" NumTotalChildBone="0"/&gt;
+                                        &lt;/Bone&gt;
+                                        &lt;Bone Name="Lip_D_R_1" Index="96" ParentIndex="95" NumChild="1" NumTotalChildBone="1"&gt;
+                                            &lt;Bone Name="Lip_D_R_1_end" Index="97" ParentIndex="96" NumChild="0" NumTotalChildBone="0"/&gt;
+                                        &lt;/Bone&gt;
+                                        &lt;Bone Name="Teeth_D" Index="98" ParentIndex="97" NumChild="1" NumTotalChildBone="1"&gt;
+                                            &lt;Bone Name="Teeth_D_end" Index="99" ParentIndex="98" NumChild="0" NumTotalChildBone="0"/&gt;
+                                        &lt;/Bone&gt;
+                                    &lt;/Bone&gt;
+                                    &lt;Bone Name="Eye_In_L" Index="100" ParentIndex="99" NumChild="1" NumTotalChildBone="1"&gt;
+                                        &lt;Bone Name="Eye_In_L_end" Index="101" ParentIndex="100" NumChild="0" NumTotalChildBone="0"/&gt;
+                                    &lt;/Bone&gt;
+                                    &lt;Bone Name="Eye_In_R" Index="102" ParentIndex="101" NumChild="1" NumTotalChildBone="1"&gt;
+                                        &lt;Bone Name="Eye_In_R_end" Index="103" ParentIndex="102" NumChild="0" NumTotalChildBone="0"/&gt;
+                                    &lt;/Bone&gt;
+                                    &lt;Bone Name="Eye_Out_L" Index="104" ParentIndex="103" NumChild="1" NumTotalChildBone="1"&gt;
+                                        &lt;Bone Name="Eye_Out_L_end" Index="105" ParentIndex="104" NumChild="0" NumTotalChildBone="0"/&gt;
+                                    &lt;/Bone&gt;
+                                    &lt;Bone Name="Eye_Out_R" Index="106" ParentIndex="105" NumChild="1" NumTotalChildBone="1"&gt;
+                                        &lt;Bone Name="Eye_Out_R_end" Index="107" ParentIndex="106" NumChild="0" NumTotalChildBone="0"/&gt;
+                                    &lt;/Bone&gt;
+                                    &lt;Bone Name="Eyeball_L" Index="108" ParentIndex="107" NumChild="1" NumTotalChildBone="1"&gt;
+                                        &lt;Bone Name="Eyeball_L_end" Index="109" ParentIndex="108" NumChild="0" NumTotalChildBone="0"/&gt;
+                                    &lt;/Bone&gt;
+                                    &lt;Bone Name="Eyeball_R" Index="110" ParentIndex="109" NumChild="1" NumTotalChildBone="1"&gt;
+                                        &lt;Bone Name="Eyeball_R_end" Index="111" ParentIndex="110" NumChild="0" NumTotalChildBone="0"/&gt;
+                                    &lt;/Bone&gt;
+                                    &lt;Bone Name="Eyebrow_In_L" Index="112" ParentIndex="111" NumChild="1" NumTotalChildBone="1"&gt;
+                                        &lt;Bone Name="Eyebrow_In_L_end" Index="113" ParentIndex="112" NumChild="0" NumTotalChildBone="0"/&gt;
+                                    &lt;/Bone&gt;
+                                    &lt;Bone Name="Eyebrow_In_R" Index="114" ParentIndex="113" NumChild="1" NumTotalChildBone="1"&gt;
+                                        &lt;Bone Name="Eyebrow_In_R_end" Index="115" ParentIndex="114" NumChild="0" NumTotalChildBone="0"/&gt;
+                                    &lt;/Bone&gt;
+                                    &lt;Bone Name="Eyebrow_Mid_L" Index="116" ParentIndex="115" NumChild="1" NumTotalChildBone="1"&gt;
+                                        &lt;Bone Name="Eyebrow_Mid_L_end" Index="117" ParentIndex="116" NumChild="0" NumTotalChildBone="0"/&gt;
+                                    &lt;/Bone&gt;
+                                    &lt;Bone Name="Eyebrow_Mid_R" Index="118" ParentIndex="117" NumChild="1" NumTotalChildBone="1"&gt;
+                                        &lt;Bone Name="Eyebrow_Mid_R_end" Index="119" ParentIndex="118" NumChild="0" NumTotalChildBone="0"/&gt;
+                                    &lt;/Bone&gt;
+                                    &lt;Bone Name="Eyebrow_Out_L" Index="120" ParentIndex="119" NumChild="1" NumTotalChildBone="1"&gt;
+                                        &lt;Bone Name="Eyebrow_Out_L_end" Index="121" ParentIndex="120" NumChild="0" NumTotalChildBone="0"/&gt;
+                                    &lt;/Bone&gt;
+                                    &lt;Bone Name="Eyebrow_Out_R" Index="122" ParentIndex="121" NumChild="1" NumTotalChildBone="1"&gt;
+                                        &lt;Bone Name="Eyebrow_Out_R_end" Index="123" ParentIndex="122" NumChild="0" NumTotalChildBone="0"/&gt;
+                                    &lt;/Bone&gt;
+                                    &lt;Bone Name="Eyelid_D_L" Index="124" ParentIndex="123" NumChild="1" NumTotalChildBone="1"&gt;
+                                        &lt;Bone Name="Eyelid_D_L_end" Index="125" ParentIndex="124" NumChild="0" NumTotalChildBone="0"/&gt;
+                                    &lt;/Bone&gt;
+                                    &lt;Bone Name="Eyelid_D_R" Index="126" ParentIndex="125" NumChild="1" NumTotalChildBone="1"&gt;
+                                        &lt;Bone Name="Eyelid_D_R_end" Index="127" ParentIndex="126" NumChild="0" NumTotalChildBone="0"/&gt;
+                                    &lt;/Bone&gt;
+                                    &lt;Bone Name="Eyelid_U_L" Index="128" ParentIndex="127" NumChild="1" NumTotalChildBone="1"&gt;
+                                        &lt;Bone Name="Eyelid_U_L_end" Index="129" ParentIndex="128" NumChild="0" NumTotalChildBone="0"/&gt;
+                                    &lt;/Bone&gt;
+                                    &lt;Bone Name="Eyelid_U_R" Index="130" ParentIndex="129" NumChild="1" NumTotalChildBone="1"&gt;
+                                        &lt;Bone Name="Eyelid_U_R_end" Index="131" ParentIndex="130" NumChild="0" NumTotalChildBone="0"/&gt;
+                                    &lt;/Bone&gt;
+                                    &lt;Bone Name="Lip_U" Index="132" ParentIndex="131" NumChild="1" NumTotalChildBone="1"&gt;
+                                        &lt;Bone Name="Lip_U_end" Index="133" ParentIndex="132" NumChild="0" NumTotalChildBone="0"/&gt;
+                                    &lt;/Bone&gt;
+                                    &lt;Bone Name="Lip_U_L_1" Index="134" ParentIndex="133" NumChild="1" NumTotalChildBone="1"&gt;
+                                        &lt;Bone Name="Lip_U_L_1_end" Index="135" ParentIndex="134" NumChild="0" NumTotalChildBone="0"/&gt;
+                                    &lt;/Bone&gt;
+                                    &lt;Bone Name="Lip_U_L_2" Index="136" ParentIndex="135" NumChild="1" NumTotalChildBone="1"&gt;
+                                        &lt;Bone Name="Lip_U_L_2_end" Index="137" ParentIndex="136" NumChild="0" NumTotalChildBone="0"/&gt;
+                                    &lt;/Bone&gt;
+                                    &lt;Bone Name="Lip_U_R_1" Index="138" ParentIndex="137" NumChild="1" NumTotalChildBone="1"&gt;
+                                        &lt;Bone Name="Lip_U_R_1_end" Index="139" ParentIndex="138" NumChild="0" NumTotalChildBone="0"/&gt;
+                                    &lt;/Bone&gt;
+                                    &lt;Bone Name="Lip_U_R_2" Index="140" ParentIndex="139" NumChild="1" NumTotalChildBone="1"&gt;
+                                        &lt;Bone Name="Lip_U_R_2_end" Index="141" ParentIndex="140" NumChild="0" NumTotalChildBone="0"/&gt;
+                                    &lt;/Bone&gt;
+                                    &lt;Bone Name="Nose" Index="142" ParentIndex="141" NumChild="1" NumTotalChildBone="1"&gt;
+                                        &lt;Bone Name="Nose_end" Index="143" ParentIndex="142" NumChild="0" NumTotalChildBone="0"/&gt;
+                                    &lt;/Bone&gt;
+                                    &lt;Bone Name="Teeth_U" Index="144" ParentIndex="143" NumChild="1" NumTotalChildBone="1"&gt;
+                                        &lt;Bone Name="Teeth_U_end" Index="145" ParentIndex="144" NumChild="0" NumTotalChildBone="0"/&gt;
+                                    &lt;/Bone&gt;
+                                &lt;/Bone&gt;
+                                &lt;Bone Name="Hair_Root" Index="146" ParentIndex="145" NumChild="1" NumTotalChildBone="2"&gt;
+                                    &lt;Bone Name="Ponytail_A_1" Index="147" ParentIndex="146" NumChild="1" NumTotalChildBone="1"&gt;
+                                        &lt;Bone Name="Ponytail_A_1_end" Index="148" ParentIndex="147" NumChild="0" NumTotalChildBone="0"/&gt;
+                                    &lt;/Bone&gt;
+                                &lt;/Bone&gt;
+                            &lt;/Bone&gt;
+                        &lt;/Bone&gt;
+                        &lt;Bone Name="Pod_A" Index="149" ParentIndex="148" NumChild="1" NumTotalChildBone="1"&gt;
+                            &lt;Bone Name="Pod_A_end" Index="150" ParentIndex="149" NumChild="0" NumTotalChildBone="0"/&gt;
+                        &lt;/Bone&gt;
+                    &lt;/Bone&gt;
+                &lt;/Bone&gt;
+                &lt;Bone Name="Waist" Index="151" ParentIndex="150" NumChild="13" NumTotalChildBone="43"&gt;
+                    &lt;Bone Name="Belt_A_1" Index="152" ParentIndex="151" NumChild="1" NumTotalChildBone="3"&gt;
+                        &lt;Bone Name="Belt_A_2" Index="153" ParentIndex="152" NumChild="1" NumTotalChildBone="2"&gt;
+                            &lt;Bone Name="Belt_A_3" Index="154" ParentIndex="153" NumChild="1" NumTotalChildBone="1"&gt;
+                                &lt;Bone Name="Belt_A_3_end" Index="155" ParentIndex="154" NumChild="0" NumTotalChildBone="0"/&gt;
+                            &lt;/Bone&gt;
+                        &lt;/Bone&gt;
+                    &lt;/Bone&gt;
+                    &lt;Bone Name="Belt_C_1" Index="156" ParentIndex="155" NumChild="1" NumTotalChildBone="1"&gt;
+                        &lt;Bone Name="Belt_C_1_end" Index="157" ParentIndex="156" NumChild="0" NumTotalChildBone="0"/&gt;
+                    &lt;/Bone&gt;
+                    &lt;Bone Name="Belt_C_2" Index="158" ParentIndex="157" NumChild="1" NumTotalChildBone="1"&gt;
+                        &lt;Bone Name="Belt_C_2_end" Index="159" ParentIndex="158" NumChild="0" NumTotalChildBone="0"/&gt;
+                    &lt;/Bone&gt;
+                    &lt;Bone Name="Belt_C_3" Index="160" ParentIndex="159" NumChild="1" NumTotalChildBone="1"&gt;
+                        &lt;Bone Name="Belt_C_3_end" Index="161" ParentIndex="160" NumChild="0" NumTotalChildBone="0"/&gt;
+                    &lt;/Bone&gt;
+                    &lt;Bone Name="Belt_C_4" Index="162" ParentIndex="161" NumChild="1" NumTotalChildBone="1"&gt;
+                        &lt;Bone Name="Belt_C_4_end" Index="163" ParentIndex="162" NumChild="0" NumTotalChildBone="0"/&gt;
+                    &lt;/Bone&gt;
+                    &lt;Bone Name="Belt_C_5" Index="164" ParentIndex="163" NumChild="1" NumTotalChildBone="1"&gt;
+                        &lt;Bone Name="Belt_C_5_end" Index="165" ParentIndex="164" NumChild="0" NumTotalChildBone="0"/&gt;
+                    &lt;/Bone&gt;
+                    &lt;Bone Name="Belt_C_6" Index="166" ParentIndex="165" NumChild="1" NumTotalChildBone="1"&gt;
+                        &lt;Bone Name="Belt_C_6_end" Index="167" ParentIndex="166" NumChild="0" NumTotalChildBone="0"/&gt;
+                    &lt;/Bone&gt;
+                    &lt;Bone Name="Belt_C_7" Index="168" ParentIndex="167" NumChild="1" NumTotalChildBone="2"&gt;
+                        &lt;Bone Name="Pod_B" Index="169" ParentIndex="168" NumChild="1" NumTotalChildBone="1"&gt;
+                            &lt;Bone Name="Pod_B_end" Index="170" ParentIndex="169" NumChild="0" NumTotalChildBone="0"/&gt;
+                        &lt;/Bone&gt;
+                    &lt;/Bone&gt;
+                    &lt;Bone Name="Belt_C_8" Index="171" ParentIndex="170" NumChild="1" NumTotalChildBone="1"&gt;
+                        &lt;Bone Name="Belt_C_8_end" Index="172" ParentIndex="171" NumChild="0" NumTotalChildBone="0"/&gt;
+                    &lt;/Bone&gt;
+                    &lt;Bone Name="Leg_1_L" Index="173" ParentIndex="172" NumChild="2" NumTotalChildBone="8"&gt;
+                        &lt;Bone Name="Knee_L" Index="174" ParentIndex="173" NumChild="1" NumTotalChildBone="1"&gt;
+                            &lt;Bone Name="Knee_L_end" Index="175" ParentIndex="174" NumChild="0" NumTotalChildBone="0"/&gt;
+                        &lt;/Bone&gt;
+                        &lt;Bone Name="Leg_2_L" Index="176" ParentIndex="175" NumChild="2" NumTotalChildBone="5"&gt;
+                            &lt;Bone Name="Ankle_Assist_L" Index="177" ParentIndex="176" NumChild="1" NumTotalChildBone="1"&gt;
+                                &lt;Bone Name="Ankle_Assist_L_end" Index="178" ParentIndex="177" NumChild="0" NumTotalChildBone="0"/&gt;
+                            &lt;/Bone&gt;
+                            &lt;Bone Name="Ankle_L" Index="179" ParentIndex="178" NumChild="1" NumTotalChildBone="2"&gt;
+                                &lt;Bone Name="Toe_L" Index="180" ParentIndex="179" NumChild="1" NumTotalChildBone="1"&gt;
+                                    &lt;Bone Name="Toe_L_end" Index="181" ParentIndex="180" NumChild="0" NumTotalChildBone="0"/&gt;
+                                &lt;/Bone&gt;
+                            &lt;/Bone&gt;
+                        &lt;/Bone&gt;
+                    &lt;/Bone&gt;
+                    &lt;Bone Name="Leg_1_R" Index="182" ParentIndex="181" NumChild="2" NumTotalChildBone="8"&gt;
+                        &lt;Bone Name="Knee_R" Index="183" ParentIndex="182" NumChild="1" NumTotalChildBone="1"&gt;
+                            &lt;Bone Name="Knee_R_end" Index="184" ParentIndex="183" NumChild="0" NumTotalChildBone="0"/&gt;
+                        &lt;/Bone&gt;
+                        &lt;Bone Name="Leg_2_R" Index="185" ParentIndex="184" NumChild="2" NumTotalChildBone="5"&gt;
+                            &lt;Bone Name="Ankle_Assist_R" Index="186" ParentIndex="185" NumChild="1" NumTotalChildBone="1"&gt;
+                                &lt;Bone Name="Ankle_Assist_R_end" Index="187" ParentIndex="186" NumChild="0" NumTotalChildBone="0"/&gt;
+                            &lt;/Bone&gt;
+                            &lt;Bone Name="Ankle_R" Index="188" ParentIndex="187" NumChild="1" NumTotalChildBone="2"&gt;
+                                &lt;Bone Name="Toe_R" Index="189" ParentIndex="188" NumChild="1" NumTotalChildBone="1"&gt;
+                                    &lt;Bone Name="Toe_R_end" Index="190" ParentIndex="189" NumChild="0" NumTotalChildBone="0"/&gt;
+                                &lt;/Bone&gt;
+                            &lt;/Bone&gt;
+                        &lt;/Bone&gt;
+                    &lt;/Bone&gt;
+                    &lt;Bone Name="Poach_A" Index="191" ParentIndex="190" NumChild="1" NumTotalChildBone="1"&gt;
+                        &lt;Bone Name="Poach_A_end" Index="192" ParentIndex="191" NumChild="0" NumTotalChildBone="0"/&gt;
+                    &lt;/Bone&gt;
+                    &lt;Bone Name="Pod_C" Index="193" ParentIndex="192" NumChild="1" NumTotalChildBone="1"&gt;
+                        &lt;Bone Name="Pod_C_end" Index="194" ParentIndex="193" NumChild="0" NumTotalChildBone="0"/&gt;
+                    &lt;/Bone&gt;
+                &lt;/Bone&gt;
+            &lt;/Bone&gt;
+            &lt;Bone Name="Weapon_Root" Index="195" ParentIndex="194" NumChild="1" NumTotalChildBone="1"&gt;
+                &lt;Bone Name="Weapon_Root_end" Index="196" ParentIndex="195" NumChild="0" NumTotalChildBone="0"/&gt;
+            &lt;/Bone&gt;
+        &lt;/Bone&gt;
+    &lt;/BlendBoneParentName&gt;
+    
+    &lt;BlendBoneParentName Name="Spine_1" Type="UpperBody" MinBoneIdx="4" MaxBoneIdx="150"&gt;
+        &lt;Bone Name="Spine_1" Index="4" ParentIndex="3" NumChild="1" NumTotalChildBone="146"&gt;
+            &lt;Bone Name="Spine_2" Index="5" ParentIndex="4" NumChild="4" NumTotalChildBone="145"&gt;
+                &lt;Bone Name="Clavicle_L" Index="6" ParentIndex="5" NumChild="2" NumTotalChildBone="33"&gt;
+                    &lt;Bone Name="Arm_1_L" Index="7" ParentIndex="6" NumChild="2" NumTotalChildBone="30"&gt;
+                        &lt;Bone Name="Arm_1_Assist_L" Index="8" ParentIndex="7" NumChild="1" NumTotalChildBone="1"&gt;
+                            &lt;Bone Name="Arm_1_Assist_L_end" Index="9" ParentIndex="8" NumChild="0" NumTotalChildBone="0"/&gt;
+                        &lt;/Bone&gt;
+                        &lt;Bone Name="Arm_2_L" Index="10" ParentIndex="9" NumChild="3" NumTotalChildBone="27"&gt;
+                            &lt;Bone Name="Elbow_L" Index="11" ParentIndex="10" NumChild="1" NumTotalChildBone="1"&gt;
+                                &lt;Bone Name="Elbow_L_end" Index="12" ParentIndex="11" NumChild="0" NumTotalChildBone="0"/&gt;
+                            &lt;/Bone&gt;
+                            &lt;Bone Name="Wrist_Assist_L" Index="13" ParentIndex="12" NumChild="1" NumTotalChildBone="1"&gt;
+                                &lt;Bone Name="Wrist_Assist_L_end" Index="14" ParentIndex="13" NumChild="0" NumTotalChildBone="0"/&gt;
+                            &lt;/Bone&gt;
+                            &lt;Bone Name="Wrist_L" Index="15" ParentIndex="14" NumChild="6" NumTotalChildBone="22"&gt;
+                                &lt;Bone Name="Finger_A_1_L" Index="16" ParentIndex="15" NumChild="1" NumTotalChildBone="3"&gt;
+                                    &lt;Bone Name="Finger_A_2_L" Index="17" ParentIndex="16" NumChild="1" NumTotalChildBone="2"&gt;
+                                        &lt;Bone Name="Finger_A_3_L" Index="18" ParentIndex="17" NumChild="1" NumTotalChildBone="1"&gt;
+                                            &lt;Bone Name="Finger_A_3_L_end" Index="19" ParentIndex="18" NumChild="0" NumTotalChildBone="0"/&gt;
+                                        &lt;/Bone&gt;
+                                    &lt;/Bone&gt;
+                                &lt;/Bone&gt;
+                                &lt;Bone Name="Finger_B_1_L" Index="20" ParentIndex="19" NumChild="1" NumTotalChildBone="3"&gt;
+                                    &lt;Bone Name="Finger_B_2_L" Index="21" ParentIndex="20" NumChild="1" NumTotalChildBone="2"&gt;
+                                        &lt;Bone Name="Finger_B_3_L" Index="22" ParentIndex="21" NumChild="1" NumTotalChildBone="1"&gt;
+                                            &lt;Bone Name="Finger_B_3_L_end" Index="23" ParentIndex="22" NumChild="0" NumTotalChildBone="0"/&gt;
+                                        &lt;/Bone&gt;
+                                    &lt;/Bone&gt;
+                                &lt;/Bone&gt;
+                                &lt;Bone Name="Finger_C_1_L" Index="24" ParentIndex="23" NumChild="1" NumTotalChildBone="3"&gt;
+                                    &lt;Bone Name="Finger_C_2_L" Index="25" ParentIndex="24" NumChild="1" NumTotalChildBone="2"&gt;
+                                        &lt;Bone Name="Finger_C_3_L" Index="26" ParentIndex="25" NumChild="1" NumTotalChildBone="1"&gt;
+                                            &lt;Bone Name="Finger_C_3_L_end" Index="27" ParentIndex="26" NumChild="0" NumTotalChildBone="0"/&gt;
+                                        &lt;/Bone&gt;
+                                    &lt;/Bone&gt;
+                                &lt;/Bone&gt;
+                                &lt;Bone Name="Finger_D_1_L" Index="28" ParentIndex="27" NumChild="1" NumTotalChildBone="3"&gt;
+                                    &lt;Bone Name="Finger_D_2_L" Index="29" ParentIndex="28" NumChild="1" NumTotalChildBone="2"&gt;
+                                        &lt;Bone Name="Finger_D_3_L" Index="30" ParentIndex="29" NumChild="1" NumTotalChildBone="1"&gt;
+                                            &lt;Bone Name="Finger_D_3_L_end" Index="31" ParentIndex="30" NumChild="0" NumTotalChildBone="0"/&gt;
+                                        &lt;/Bone&gt;
+                                    &lt;/Bone&gt;
+                                &lt;/Bone&gt;
+                                &lt;Bone Name="Finger_E_1_L" Index="32" ParentIndex="31" NumChild="1" NumTotalChildBone="3"&gt;
+                                    &lt;Bone Name="Finger_E_2_L" Index="33" ParentIndex="32" NumChild="1" NumTotalChildBone="2"&gt;
+                                        &lt;Bone Name="Finger_E_3_L" Index="34" ParentIndex="33" NumChild="1" NumTotalChildBone="1"&gt;
+                                            &lt;Bone Name="Finger_E_3_L_end" Index="35" ParentIndex="34" NumChild="0" NumTotalChildBone="0"/&gt;
+                                        &lt;/Bone&gt;
+                                    &lt;/Bone&gt;
+                                &lt;/Bone&gt;
+                                &lt;Bone Name="Weapon_L" Index="36" ParentIndex="35" NumChild="1" NumTotalChildBone="1"&gt;
+                                    &lt;Bone Name="Weapon_L_end" Index="37" ParentIndex="36" NumChild="0" NumTotalChildBone="0"/&gt;
+                                &lt;/Bone&gt;
+                            &lt;/Bone&gt;
+                        &lt;/Bone&gt;
+                    &lt;/Bone&gt;
+                    &lt;Bone Name="Clavicle_Assist_L" Index="38" ParentIndex="37" NumChild="1" NumTotalChildBone="1"&gt;
+                        &lt;Bone Name="Clavicle_Assist_L_end" Index="39" ParentIndex="38" NumChild="0" NumTotalChildBone="0"/&gt;
+                    &lt;/Bone&gt;
+                &lt;/Bone&gt;
+                &lt;Bone Name="Clavicle_R" Index="40" ParentIndex="39" NumChild="2" NumTotalChildBone="33"&gt;
+                    &lt;Bone Name="Arm_1_R" Index="41" ParentIndex="40" NumChild="2" NumTotalChildBone="30"&gt;
+                        &lt;Bone Name="Arm_1_Assist_R" Index="42" ParentIndex="41" NumChild="1" NumTotalChildBone="1"&gt;
+                            &lt;Bone Name="Arm_1_Assist_R_end" Index="43" ParentIndex="42" NumChild="0" NumTotalChildBone="0"/&gt;
+                        &lt;/Bone&gt;
+                        &lt;Bone Name="Arm_2_R" Index="44" ParentIndex="43" NumChild="3" NumTotalChildBone="27"&gt;
+                            &lt;Bone Name="Elbow_R" Index="45" ParentIndex="44" NumChild="1" NumTotalChildBone="1"&gt;
+                                &lt;Bone Name="Elbow_R_end" Index="46" ParentIndex="45" NumChild="0" NumTotalChildBone="0"/&gt;
+                            &lt;/Bone&gt;
+                            &lt;Bone Name="Wrist_Assist_R" Index="47" ParentIndex="46" NumChild="1" NumTotalChildBone="1"&gt;
+                                &lt;Bone Name="Wrist_Assist_R_end" Index="48" ParentIndex="47" NumChild="0" NumTotalChildBone="0"/&gt;
+                            &lt;/Bone&gt;
+                            &lt;Bone Name="Wrist_R" Index="49" ParentIndex="48" NumChild="6" NumTotalChildBone="22"&gt;
+                                &lt;Bone Name="Finger_A_1_R" Index="50" ParentIndex="49" NumChild="1" NumTotalChildBone="3"&gt;
+                                    &lt;Bone Name="Finger_A_2_R" Index="51" ParentIndex="50" NumChild="1" NumTotalChildBone="2"&gt;
+                                        &lt;Bone Name="Finger_A_3_R" Index="52" ParentIndex="51" NumChild="1" NumTotalChildBone="1"&gt;
+                                            &lt;Bone Name="Finger_A_3_R_end" Index="53" ParentIndex="52" NumChild="0" NumTotalChildBone="0"/&gt;
+                                        &lt;/Bone&gt;
+                                    &lt;/Bone&gt;
+                                &lt;/Bone&gt;
+                                &lt;Bone Name="Finger_B_1_R" Index="54" ParentIndex="53" NumChild="1" NumTotalChildBone="3"&gt;
+                                    &lt;Bone Name="Finger_B_2_R" Index="55" ParentIndex="54" NumChild="1" NumTotalChildBone="2"&gt;
+                                        &lt;Bone Name="Finger_B_3_R" Index="56" ParentIndex="55" NumChild="1" NumTotalChildBone="1"&gt;
+                                            &lt;Bone Name="Finger_B_3_R_end" Index="57" ParentIndex="56" NumChild="0" NumTotalChildBone="0"/&gt;
+                                        &lt;/Bone&gt;
+                                    &lt;/Bone&gt;
+                                &lt;/Bone&gt;
+                                &lt;Bone Name="Finger_C_1_R" Index="58" ParentIndex="57" NumChild="1" NumTotalChildBone="3"&gt;
+                                    &lt;Bone Name="Finger_C_2_R" Index="59" ParentIndex="58" NumChild="1" NumTotalChildBone="2"&gt;
+                                        &lt;Bone Name="Finger_C_3_R" Index="60" ParentIndex="59" NumChild="1" NumTotalChildBone="1"&gt;
+                                            &lt;Bone Name="Finger_C_3_R_end" Index="61" ParentIndex="60" NumChild="0" NumTotalChildBone="0"/&gt;
+                                        &lt;/Bone&gt;
+                                    &lt;/Bone&gt;
+                                &lt;/Bone&gt;
+                                &lt;Bone Name="Finger_D_1_R" Index="62" ParentIndex="61" NumChild="1" NumTotalChildBone="3"&gt;
+                                    &lt;Bone Name="Finger_D_2_R" Index="63" ParentIndex="62" NumChild="1" NumTotalChildBone="2"&gt;
+                                        &lt;Bone Name="Finger_D_3_R" Index="64" ParentIndex="63" NumChild="1" NumTotalChildBone="1"&gt;
+                                            &lt;Bone Name="Finger_D_3_R_end" Index="65" ParentIndex="64" NumChild="0" NumTotalChildBone="0"/&gt;
+                                        &lt;/Bone&gt;
+                                    &lt;/Bone&gt;
+                                &lt;/Bone&gt;
+                                &lt;Bone Name="Finger_E_1_R" Index="66" ParentIndex="65" NumChild="1" NumTotalChildBone="3"&gt;
+                                    &lt;Bone Name="Finger_E_2_R" Index="67" ParentIndex="66" NumChild="1" NumTotalChildBone="2"&gt;
+                                        &lt;Bone Name="Finger_E_3_R" Index="68" ParentIndex="67" NumChild="1" NumTotalChildBone="1"&gt;
+                                            &lt;Bone Name="Finger_E_3_R_end" Index="69" ParentIndex="68" NumChild="0" NumTotalChildBone="0"/&gt;
+                                        &lt;/Bone&gt;
+                                    &lt;/Bone&gt;
+                                &lt;/Bone&gt;
+                                &lt;Bone Name="Weapon_R" Index="70" ParentIndex="69" NumChild="1" NumTotalChildBone="1"&gt;
+                                    &lt;Bone Name="Weapon_R_end" Index="71" ParentIndex="70" NumChild="0" NumTotalChildBone="0"/&gt;
+                                &lt;/Bone&gt;
+                            &lt;/Bone&gt;
+                        &lt;/Bone&gt;
+                    &lt;/Bone&gt;
+                    &lt;Bone Name="Clavicle_Assist_R" Index="72" ParentIndex="71" NumChild="1" NumTotalChildBone="1"&gt;
+                        &lt;Bone Name="Clavicle_Assist_R_end" Index="73" ParentIndex="72" NumChild="0" NumTotalChildBone="0"/&gt;
+                    &lt;/Bone&gt;
+                &lt;/Bone&gt;
+                &lt;Bone Name="Neck" Index="74" ParentIndex="73" NumChild="1" NumTotalChildBone="74"&gt;
+                    &lt;Bone Name="Head" Index="75" ParentIndex="74" NumChild="4" NumTotalChildBone="73"&gt;
+                        &lt;Bone Name="Ear_L" Index="76" ParentIndex="75" NumChild="1" NumTotalChildBone="1"&gt;
+                            &lt;Bone Name="Ear_L_end" Index="77" ParentIndex="76" NumChild="0" NumTotalChildBone="0"/&gt;
+                        &lt;/Bone&gt;
+                        &lt;Bone Name="Ear_R" Index="78" ParentIndex="77" NumChild="1" NumTotalChildBone="1"&gt;
+                            &lt;Bone Name="Ear_R_end" Index="79" ParentIndex="78" NumChild="0" NumTotalChildBone="0"/&gt;
+                        &lt;/Bone&gt;
+                        &lt;Bone Name="Face_Root" Index="80" ParentIndex="79" NumChild="28" NumTotalChildBone="65"&gt;
+                            &lt;Bone Name="Cheek_D_L" Index="81" ParentIndex="80" NumChild="1" NumTotalChildBone="1"&gt;
+                                &lt;Bone Name="Cheek_D_L_end" Index="82" ParentIndex="81" NumChild="0" NumTotalChildBone="0"/&gt;
+                            &lt;/Bone&gt;
+                            &lt;Bone Name="Cheek_D_R" Index="83" ParentIndex="82" NumChild="1" NumTotalChildBone="1"&gt;
+                                &lt;Bone Name="Cheek_D_R_end" Index="84" ParentIndex="83" NumChild="0" NumTotalChildBone="0"/&gt;
+                            &lt;/Bone&gt;
+                            &lt;Bone Name="Cheek_U_L" Index="85" ParentIndex="84" NumChild="1" NumTotalChildBone="1"&gt;
+                                &lt;Bone Name="Cheek_U_L_end" Index="86" ParentIndex="85" NumChild="0" NumTotalChildBone="0"/&gt;
+                            &lt;/Bone&gt;
+                            &lt;Bone Name="Cheek_U_R" Index="87" ParentIndex="86" NumChild="1" NumTotalChildBone="1"&gt;
+                                &lt;Bone Name="Cheek_U_R_end" Index="88" ParentIndex="87" NumChild="0" NumTotalChildBone="0"/&gt;
+                            &lt;/Bone&gt;
+                            &lt;Bone Name="Chin" Index="89" ParentIndex="88" NumChild="5" NumTotalChildBone="10"&gt;
+                                &lt;Bone Name="Chin_Point" Index="90" ParentIndex="89" NumChild="1" NumTotalChildBone="1"&gt;
+                                    &lt;Bone Name="Chin_Point_end" Index="91" ParentIndex="90" NumChild="0" NumTotalChildBone="0"/&gt;
+                                &lt;/Bone&gt;
+                                &lt;Bone Name="Lip_D" Index="92" ParentIndex="91" NumChild="1" NumTotalChildBone="1"&gt;
+                                    &lt;Bone Name="Lip_D_end" Index="93" ParentIndex="92" NumChild="0" NumTotalChildBone="0"/&gt;
+                                &lt;/Bone&gt;
+                                &lt;Bone Name="Lip_D_L_1" Index="94" ParentIndex="93" NumChild="1" NumTotalChildBone="1"&gt;
+                                    &lt;Bone Name="Lip_D_L_1_end" Index="95" ParentIndex="94" NumChild="0" NumTotalChildBone="0"/&gt;
+                                &lt;/Bone&gt;
+                                &lt;Bone Name="Lip_D_R_1" Index="96" ParentIndex="95" NumChild="1" NumTotalChildBone="1"&gt;
+                                    &lt;Bone Name="Lip_D_R_1_end" Index="97" ParentIndex="96" NumChild="0" NumTotalChildBone="0"/&gt;
+                                &lt;/Bone&gt;
+                                &lt;Bone Name="Teeth_D" Index="98" ParentIndex="97" NumChild="1" NumTotalChildBone="1"&gt;
+                                    &lt;Bone Name="Teeth_D_end" Index="99" ParentIndex="98" NumChild="0" NumTotalChildBone="0"/&gt;
+                                &lt;/Bone&gt;
+                            &lt;/Bone&gt;
+                            &lt;Bone Name="Eye_In_L" Index="100" ParentIndex="99" NumChild="1" NumTotalChildBone="1"&gt;
+                                &lt;Bone Name="Eye_In_L_end" Index="101" ParentIndex="100" NumChild="0" NumTotalChildBone="0"/&gt;
+                            &lt;/Bone&gt;
+                            &lt;Bone Name="Eye_In_R" Index="102" ParentIndex="101" NumChild="1" NumTotalChildBone="1"&gt;
+                                &lt;Bone Name="Eye_In_R_end" Index="103" ParentIndex="102" NumChild="0" NumTotalChildBone="0"/&gt;
+                            &lt;/Bone&gt;
+                            &lt;Bone Name="Eye_Out_L" Index="104" ParentIndex="103" NumChild="1" NumTotalChildBone="1"&gt;
+                                &lt;Bone Name="Eye_Out_L_end" Index="105" ParentIndex="104" NumChild="0" NumTotalChildBone="0"/&gt;
+                            &lt;/Bone&gt;
+                            &lt;Bone Name="Eye_Out_R" Index="106" ParentIndex="105" NumChild="1" NumTotalChildBone="1"&gt;
+                                &lt;Bone Name="Eye_Out_R_end" Index="107" ParentIndex="106" NumChild="0" NumTotalChildBone="0"/&gt;
+                            &lt;/Bone&gt;
+                            &lt;Bone Name="Eyeball_L" Index="108" ParentIndex="107" NumChild="1" NumTotalChildBone="1"&gt;
+                                &lt;Bone Name="Eyeball_L_end" Index="109" ParentIndex="108" NumChild="0" NumTotalChildBone="0"/&gt;
+                            &lt;/Bone&gt;
+                            &lt;Bone Name="Eyeball_R" Index="110" ParentIndex="109" NumChild="1" NumTotalChildBone="1"&gt;
+                                &lt;Bone Name="Eyeball_R_end" Index="111" ParentIndex="110" NumChild="0" NumTotalChildBone="0"/&gt;
+                            &lt;/Bone&gt;
+                            &lt;Bone Name="Eyebrow_In_L" Index="112" ParentIndex="111" NumChild="1" NumTotalChildBone="1"&gt;
+                                &lt;Bone Name="Eyebrow_In_L_end" Index="113" ParentIndex="112" NumChild="0" NumTotalChildBone="0"/&gt;
+                            &lt;/Bone&gt;
+                            &lt;Bone Name="Eyebrow_In_R" Index="114" ParentIndex="113" NumChild="1" NumTotalChildBone="1"&gt;
+                                &lt;Bone Name="Eyebrow_In_R_end" Index="115" ParentIndex="114" NumChild="0" NumTotalChildBone="0"/&gt;
+                            &lt;/Bone&gt;
+                            &lt;Bone Name="Eyebrow_Mid_L" Index="116" ParentIndex="115" NumChild="1" NumTotalChildBone="1"&gt;
+                                &lt;Bone Name="Eyebrow_Mid_L_end" Index="117" ParentIndex="116" NumChild="0" NumTotalChildBone="0"/&gt;
+                            &lt;/Bone&gt;
+                            &lt;Bone Name="Eyebrow_Mid_R" Index="118" ParentIndex="117" NumChild="1" NumTotalChildBone="1"&gt;
+                                &lt;Bone Name="Eyebrow_Mid_R_end" Index="119" ParentIndex="118" NumChild="0" NumTotalChildBone="0"/&gt;
+                            &lt;/Bone&gt;
+                            &lt;Bone Name="Eyebrow_Out_L" Index="120" ParentIndex="119" NumChild="1" NumTotalChildBone="1"&gt;
+                                &lt;Bone Name="Eyebrow_Out_L_end" Index="121" ParentIndex="120" NumChild="0" NumTotalChildBone="0"/&gt;
+                            &lt;/Bone&gt;
+                            &lt;Bone Name="Eyebrow_Out_R" Index="122" ParentIndex="121" NumChild="1" NumTotalChildBone="1"&gt;
+                                &lt;Bone Name="Eyebrow_Out_R_end" Index="123" ParentIndex="122" NumChild="0" NumTotalChildBone="0"/&gt;
+                            &lt;/Bone&gt;
+                            &lt;Bone Name="Eyelid_D_L" Index="124" ParentIndex="123" NumChild="1" NumTotalChildBone="1"&gt;
+                                &lt;Bone Name="Eyelid_D_L_end" Index="125" ParentIndex="124" NumChild="0" NumTotalChildBone="0"/&gt;
+                            &lt;/Bone&gt;
+                            &lt;Bone Name="Eyelid_D_R" Index="126" ParentIndex="125" NumChild="1" NumTotalChildBone="1"&gt;
+                                &lt;Bone Name="Eyelid_D_R_end" Index="127" ParentIndex="126" NumChild="0" NumTotalChildBone="0"/&gt;
+                            &lt;/Bone&gt;
+                            &lt;Bone Name="Eyelid_U_L" Index="128" ParentIndex="127" NumChild="1" NumTotalChildBone="1"&gt;
+                                &lt;Bone Name="Eyelid_U_L_end" Index="129" ParentIndex="128" NumChild="0" NumTotalChildBone="0"/&gt;
+                            &lt;/Bone&gt;
+                            &lt;Bone Name="Eyelid_U_R" Index="130" ParentIndex="129" NumChild="1" NumTotalChildBone="1"&gt;
+                                &lt;Bone Name="Eyelid_U_R_end" Index="131" ParentIndex="130" NumChild="0" NumTotalChildBone="0"/&gt;
+                            &lt;/Bone&gt;
+                            &lt;Bone Name="Lip_U" Index="132" ParentIndex="131" NumChild="1" NumTotalChildBone="1"&gt;
+                                &lt;Bone Name="Lip_U_end" Index="133" ParentIndex="132" NumChild="0" NumTotalChildBone="0"/&gt;
+                            &lt;/Bone&gt;
+                            &lt;Bone Name="Lip_U_L_1" Index="134" ParentIndex="133" NumChild="1" NumTotalChildBone="1"&gt;
+                                &lt;Bone Name="Lip_U_L_1_end" Index="135" ParentIndex="134" NumChild="0" NumTotalChildBone="0"/&gt;
+                            &lt;/Bone&gt;
+                            &lt;Bone Name="Lip_U_L_2" Index="136" ParentIndex="135" NumChild="1" NumTotalChildBone="1"&gt;
+                                &lt;Bone Name="Lip_U_L_2_end" Index="137" ParentIndex="136" NumChild="0" NumTotalChildBone="0"/&gt;
+                            &lt;/Bone&gt;
+                            &lt;Bone Name="Lip_U_R_1" Index="138" ParentIndex="137" NumChild="1" NumTotalChildBone="1"&gt;
+                                &lt;Bone Name="Lip_U_R_1_end" Index="139" ParentIndex="138" NumChild="0" NumTotalChildBone="0"/&gt;
+                            &lt;/Bone&gt;
+                            &lt;Bone Name="Lip_U_R_2" Index="140" ParentIndex="139" NumChild="1" NumTotalChildBone="1"&gt;
+                                &lt;Bone Name="Lip_U_R_2_end" Index="141" ParentIndex="140" NumChild="0" NumTotalChildBone="0"/&gt;
+                            &lt;/Bone&gt;
+                            &lt;Bone Name="Nose" Index="142" ParentIndex="141" NumChild="1" NumTotalChildBone="1"&gt;
+                                &lt;Bone Name="Nose_end" Index="143" ParentIndex="142" NumChild="0" NumTotalChildBone="0"/&gt;
+                            &lt;/Bone&gt;
+                            &lt;Bone Name="Teeth_U" Index="144" ParentIndex="143" NumChild="1" NumTotalChildBone="1"&gt;
+                                &lt;Bone Name="Teeth_U_end" Index="145" ParentIndex="144" NumChild="0" NumTotalChildBone="0"/&gt;
+                            &lt;/Bone&gt;
+                        &lt;/Bone&gt;
+                        &lt;Bone Name="Hair_Root" Index="146" ParentIndex="145" NumChild="1" NumTotalChildBone="2"&gt;
+                            &lt;Bone Name="Ponytail_A_1" Index="147" ParentIndex="146" NumChild="1" NumTotalChildBone="1"&gt;
+                                &lt;Bone Name="Ponytail_A_1_end" Index="148" ParentIndex="147" NumChild="0" NumTotalChildBone="0"/&gt;
+                            &lt;/Bone&gt;
+                        &lt;/Bone&gt;
+                    &lt;/Bone&gt;
+                &lt;/Bone&gt;
+                &lt;Bone Name="Pod_A" Index="149" ParentIndex="148" NumChild="1" NumTotalChildBone="1"&gt;
+                    &lt;Bone Name="Pod_A_end" Index="150" ParentIndex="149" NumChild="0" NumTotalChildBone="0"/&gt;
+                &lt;/Bone&gt;
+            &lt;/Bone&gt;
+        &lt;/Bone&gt;
+    &lt;/BlendBoneParentName&gt;
+    
+    &lt;BlendBoneParentName Name="Waist" Type="LowerBody" MinBoneIdx="151" MaxBoneIdx="194"&gt;
+        &lt;Bone Name="Waist" Index="151" ParentIndex="150" NumChild="13" NumTotalChildBone="43"&gt;
+            &lt;Bone Name="Belt_A_1" Index="152" ParentIndex="151" NumChild="1" NumTotalChildBone="3"&gt;
+                &lt;Bone Name="Belt_A_2" Index="153" ParentIndex="152" NumChild="1" NumTotalChildBone="2"&gt;
+                    &lt;Bone Name="Belt_A_3" Index="154" ParentIndex="153" NumChild="1" NumTotalChildBone="1"&gt;
+                        &lt;Bone Name="Belt_A_3_end" Index="155" ParentIndex="154" NumChild="0" NumTotalChildBone="0"/&gt;
+                    &lt;/Bone&gt;
+                &lt;/Bone&gt;
+            &lt;/Bone&gt;
+            &lt;Bone Name="Belt_C_1" Index="156" ParentIndex="155" NumChild="1" NumTotalChildBone="1"&gt;
+                &lt;Bone Name="Belt_C_1_end" Index="157" ParentIndex="156" NumChild="0" NumTotalChildBone="0"/&gt;
+            &lt;/Bone&gt;
+            &lt;Bone Name="Belt_C_2" Index="158" ParentIndex="157" NumChild="1" NumTotalChildBone="1"&gt;
+                &lt;Bone Name="Belt_C_2_end" Index="159" ParentIndex="158" NumChild="0" NumTotalChildBone="0"/&gt;
+            &lt;/Bone&gt;
+            &lt;Bone Name="Belt_C_3" Index="160" ParentIndex="159" NumChild="1" NumTotalChildBone="1"&gt;
+                &lt;Bone Name="Belt_C_3_end" Index="161" ParentIndex="160" NumChild="0" NumTotalChildBone="0"/&gt;
+            &lt;/Bone&gt;
+            &lt;Bone Name="Belt_C_4" Index="162" ParentIndex="161" NumChild="1" NumTotalChildBone="1"&gt;
+                &lt;Bone Name="Belt_C_4_end" Index="163" ParentIndex="162" NumChild="0" NumTotalChildBone="0"/&gt;
+            &lt;/Bone&gt;
+            &lt;Bone Name="Belt_C_5" Index="164" ParentIndex="163" NumChild="1" NumTotalChildBone="1"&gt;
+                &lt;Bone Name="Belt_C_5_end" Index="165" ParentIndex="164" NumChild="0" NumTotalChildBone="0"/&gt;
+            &lt;/Bone&gt;
+            &lt;Bone Name="Belt_C_6" Index="166" ParentIndex="165" NumChild="1" NumTotalChildBone="1"&gt;
+                &lt;Bone Name="Belt_C_6_end" Index="167" ParentIndex="166" NumChild="0" NumTotalChildBone="0"/&gt;
+            &lt;/Bone&gt;
+            &lt;Bone Name="Belt_C_7" Index="168" ParentIndex="167" NumChild="1" NumTotalChildBone="2"&gt;
+                &lt;Bone Name="Pod_B" Index="169" ParentIndex="168" NumChild="1" NumTotalChildBone="1"&gt;
+                    &lt;Bone Name="Pod_B_end" Index="170" ParentIndex="169" NumChild="0" NumTotalChildBone="0"/&gt;
+                &lt;/Bone&gt;
+            &lt;/Bone&gt;
+            &lt;Bone Name="Belt_C_8" Index="171" ParentIndex="170" NumChild="1" NumTotalChildBone="1"&gt;
+                &lt;Bone Name="Belt_C_8_end" Index="172" ParentIndex="171" NumChild="0" NumTotalChildBone="0"/&gt;
+            &lt;/Bone&gt;
+            &lt;Bone Name="Leg_1_L" Index="173" ParentIndex="172" NumChild="2" NumTotalChildBone="8"&gt;
+                &lt;Bone Name="Knee_L" Index="174" ParentIndex="173" NumChild="1" NumTotalChildBone="1"&gt;
+                    &lt;Bone Name="Knee_L_end" Index="175" ParentIndex="174" NumChild="0" NumTotalChildBone="0"/&gt;
+                &lt;/Bone&gt;
+                &lt;Bone Name="Leg_2_L" Index="176" ParentIndex="175" NumChild="2" NumTotalChildBone="5"&gt;
+                    &lt;Bone Name="Ankle_Assist_L" Index="177" ParentIndex="176" NumChild="1" NumTotalChildBone="1"&gt;
+                        &lt;Bone Name="Ankle_Assist_L_end" Index="178" ParentIndex="177" NumChild="0" NumTotalChildBone="0"/&gt;
+                    &lt;/Bone&gt;
+                    &lt;Bone Name="Ankle_L" Index="179" ParentIndex="178" NumChild="1" NumTotalChildBone="2"&gt;
+                        &lt;Bone Name="Toe_L" Index="180" ParentIndex="179" NumChild="1" NumTotalChildBone="1"&gt;
+                            &lt;Bone Name="Toe_L_end" Index="181" ParentIndex="180" NumChild="0" NumTotalChildBone="0"/&gt;
+                        &lt;/Bone&gt;
+                    &lt;/Bone&gt;
+                &lt;/Bone&gt;
+            &lt;/Bone&gt;
+            &lt;Bone Name="Leg_1_R" Index="182" ParentIndex="181" NumChild="2" NumTotalChildBone="8"&gt;
+                &lt;Bone Name="Knee_R" Index="183" ParentIndex="182" NumChild="1" NumTotalChildBone="1"&gt;
+                    &lt;Bone Name="Knee_R_end" Index="184" ParentIndex="183" NumChild="0" NumTotalChildBone="0"/&gt;
+                &lt;/Bone&gt;
+                &lt;Bone Name="Leg_2_R" Index="185" ParentIndex="184" NumChild="2" NumTotalChildBone="5"&gt;
+                    &lt;Bone Name="Ankle_Assist_R" Index="186" ParentIndex="185" NumChild="1" NumTotalChildBone="1"&gt;
+                        &lt;Bone Name="Ankle_Assist_R_end" Index="187" ParentIndex="186" NumChild="0" NumTotalChildBone="0"/&gt;
+                    &lt;/Bone&gt;
+                    &lt;Bone Name="Ankle_R" Index="188" ParentIndex="187" NumChild="1" NumTotalChildBone="2"&gt;
+                        &lt;Bone Name="Toe_R" Index="189" ParentIndex="188" NumChild="1" NumTotalChildBone="1"&gt;
+                            &lt;Bone Name="Toe_R_end" Index="190" ParentIndex="189" NumChild="0" NumTotalChildBone="0"/&gt;
+                        &lt;/Bone&gt;
+                    &lt;/Bone&gt;
+                &lt;/Bone&gt;
+            &lt;/Bone&gt;
+            &lt;Bone Name="Poach_A" Index="191" ParentIndex="190" NumChild="1" NumTotalChildBone="1"&gt;
+                &lt;Bone Name="Poach_A_end" Index="192" ParentIndex="191" NumChild="0" NumTotalChildBone="0"/&gt;
+            &lt;/Bone&gt;
+            &lt;Bone Name="Pod_C" Index="193" ParentIndex="192" NumChild="1" NumTotalChildBone="1"&gt;
+                &lt;Bone Name="Pod_C_end" Index="194" ParentIndex="193" NumChild="0" NumTotalChildBone="0"/&gt;
+            &lt;/Bone&gt;
+        &lt;/Bone&gt;
+    &lt;/BlendBoneParentName&gt;
+    
+    &lt;BlendBoneParentName Name="Clavicle_L" Type="ArmLeft" MinBoneIdx="6" MaxBoneIdx="39"&gt;
+        &lt;Bone Name="Clavicle_L" Index="6" ParentIndex="5" NumChild="2" NumTotalChildBone="33"&gt;
+            &lt;Bone Name="Arm_1_L" Index="7" ParentIndex="6" NumChild="2" NumTotalChildBone="30"&gt;
+                &lt;Bone Name="Arm_1_Assist_L" Index="8" ParentIndex="7" NumChild="1" NumTotalChildBone="1"&gt;
+                    &lt;Bone Name="Arm_1_Assist_L_end" Index="9" ParentIndex="8" NumChild="0" NumTotalChildBone="0"/&gt;
+                &lt;/Bone&gt;
+                &lt;Bone Name="Arm_2_L" Index="10" ParentIndex="9" NumChild="3" NumTotalChildBone="27"&gt;
+                    &lt;Bone Name="Elbow_L" Index="11" ParentIndex="10" NumChild="1" NumTotalChildBone="1"&gt;
+                        &lt;Bone Name="Elbow_L_end" Index="12" ParentIndex="11" NumChild="0" NumTotalChildBone="0"/&gt;
+                    &lt;/Bone&gt;
+                    &lt;Bone Name="Wrist_Assist_L" Index="13" ParentIndex="12" NumChild="1" NumTotalChildBone="1"&gt;
+                        &lt;Bone Name="Wrist_Assist_L_end" Index="14" ParentIndex="13" NumChild="0" NumTotalChildBone="0"/&gt;
+                    &lt;/Bone&gt;
+                    &lt;Bone Name="Wrist_L" Index="15" ParentIndex="14" NumChild="6" NumTotalChildBone="22"&gt;
+                        &lt;Bone Name="Finger_A_1_L" Index="16" ParentIndex="15" NumChild="1" NumTotalChildBone="3"&gt;
+                            &lt;Bone Name="Finger_A_2_L" Index="17" ParentIndex="16" NumChild="1" NumTotalChildBone="2"&gt;
+                                &lt;Bone Name="Finger_A_3_L" Index="18" ParentIndex="17" NumChild="1" NumTotalChildBone="1"&gt;
+                                    &lt;Bone Name="Finger_A_3_L_end" Index="19" ParentIndex="18" NumChild="0" NumTotalChildBone="0"/&gt;
+                                &lt;/Bone&gt;
+                            &lt;/Bone&gt;
+                        &lt;/Bone&gt;
+                        &lt;Bone Name="Finger_B_1_L" Index="20" ParentIndex="19" NumChild="1" NumTotalChildBone="3"&gt;
+                            &lt;Bone Name="Finger_B_2_L" Index="21" ParentIndex="20" NumChild="1" NumTotalChildBone="2"&gt;
+                                &lt;Bone Name="Finger_B_3_L" Index="22" ParentIndex="21" NumChild="1" NumTotalChildBone="1"&gt;
+                                    &lt;Bone Name="Finger_B_3_L_end" Index="23" ParentIndex="22" NumChild="0" NumTotalChildBone="0"/&gt;
+                                &lt;/Bone&gt;
+                            &lt;/Bone&gt;
+                        &lt;/Bone&gt;
+                        &lt;Bone Name="Finger_C_1_L" Index="24" ParentIndex="23" NumChild="1" NumTotalChildBone="3"&gt;
+                            &lt;Bone Name="Finger_C_2_L" Index="25" ParentIndex="24" NumChild="1" NumTotalChildBone="2"&gt;
+                                &lt;Bone Name="Finger_C_3_L" Index="26" ParentIndex="25" NumChild="1" NumTotalChildBone="1"&gt;
+                                    &lt;Bone Name="Finger_C_3_L_end" Index="27" ParentIndex="26" NumChild="0" NumTotalChildBone="0"/&gt;
+                                &lt;/Bone&gt;
+                            &lt;/Bone&gt;
+                        &lt;/Bone&gt;
+                        &lt;Bone Name="Finger_D_1_L" Index="28" ParentIndex="27" NumChild="1" NumTotalChildBone="3"&gt;
+                            &lt;Bone Name="Finger_D_2_L" Index="29" ParentIndex="28" NumChild="1" NumTotalChildBone="2"&gt;
+                                &lt;Bone Name="Finger_D_3_L" Index="30" ParentIndex="29" NumChild="1" NumTotalChildBone="1"&gt;
+                                    &lt;Bone Name="Finger_D_3_L_end" Index="31" ParentIndex="30" NumChild="0" NumTotalChildBone="0"/&gt;
+                                &lt;/Bone&gt;
+                            &lt;/Bone&gt;
+                        &lt;/Bone&gt;
+                        &lt;Bone Name="Finger_E_1_L" Index="32" ParentIndex="31" NumChild="1" NumTotalChildBone="3"&gt;
+                            &lt;Bone Name="Finger_E_2_L" Index="33" ParentIndex="32" NumChild="1" NumTotalChildBone="2"&gt;
+                                &lt;Bone Name="Finger_E_3_L" Index="34" ParentIndex="33" NumChild="1" NumTotalChildBone="1"&gt;
+                                    &lt;Bone Name="Finger_E_3_L_end" Index="35" ParentIndex="34" NumChild="0" NumTotalChildBone="0"/&gt;
+                                &lt;/Bone&gt;
+                            &lt;/Bone&gt;
+                        &lt;/Bone&gt;
+                        &lt;Bone Name="Weapon_L" Index="36" ParentIndex="35" NumChild="1" NumTotalChildBone="1"&gt;
+                            &lt;Bone Name="Weapon_L_end" Index="37" ParentIndex="36" NumChild="0" NumTotalChildBone="0"/&gt;
+                        &lt;/Bone&gt;
+                    &lt;/Bone&gt;
+                &lt;/Bone&gt;
+            &lt;/Bone&gt;
+            &lt;Bone Name="Clavicle_Assist_L" Index="38" ParentIndex="37" NumChild="1" NumTotalChildBone="1"&gt;
+                &lt;Bone Name="Clavicle_Assist_L_end" Index="39" ParentIndex="38" NumChild="0" NumTotalChildBone="0"/&gt;
+            &lt;/Bone&gt;
+        &lt;/Bone&gt;
+    &lt;/BlendBoneParentName&gt;
+    
+    &lt;BlendBoneParentName Name="Clavicle_R" Type="ArmRight" MinBoneIdx="40" MaxBoneIdx="73"&gt;
+        &lt;Bone Name="Clavicle_R" Index="40" ParentIndex="39" NumChild="2" NumTotalChildBone="33"&gt;
+            &lt;Bone Name="Arm_1_R" Index="41" ParentIndex="40" NumChild="2" NumTotalChildBone="30"&gt;
+                &lt;Bone Name="Arm_1_Assist_R" Index="42" ParentIndex="41" NumChild="1" NumTotalChildBone="1"&gt;
+                    &lt;Bone Name="Arm_1_Assist_R_end" Index="43" ParentIndex="42" NumChild="0" NumTotalChildBone="0"/&gt;
+                &lt;/Bone&gt;
+                &lt;Bone Name="Arm_2_R" Index="44" ParentIndex="43" NumChild="3" NumTotalChildBone="27"&gt;
+                    &lt;Bone Name="Elbow_R" Index="45" ParentIndex="44" NumChild="1" NumTotalChildBone="1"&gt;
+                        &lt;Bone Name="Elbow_R_end" Index="46" ParentIndex="45" NumChild="0" NumTotalChildBone="0"/&gt;
+                    &lt;/Bone&gt;
+                    &lt;Bone Name="Wrist_Assist_R" Index="47" ParentIndex="46" NumChild="1" NumTotalChildBone="1"&gt;
+                        &lt;Bone Name="Wrist_Assist_R_end" Index="48" ParentIndex="47" NumChild="0" NumTotalChildBone="0"/&gt;
+                    &lt;/Bone&gt;
+                    &lt;Bone Name="Wrist_R" Index="49" ParentIndex="48" NumChild="6" NumTotalChildBone="22"&gt;
+                        &lt;Bone Name="Finger_A_1_R" Index="50" ParentIndex="49" NumChild="1" NumTotalChildBone="3"&gt;
+                            &lt;Bone Name="Finger_A_2_R" Index="51" ParentIndex="50" NumChild="1" NumTotalChildBone="2"&gt;
+                                &lt;Bone Name="Finger_A_3_R" Index="52" ParentIndex="51" NumChild="1" NumTotalChildBone="1"&gt;
+                                    &lt;Bone Name="Finger_A_3_R_end" Index="53" ParentIndex="52" NumChild="0" NumTotalChildBone="0"/&gt;
+                                &lt;/Bone&gt;
+                            &lt;/Bone&gt;
+                        &lt;/Bone&gt;
+                        &lt;Bone Name="Finger_B_1_R" Index="54" ParentIndex="53" NumChild="1" NumTotalChildBone="3"&gt;
+                            &lt;Bone Name="Finger_B_2_R" Index="55" ParentIndex="54" NumChild="1" NumTotalChildBone="2"&gt;
+                                &lt;Bone Name="Finger_B_3_R" Index="56" ParentIndex="55" NumChild="1" NumTotalChildBone="1"&gt;
+                                    &lt;Bone Name="Finger_B_3_R_end" Index="57" ParentIndex="56" NumChild="0" NumTotalChildBone="0"/&gt;
+                                &lt;/Bone&gt;
+                            &lt;/Bone&gt;
+                        &lt;/Bone&gt;
+                        &lt;Bone Name="Finger_C_1_R" Index="58" ParentIndex="57" NumChild="1" NumTotalChildBone="3"&gt;
+                            &lt;Bone Name="Finger_C_2_R" Index="59" ParentIndex="58" NumChild="1" NumTotalChildBone="2"&gt;
+                                &lt;Bone Name="Finger_C_3_R" Index="60" ParentIndex="59" NumChild="1" NumTotalChildBone="1"&gt;
+                                    &lt;Bone Name="Finger_C_3_R_end" Index="61" ParentIndex="60" NumChild="0" NumTotalChildBone="0"/&gt;
+                                &lt;/Bone&gt;
+                            &lt;/Bone&gt;
+                        &lt;/Bone&gt;
+                        &lt;Bone Name="Finger_D_1_R" Index="62" ParentIndex="61" NumChild="1" NumTotalChildBone="3"&gt;
+                            &lt;Bone Name="Finger_D_2_R" Index="63" ParentIndex="62" NumChild="1" NumTotalChildBone="2"&gt;
+                                &lt;Bone Name="Finger_D_3_R" Index="64" ParentIndex="63" NumChild="1" NumTotalChildBone="1"&gt;
+                                    &lt;Bone Name="Finger_D_3_R_end" Index="65" ParentIndex="64" NumChild="0" NumTotalChildBone="0"/&gt;
+                                &lt;/Bone&gt;
+                            &lt;/Bone&gt;
+                        &lt;/Bone&gt;
+                        &lt;Bone Name="Finger_E_1_R" Index="66" ParentIndex="65" NumChild="1" NumTotalChildBone="3"&gt;
+                            &lt;Bone Name="Finger_E_2_R" Index="67" ParentIndex="66" NumChild="1" NumTotalChildBone="2"&gt;
+                                &lt;Bone Name="Finger_E_3_R" Index="68" ParentIndex="67" NumChild="1" NumTotalChildBone="1"&gt;
+                                    &lt;Bone Name="Finger_E_3_R_end" Index="69" ParentIndex="68" NumChild="0" NumTotalChildBone="0"/&gt;
+                                &lt;/Bone&gt;
+                            &lt;/Bone&gt;
+                        &lt;/Bone&gt;
+                        &lt;Bone Name="Weapon_R" Index="70" ParentIndex="69" NumChild="1" NumTotalChildBone="1"&gt;
+                            &lt;Bone Name="Weapon_R_end" Index="71" ParentIndex="70" NumChild="0" NumTotalChildBone="0"/&gt;
+                        &lt;/Bone&gt;
+                    &lt;/Bone&gt;
+                &lt;/Bone&gt;
+            &lt;/Bone&gt;
+            &lt;Bone Name="Clavicle_Assist_R" Index="72" ParentIndex="71" NumChild="1" NumTotalChildBone="1"&gt;
+                &lt;Bone Name="Clavicle_Assist_R_end" Index="73" ParentIndex="72" NumChild="0" NumTotalChildBone="0"/&gt;
+            &lt;/Bone&gt;
+        &lt;/Bone&gt;
+    &lt;/BlendBoneParentName&gt;
+    
+    &lt;BlendBoneParentName Name="Head" Type="Head" MinBoneIdx="75" MaxBoneIdx="148"&gt;
+        &lt;Bone Name="Head" Index="75" ParentIndex="74" NumChild="4" NumTotalChildBone="73"&gt;
+            &lt;Bone Name="Ear_L" Index="76" ParentIndex="75" NumChild="1" NumTotalChildBone="1"&gt;
+                &lt;Bone Name="Ear_L_end" Index="77" ParentIndex="76" NumChild="0" NumTotalChildBone="0"/&gt;
+            &lt;/Bone&gt;
+            &lt;Bone Name="Ear_R" Index="78" ParentIndex="77" NumChild="1" NumTotalChildBone="1"&gt;
+                &lt;Bone Name="Ear_R_end" Index="79" ParentIndex="78" NumChild="0" NumTotalChildBone="0"/&gt;
+            &lt;/Bone&gt;
+            &lt;Bone Name="Face_Root" Index="80" ParentIndex="79" NumChild="28" NumTotalChildBone="65"&gt;
+                &lt;Bone Name="Cheek_D_L" Index="81" ParentIndex="80" NumChild="1" NumTotalChildBone="1"&gt;
+                    &lt;Bone Name="Cheek_D_L_end" Index="82" ParentIndex="81" NumChild="0" NumTotalChildBone="0"/&gt;
+                &lt;/Bone&gt;
+                &lt;Bone Name="Cheek_D_R" Index="83" ParentIndex="82" NumChild="1" NumTotalChildBone="1"&gt;
+                    &lt;Bone Name="Cheek_D_R_end" Index="84" ParentIndex="83" NumChild="0" NumTotalChildBone="0"/&gt;
+                &lt;/Bone&gt;
+                &lt;Bone Name="Cheek_U_L" Index="85" ParentIndex="84" NumChild="1" NumTotalChildBone="1"&gt;
+                    &lt;Bone Name="Cheek_U_L_end" Index="86" ParentIndex="85" NumChild="0" NumTotalChildBone="0"/&gt;
+                &lt;/Bone&gt;
+                &lt;Bone Name="Cheek_U_R" Index="87" ParentIndex="86" NumChild="1" NumTotalChildBone="1"&gt;
+                    &lt;Bone Name="Cheek_U_R_end" Index="88" ParentIndex="87" NumChild="0" NumTotalChildBone="0"/&gt;
+                &lt;/Bone&gt;
+                &lt;Bone Name="Chin" Index="89" ParentIndex="88" NumChild="5" NumTotalChildBone="10"&gt;
+                    &lt;Bone Name="Chin_Point" Index="90" ParentIndex="89" NumChild="1" NumTotalChildBone="1"&gt;
+                        &lt;Bone Name="Chin_Point_end" Index="91" ParentIndex="90" NumChild="0" NumTotalChildBone="0"/&gt;
+                    &lt;/Bone&gt;
+                    &lt;Bone Name="Lip_D" Index="92" ParentIndex="91" NumChild="1" NumTotalChildBone="1"&gt;
+                        &lt;Bone Name="Lip_D_end" Index="93" ParentIndex="92" NumChild="0" NumTotalChildBone="0"/&gt;
+                    &lt;/Bone&gt;
+                    &lt;Bone Name="Lip_D_L_1" Index="94" ParentIndex="93" NumChild="1" NumTotalChildBone="1"&gt;
+                        &lt;Bone Name="Lip_D_L_1_end" Index="95" ParentIndex="94" NumChild="0" NumTotalChildBone="0"/&gt;
+                    &lt;/Bone&gt;
+                    &lt;Bone Name="Lip_D_R_1" Index="96" ParentIndex="95" NumChild="1" NumTotalChildBone="1"&gt;
+                        &lt;Bone Name="Lip_D_R_1_end" Index="97" ParentIndex="96" NumChild="0" NumTotalChildBone="0"/&gt;
+                    &lt;/Bone&gt;
+                    &lt;Bone Name="Teeth_D" Index="98" ParentIndex="97" NumChild="1" NumTotalChildBone="1"&gt;
+                        &lt;Bone Name="Teeth_D_end" Index="99" ParentIndex="98" NumChild="0" NumTotalChildBone="0"/&gt;
+                    &lt;/Bone&gt;
+                &lt;/Bone&gt;
+                &lt;Bone Name="Eye_In_L" Index="100" ParentIndex="99" NumChild="1" NumTotalChildBone="1"&gt;
+                    &lt;Bone Name="Eye_In_L_end" Index="101" ParentIndex="100" NumChild="0" NumTotalChildBone="0"/&gt;
+                &lt;/Bone&gt;
+                &lt;Bone Name="Eye_In_R" Index="102" ParentIndex="101" NumChild="1" NumTotalChildBone="1"&gt;
+                    &lt;Bone Name="Eye_In_R_end" Index="103" ParentIndex="102" NumChild="0" NumTotalChildBone="0"/&gt;
+                &lt;/Bone&gt;
+                &lt;Bone Name="Eye_Out_L" Index="104" ParentIndex="103" NumChild="1" NumTotalChildBone="1"&gt;
+                    &lt;Bone Name="Eye_Out_L_end" Index="105" ParentIndex="104" NumChild="0" NumTotalChildBone="0"/&gt;
+                &lt;/Bone&gt;
+                &lt;Bone Name="Eye_Out_R" Index="106" ParentIndex="105" NumChild="1" NumTotalChildBone="1"&gt;
+                    &lt;Bone Name="Eye_Out_R_end" Index="107" ParentIndex="106" NumChild="0" NumTotalChildBone="0"/&gt;
+                &lt;/Bone&gt;
+                &lt;Bone Name="Eyeball_L" Index="108" ParentIndex="107" NumChild="1" NumTotalChildBone="1"&gt;
+                    &lt;Bone Name="Eyeball_L_end" Index="109" ParentIndex="108" NumChild="0" NumTotalChildBone="0"/&gt;
+                &lt;/Bone&gt;
+                &lt;Bone Name="Eyeball_R" Index="110" ParentIndex="109" NumChild="1" NumTotalChildBone="1"&gt;
+                    &lt;Bone Name="Eyeball_R_end" Index="111" ParentIndex="110" NumChild="0" NumTotalChildBone="0"/&gt;
+                &lt;/Bone&gt;
+                &lt;Bone Name="Eyebrow_In_L" Index="112" ParentIndex="111" NumChild="1" NumTotalChildBone="1"&gt;
+                    &lt;Bone Name="Eyebrow_In_L_end" Index="113" ParentIndex="112" NumChild="0" NumTotalChildBone="0"/&gt;
+                &lt;/Bone&gt;
+                &lt;Bone Name="Eyebrow_In_R" Index="114" ParentIndex="113" NumChild="1" NumTotalChildBone="1"&gt;
+                    &lt;Bone Name="Eyebrow_In_R_end" Index="115" ParentIndex="114" NumChild="0" NumTotalChildBone="0"/&gt;
+                &lt;/Bone&gt;
+                &lt;Bone Name="Eyebrow_Mid_L" Index="116" ParentIndex="115" NumChild="1" NumTotalChildBone="1"&gt;
+                    &lt;Bone Name="Eyebrow_Mid_L_end" Index="117" ParentIndex="116" NumChild="0" NumTotalChildBone="0"/&gt;
+                &lt;/Bone&gt;
+                &lt;Bone Name="Eyebrow_Mid_R" Index="118" ParentIndex="117" NumChild="1" NumTotalChildBone="1"&gt;
+                    &lt;Bone Name="Eyebrow_Mid_R_end" Index="119" ParentIndex="118" NumChild="0" NumTotalChildBone="0"/&gt;
+                &lt;/Bone&gt;
+                &lt;Bone Name="Eyebrow_Out_L" Index="120" ParentIndex="119" NumChild="1" NumTotalChildBone="1"&gt;
+                    &lt;Bone Name="Eyebrow_Out_L_end" Index="121" ParentIndex="120" NumChild="0" NumTotalChildBone="0"/&gt;
+                &lt;/Bone&gt;
+                &lt;Bone Name="Eyebrow_Out_R" Index="122" ParentIndex="121" NumChild="1" NumTotalChildBone="1"&gt;
+                    &lt;Bone Name="Eyebrow_Out_R_end" Index="123" ParentIndex="122" NumChild="0" NumTotalChildBone="0"/&gt;
+                &lt;/Bone&gt;
+                &lt;Bone Name="Eyelid_D_L" Index="124" ParentIndex="123" NumChild="1" NumTotalChildBone="1"&gt;
+                    &lt;Bone Name="Eyelid_D_L_end" Index="125" ParentIndex="124" NumChild="0" NumTotalChildBone="0"/&gt;
+                &lt;/Bone&gt;
+                &lt;Bone Name="Eyelid_D_R" Index="126" ParentIndex="125" NumChild="1" NumTotalChildBone="1"&gt;
+                    &lt;Bone Name="Eyelid_D_R_end" Index="127" ParentIndex="126" NumChild="0" NumTotalChildBone="0"/&gt;
+                &lt;/Bone&gt;
+                &lt;Bone Name="Eyelid_U_L" Index="128" ParentIndex="127" NumChild="1" NumTotalChildBone="1"&gt;
+                    &lt;Bone Name="Eyelid_U_L_end" Index="129" ParentIndex="128" NumChild="0" NumTotalChildBone="0"/&gt;
+                &lt;/Bone&gt;
+                &lt;Bone Name="Eyelid_U_R" Index="130" ParentIndex="129" NumChild="1" NumTotalChildBone="1"&gt;
+                    &lt;Bone Name="Eyelid_U_R_end" Index="131" ParentIndex="130" NumChild="0" NumTotalChildBone="0"/&gt;
+                &lt;/Bone&gt;
+                &lt;Bone Name="Lip_U" Index="132" ParentIndex="131" NumChild="1" NumTotalChildBone="1"&gt;
+                    &lt;Bone Name="Lip_U_end" Index="133" ParentIndex="132" NumChild="0" NumTotalChildBone="0"/&gt;
+                &lt;/Bone&gt;
+                &lt;Bone Name="Lip_U_L_1" Index="134" ParentIndex="133" NumChild="1" NumTotalChildBone="1"&gt;
+                    &lt;Bone Name="Lip_U_L_1_end" Index="135" ParentIndex="134" NumChild="0" NumTotalChildBone="0"/&gt;
+                &lt;/Bone&gt;
+                &lt;Bone Name="Lip_U_L_2" Index="136" ParentIndex="135" NumChild="1" NumTotalChildBone="1"&gt;
+                    &lt;Bone Name="Lip_U_L_2_end" Index="137" ParentIndex="136" NumChild="0" NumTotalChildBone="0"/&gt;
+                &lt;/Bone&gt;
+                &lt;Bone Name="Lip_U_R_1" Index="138" ParentIndex="137" NumChild="1" NumTotalChildBone="1"&gt;
+                    &lt;Bone Name="Lip_U_R_1_end" Index="139" ParentIndex="138" NumChild="0" NumTotalChildBone="0"/&gt;
+                &lt;/Bone&gt;
+                &lt;Bone Name="Lip_U_R_2" Index="140" ParentIndex="139" NumChild="1" NumTotalChildBone="1"&gt;
+                    &lt;Bone Name="Lip_U_R_2_end" Index="141" ParentIndex="140" NumChild="0" NumTotalChildBone="0"/&gt;
+                &lt;/Bone&gt;
+                &lt;Bone Name="Nose" Index="142" ParentIndex="141" NumChild="1" NumTotalChildBone="1"&gt;
+                    &lt;Bone Name="Nose_end" Index="143" ParentIndex="142" NumChild="0" NumTotalChildBone="0"/&gt;
+                &lt;/Bone&gt;
+                &lt;Bone Name="Teeth_U" Index="144" ParentIndex="143" NumChild="1" NumTotalChildBone="1"&gt;
+                    &lt;Bone Name="Teeth_U_end" Index="145" ParentIndex="144" NumChild="0" NumTotalChildBone="0"/&gt;
+                &lt;/Bone&gt;
+            &lt;/Bone&gt;
+            &lt;Bone Name="Hair_Root" Index="146" ParentIndex="145" NumChild="1" NumTotalChildBone="2"&gt;
+                &lt;Bone Name="Ponytail_A_1" Index="147" ParentIndex="146" NumChild="1" NumTotalChildBone="1"&gt;
+                    &lt;Bone Name="Ponytail_A_1_end" Index="148" ParentIndex="147" NumChild="0" NumTotalChildBone="0"/&gt;
+                &lt;/Bone&gt;
+            &lt;/Bone&gt;
+        &lt;/Bone&gt;
+    &lt;/BlendBoneParentName&gt;</code></pre>
+</details>
+<p>뼈의 범위 정보만 저장해도 되지만 좀더 명확하고 쉽게 이해하며 파악할 수 있도록 뼈의 범위를 계층적으로 XML로 저장한 모습입니다.</p>
+<p>툴을 실행하지 않더라도 해당 XML파일만을 확인하여 현재 어떤 뼈가 어떤 부위에 해당하는지 확인할 수 있도록 하였습니다.</p>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__39.png" alt="image.png" loading="lazy"></figure>
+<ul>
+<li>전체 Code</li>
+</ul>
+<details class="code-toggle"><summary>📝 Code</summary>
+<pre><code class="language-cpp">    _bool CModel::Process_UsingGroups(_int iUsingCnt, _int iRequestCnt, vector&lt;pair&lt;Abgt, _int&gt;&gt;&amp; UsingGroups, vector&lt;pair&lt;Abgt, _int&gt;&gt;&amp; ChangeGroups)
+    {
+    	if (!iUsingCnt)
+    		return true;
+    
+    	// 전체 -&gt; 전체
+    	// 전체 -&gt; 상하
+    	if (iUsingCnt == 1)
+    	{
+    		_int iNotTotalGroupIdx = NON;
+    		_bool bTotal = false;
+    		for (_int i = iLower; i &lt;= iTotal; ++i)
+    		{
+    			if (UsingGroups[i].second != NON &amp;&amp; i == iTotal)
+    				bTotal = true;
+    			
+    			if (UsingGroups[i].second != NON)
+    				iNotTotalGroupIdx = i;
+    		}
+    
+    		// 사용중인 그룹이 tot인경우
+    		if (bTotal)
+    		{
+    			_bool bIsRequestGroupTotal = false;
+    			for (_int i = iLower; i &lt;= iTotal; ++i)
+    			{
+    				if (ChangeGroups[i].second != NON &amp;&amp; i == iTotal)
+    					bIsRequestGroupTotal = true;
+    			}
+    
+    			// 전체 -&gt; 전체 (요청 그룹이 1개이고(tot로의 변경 요청일 때) 
+    			if (iRequestCnt == 1 &amp;&amp; bIsRequestGroupTotal)
+    			{
+    				_int iRequestChangeAnimIdx = ChangeGroups[iTotal].second;
+    				_int iCurUsingGroupAnimIdx = UsingGroups[iTotal].second;
+    
+    				// 사용중인 그룹 개수가 1개이고 요청한 그룹 개수도 1개이다 이것은 tot -&gt; tot인 경우이다. 근데 애니매이션 인덱스가 같다면 그냥 true를 리턴한다.
+    				if (iCurUsingGroupAnimIdx == iRequestChangeAnimIdx)
+    					return true;
+    
+    				// 같은 경우가 아니기 때문에 보간한다.
+    				Ready_Interpolation(Abgt::TOTAL, Abgt::TOTAL, iRequestChangeAnimIdx);
+    
+    			}
+    			// 전체 -&gt; 상하(그 이상)
+    			else if (iRequestCnt &gt;= 2 &amp;&amp; !bIsRequestGroupTotal)
+    			{
+    				_int iCurUsingGroupAnimIdx = UsingGroups[iTotal].second;
+    
+    				for (_int iGroupIdx = iLower; iGroupIdx &lt; iTotal; ++iGroupIdx)
+    				{
+    					_int iRequestAnimIdx = ChangeGroups[iGroupIdx].second;
+    					if (iRequestAnimIdx == NON)
+    						continue;
+    
+    					// 전체에 해당하는 애니매이션이 요청이 온 애니매이션과 같은 경우
+    					// iGroupIdx에 해당하는 그룹은 애니매이션 재생을 하도록 한다.
+    					if (iCurUsingGroupAnimIdx == iRequestAnimIdx)
+    					{
+    						Ready_ToPlay_Anim(Abgt(iGroupIdx), m_BlendGroups[iTotal].AnimInfo);
+    					}
+    					// 다르다면 Total에서 보간을 하도록 설정한다.
+    					else
+    					{
+    						Ready_Interpolation(Abgt::TOTAL, Abgt(iGroupIdx), iRequestAnimIdx);
+    					}
+    				}
+    			}
+    		}
+    		// 사용중인 그룹이 total이 아닌경우 상, 하 등 중에서 하나의 그룹이다.
+    		else
+    		{
+    			if (iNotTotalGroupIdx == NON)
+    				return true;
+    
+    			// total로의 보간 요청이 아닌 경우
+    			if (ChangeGroups[iTotal].second == NON)
+    			{
+    				_int iCurAnimIdx = m_BlendGroups[iNotTotalGroupIdx].AnimInfo.iAnimIdx;
+    				_int iReAnimIdx = ChangeGroups[iNotTotalGroupIdx].second;
+    
+    				// 현재 iNotTotalGroupIdx 그룹에서 재생중인 애니매이션과 변경 요청이 온 애니매이션이 같다면 보간하지 않고 건너뛴다.
+    				if (iReAnimIdx == NON || iCurAnimIdx == iReAnimIdx)
+    					return true;
+    
+    				Ready_Interpolation(Abgt(iNotTotalGroupIdx), Abgt(iNotTotalGroupIdx), iReAnimIdx);
+    			}
+    			// tot로의 보간 요청인 경우
+    			else
+    			{
+    				_int iReTotAnimIdx = ChangeGroups[iTotal].second;
+    
+    				for (_int i = iLower; i &lt; iTotal; ++i)
+    				{
+    					if (Is_Use_Condition(m_BlendGroups[i]))
+    					{
+    						_int iCurUsingAnimIdx = UsingGroups[i].second;
+    
+    						if (iCurUsingAnimIdx != iReTotAnimIdx)
+    						{
+    							Ready_Interpolation(Abgt(i), Abgt::TOTAL, iReTotAnimIdx);
+    							continue;
+    						}
+    					}
+    				}
+    			}
+    		}
+    	}
+    	// 상하 -&gt; 전체
+    	// 상하 -&gt; 상하
+    	else
+    	{
+    		// 상하 -&gt; 전체
+    		if (iRequestCnt == 1)
+    		{
+    			_int iRequestAnimIdx = ChangeGroups[iTotal].second;
+    
+    			for (_int iGroupIdx = iLower; iGroupIdx &lt; iTotal; ++iGroupIdx)
+    			{
+    				_int iCurGroupAnimIdx = UsingGroups[iGroupIdx].second;
+    				if (iCurGroupAnimIdx == NON)
+    					continue;
+    
+    				// total에 요청이 온 애니매이션 인덱스와 현재 그룹 Lower~Head 까지의 애니매이션 인덱스가 일치하는게 있다면 해당 그룹은 보간하지 않고 특정 그룹의 보간이 끝나면 total로 재생한다
+    				if (iCurGroupAnimIdx == iRequestAnimIdx)
+    					continue;
+    
+    				Ready_Interpolation(Abgt(iGroupIdx), Abgt::TOTAL, iRequestAnimIdx);
+    			}
+    		}
+    		// 상하 -&gt; 상하(그 이상)
+    		// 아래의 경우 무조건 1대1 대응이다.
+    		else
+    		{
+    			for (_int iGroupIdx = iLower; iGroupIdx &lt; iTotal; ++iGroupIdx)
+    			{
+    				_int iCurGroupUsingAnimIdx = UsingGroups[iGroupIdx].second;
+    				if (iCurGroupUsingAnimIdx == NON)
+    					continue;
+    
+    				// 요청이 온 애니매이션과 현재 같은 그룹의 애니매이션이 같다면 건너뛴다.
+    				_int iRequestAnimIdx = ChangeGroups[iGroupIdx].second;
+    
+    				if (iRequestAnimIdx == NON)
+    					continue;
+    
+    				if (iRequestAnimIdx == iCurGroupUsingAnimIdx)
+    					continue;
+    
+    				Ready_Interpolation(Abgt(iGroupIdx), Abgt(iGroupIdx), iRequestAnimIdx);
+    			}
+    		}
+    	}
+    
+    	return true;
+    }</code></pre>
+</details>
+<p>부위별 블렌딩을 수행하는 일부 코드입니다. 앞서 저장한 XML파일의 데이터로부터 애니매이션 행렬곱을 전체뼈에 수행하지 않고 저정하여 기록한 뼈에 대해서만 행렬곱을 수행할 수 있도록 하였습니다.</p>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__40.png" alt="image.png" loading="lazy"></figure>
+<ul>
+<li>Code</li>
+</ul>
+<details class="code-toggle"><summary>📝 Code</summary>
+<pre><code class="language-cpp">    void CModel::Update_Animation(_float fTimeDelta, _bool bPlayer)
+    {
+    	for (_int i = (_int)Abgt::LOWER_BODY; i &lt; (_int)Abgt::BLEND_END; ++i)
+    	{
+    		if (!m_BlendGroups[i].AnimInfo.bUpdate) // 250214
+    			continue;
+    
+    		if (m_BlendGroups[i].AnimInfo.bUse &amp;&amp; !m_BlendGroups[i].AnimInfo.bInterpolationing &amp;&amp; m_BlendGroups[i].AnimInfo.pAnim &amp;&amp; m_BlendGroups[i].AnimInfo.iAnimIdx != -1) // 사용중인 BlendGroup 애니매이션 업데이트 갈긴다.
+    		{
+    			_int iMinBoneIdx = m_BlendGroups[i].DefaultInfo.iMinBoneIdx;
+    			_int iMaxBoneIdx = m_BlendGroups[i].DefaultInfo.iMaxBoneIdx;
+    
+    			if (m_BlendGroups[i].DefaultInfo.eBlendGroupType == Abgt::LOWER_BODY)
+    				m_BlendGroups[i].AnimInfo.bEnd = m_BlendGroups[i].AnimInfo.pAnim-&gt;Update_TransformationMatrices(m_Bones, m_BlendGroups[i].AnimInfo.bIsLoop, iMinBoneIdx, iMaxBoneIdx, fTimeDelta, 3);
+    			else
+    				m_BlendGroups[i].AnimInfo.bEnd = m_BlendGroups[i].AnimInfo.pAnim-&gt;Update_TransformationMatrices(m_Bones, m_BlendGroups[i].AnimInfo.bIsLoop, iMinBoneIdx, iMaxBoneIdx, fTimeDelta);
+    		}
+    	}
+    }</code></pre>
+</details>
+<p>부위 별 행렬 연산을 수행할 수 있게 해주는 코드입니다. 마찬가지로 인덱스화 한 뼈들을 그룹으로 관리하여 그룹에 해당하는 뼈들에 대해서 관리할 수 있도록 하였습니다. 1차는 뼈들에 인덱스 번호를 부여하고 이들을 효율적으로 관리하기 위하여 뼈그룹이라는 것을 만들어 관리하였습니다.</p>
+<hr>
+<h3>후기</h3>
+<p>처음 구현을 해보았던 상하체 분리 로직이라 코드가 길고 많이 복잡하여 비효율적으로 동작하는 부분이 있었습니다.</p>
+<p>하지만 현재 동작 방식은 하나의 객체에서 오로지 하나의 전체 뼈 정보를 가지고 제어를 하는데 추후 업데이트를 해나간다면</p>
+<p>상체를 담당하는 객체, 하체를 담당하는 객체를 만들고, 상체를 담당하는 객체에서는 하체 부분에 해당하는 부분의 행렬 연산과 렌더를 하지 않고, 하체를 담당하는 객체에서도 마찬가지를 수행하여 복잡한 로직을 걷어 내고 기존 블렌딩(애니매이션 전환)코드를 사용하여 좀더 유지보수가 용이하고 사용하기 쉽게 만들 수 있을것 같습니다.</p>
+<h2>모델 뼈 확인 기능</h2>
+<h3>구현 결과</h3>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__41.gif" alt="뼈 위치 확인.gif" loading="lazy"></figure>
+<p>목뼈의 정확한 위치를 알기 위해 XML로 저장한 뼈 계층구조로부터 목뼈를 선택하고 큐브객체가 목뼈의 위치에 렌더링 할 수 있게하는 모습입니다.</p>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__42.gif" alt="뼈 룩벡터 확인.gif" loading="lazy"></figure>
+<p>특정 뼈의 룩벡터를 DebugRay객체를 통해 로컬, 월드 상에 보여주게 하는 기능입니다.</p>
+<hr>
+<h3>구현 과정</h3>
+<ol>
+<li>보여주기로 한 뼈의 루트 뼈 까지 곱해진 최종 행렬에 3D 오브젝트의 월드 행렬을 곱하여 좌표계 변환을 통해 월드상에 뼈의 위치가 보여질 수 있도록 하였습니다. 초록색 큐브모양 객체는 DXCollision의 버퍼를 사용하여 렌더링하였고 여러 객체들을 보여주는 경우 이들을 관리하기 위해 std::map을 통해 관리하고 map에 담겨있는 객체들을 렌더링 하였습니다.</li>
+<li>특정 <strong>‘뼈의 로컬 행렬’</strong> 정보와 <strong>‘루트 뼈 * 부모의 월드 행렬’</strong>을 곱한 두 행렬을 가져와 각 행렬의 3행 성분인 Look벡터를 Debug Ray객체에 값을 전달 해주고 DebugRay 객체의 Right, Up, Look을 외적 연산을 하여 기능을 구현하였습니다. DebugRay객체 자체도 직접 버퍼를 만들어 렌더링을 수행하였습니다.</li>
+</ol>
+<hr>
+<h3>Code</h3>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__43.png" alt="image.png" loading="lazy"></figure>
+<ul>
+<li>Code</li>
+</ul>
+<details class="code-toggle"><summary>📝 Code</summary>
+<pre><code class="language-cpp">    _bool CLevel_AnimTool::Show_BoneWorldPos()
+    {
+        if (!m_SelectedShowBonesNames.empty())
+        {
+            for (_int i = 0; i &lt; m_SelectedShowBonesNames.size(); ++i)
+            {
+                // 루트 뼈까지 곱해진 특정 뼈의 행렬
+                _matrix matBoneCombinedTransformationMatrix = m_pAT_PartAnimObj_Model-&gt;Get_Bone_CombiendTransformationMatrix(m_SelectedShowBonesNames[i]);
+    
+                // 3D 오브젝트의 월드 변환 행렬
+                _matrix matWorld = m_pAT_Obj-&gt;Get_Transform()-&gt;Get_WorldMatrix();
+    
+                // '루트 뼈까지 곱해진 행렬 * 부모의 월드 변환 행렬' 의 곱을 통해 월드 공간상의 행렬로 만들어준다.
+                matWorld = matBoneCombinedTransformationMatrix * matWorld;
+                _vector vPos = matWorld.r[3];
+                auto iter = m_SelectedShowBoneSquare.find(m_SelectedShowBonesNames[i]);
+                if (iter != m_SelectedShowBoneSquare.end())
+                {
+                    CAT_Square* pSquare = static_cast&lt;CAT_Square*&gt;((iter-&gt;second).second);
+                    if (pSquare)
+                    {
+                        pSquare-&gt;Get_Transform()-&gt;Set_State(CTransform::STATE_POSITION, vPos);
+                        continue;
+                    }
+                }
+            }
+        }
+    
+        return true;
+    }</code></pre>
+</details>
+<p>특정 뼈의 위치를 월드 공간상에 보여주게 하기 위한 계산과정 코드입니다.</p>
+<p>보여주기로 선택한 뼈(A)에 루트뼈의 행렬을 곱하고 객체의 월드 변환 행렬을 곱하여</p>
+<p>정사각형 객체(B)의 정확한 위치를 계산하는 코드입니다.</p>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__44.png" alt="image.png" loading="lazy"></figure>
+<ul>
+<li>Code</li>
+</ul>
+<details class="code-toggle"><summary>📝 Code</summary>
+<pre><code class="language-cpp">    void CLevel_AnimTool::Show_IK_Ray(string strBoneName, CAT_Ray* pRay, BONE_IK_LOOK_DIR_TYPE eIKLookType)
+    {
+        if (m_pAT_Obj)
+        {
+            switch (eIKLookType)
+            {
+            case Client::CLevel_AnimTool::IK_PLAYER_LOOK:
+            {
+                _matrix CObjWorldMatrix = m_pAT_Obj-&gt;Get_Transform()-&gt;Get_WorldMatrix();
+                _vector vBoneWorldPos = Get_Bone_WorldPos(CObjWorldMatrix, strBoneName);
+    
+                _vector vLook = XMVector3Normalize(CObjWorldMatrix.r[2]);
+                _vector vTempUp = { 0.f, 1.f, 0.f, 0.f };
+                _vector vRight = XMVector3Normalize(XMVector3Cross(vTempUp, vLook));
+                _vector vUp = XMVector3Normalize(XMVector3Cross(vLook, vRight));
+    
+                pRay-&gt;Get_Transform()-&gt;Set_State(CTransform::STATE_LOOK, XMVector3Normalize(vLook));
+                pRay-&gt;Get_Transform()-&gt;Set_State(CTransform::STATE_RIGHT, XMVector3Normalize(vRight));
+                pRay-&gt;Get_Transform()-&gt;Set_State(CTransform::STATE_UP, XMVector3Normalize(vUp));
+    
+                pRay-&gt;Get_Transform()-&gt;Scaling(1.f, 1.f, 1.f);
+    
+                vBoneWorldPos = vBoneWorldPos + vLook / 2.f;
+                pRay-&gt;Get_Transform()-&gt;Set_State(CTransform::STATE_POSITION, vBoneWorldPos);
+            }
+                break;
+            case Client::CLevel_AnimTool::IK_BONE_WORLD_LOOK:
+            {
+                _matrix CObjWorldMatrix = m_pAT_Obj-&gt;Get_Transform()-&gt;Get_WorldMatrix();
+                _vector vBoneWorldLook = Get_Bone_WorldLook(CObjWorldMatrix, strBoneName);
+                _vector vBoneWorldPos = Get_Bone_WorldPos(CObjWorldMatrix, strBoneName);
+    
+                _vector vLook = vBoneWorldLook;
+                _vector vTempUp = { 0.f, 1.f, 0.f, 0.f };
+                _vector vRight = XMVector3Normalize(XMVector3Cross(vTempUp, vLook));
+                _vector vUp = XMVector3Normalize(XMVector3Cross(vLook, vRight));
+    
+                pRay-&gt;Get_Transform()-&gt;Set_State(CTransform::STATE_LOOK, XMVector3Normalize(vLook));
+                pRay-&gt;Get_Transform()-&gt;Set_State(CTransform::STATE_RIGHT, XMVector3Normalize(vRight));
+                pRay-&gt;Get_Transform()-&gt;Set_State(CTransform::STATE_UP, XMVector3Normalize(vUp));
+    
+                pRay-&gt;Get_Transform()-&gt;Scaling(1.f, 1.f, 1.f);
+    
+                vBoneWorldPos = vBoneWorldPos + vLook / 2.f;
+                pRay-&gt;Get_Transform()-&gt;Set_State(CTransform::STATE_POSITION, vBoneWorldPos);
+            }
+                break;
+            case Client::CLevel_AnimTool::IK_BONE_LOCAL_LOOK:
+            {
+                _matrix CObjWorldMatrix = m_pAT_Obj-&gt;Get_Transform()-&gt;Get_WorldMatrix();
+    
+                _matrix BoneTransformationMatrix = XMLoadFloat4x4(&amp;(*m_pAT_PartAnimObj_Model-&gt;Get_Bone_TransformationMatrix_Ptr(strBoneName)));
+                _vector vBoneWorldPos = Get_Bone_WorldPos(CObjWorldMatrix, strBoneName);
+    
+                _vector vLook = XMVector3Normalize(BoneTransformationMatrix.r[2]);
+                _vector vTempUp = { 0.f, 1.f, 0.f, 0.f };
+                _vector vRight = XMVector3Normalize(XMVector3Cross(vTempUp, vLook));
+                _vector vUp = XMVector3Normalize(XMVector3Cross(vLook, vRight));
+    
+                pRay-&gt;Get_Transform()-&gt;Set_State(CTransform::STATE_LOOK, XMVector3Normalize(vLook));
+                pRay-&gt;Get_Transform()-&gt;Set_State(CTransform::STATE_RIGHT, XMVector3Normalize(vRight));
+                pRay-&gt;Get_Transform()-&gt;Set_State(CTransform::STATE_UP, XMVector3Normalize(vUp));
+    
+                pRay-&gt;Get_Transform()-&gt;Scaling(1.f, 1.f, 1.f);
+    
+                vBoneWorldPos = vBoneWorldPos + vLook / 2.f;
+                pRay-&gt;Get_Transform()-&gt;Set_State(CTransform::STATE_POSITION, vBoneWorldPos);
+            }
+            break;
+            case Client::CLevel_AnimTool::IK_WORLD_TO_TARGET:
+            {
+                if (!m_pMouse)
+                    return;
+                
+                // 위치 - 위치 로 방향 벡터 구한 경우
+                {
+                    _matrix BoneTransformationMatrix = XMLoadFloat4x4(&amp;(*m_pAT_PartAnimObj_Model-&gt;Get_Bone_TransformationMatrix_Ptr(strBoneName)));
+                    _matrix BoneCombinedMatrix = m_pAT_PartAnimObj_Model-&gt;Get_Bone_CombiendTransformationMatrix(strBoneName);
+                    _matrix CObjWorldMatrix = m_pAT_Obj-&gt;Get_Transform()-&gt;Get_WorldMatrix();
+    
+                    _matrix BoneWorldMatrix = BoneCombinedMatrix * CObjWorldMatrix;
+                    _vector vBoneWorldPos = BoneWorldMatrix.r[3];
+    
+                    _vector vTargetPos = m_pMouse-&gt;Get_Transform()-&gt;Get_State(CTransform::STATE_POSITION);
+                    _vector vBoneToTargetDir = XMVector3Normalize(vTargetPos - vBoneWorldPos);
+    
+                    _vector vLook = vBoneToTargetDir;
+                    _vector vTempUp = { 0.f, 1.f, 0.f, 0.f };
+                    _vector vRight = XMVector3Normalize(XMVector3Cross(vTempUp, vLook));
+                    _vector vUp = XMVector3Normalize(XMVector3Cross(vLook, vRight));
+    
+                    pRay-&gt;Get_Transform()-&gt;Set_State(CTransform::STATE_LOOK, XMVector3Normalize(vLook));
+                    pRay-&gt;Get_Transform()-&gt;Set_State(CTransform::STATE_RIGHT, XMVector3Normalize(vRight));
+                    pRay-&gt;Get_Transform()-&gt;Set_State(CTransform::STATE_UP, XMVector3Normalize(vUp));
+    
+                    pRay-&gt;Get_Transform()-&gt;Scaling(1.f, 1.f, 1.f);
+    
+                    vBoneWorldPos = vBoneWorldPos + vLook / 2.f;
+                    pRay-&gt;Get_Transform()-&gt;Set_State(CTransform::STATE_POSITION, vBoneWorldPos);
+                }
+    
+            }
+            break;
+            case Client::CLevel_AnimTool::IK_LOOK_END:
+                break;
+            default:
+                break;
+            }
+        }
+    }</code></pre>
+</details>
+<p>특정 뼈의 룩벡터를 DebugRay에 정보를 넘겨주고 DeBugRay의 Right, Up, Look벡터를 설정하여 보여지게 하는 코드입니다. 큐브객체가 가지고 있는 뼈의 로컬 행렬에 접근하여 뼈의 right, up, look벡터를 가지고 와 이를 DebugRay객체에넘겨 디버그용으로 렌더링을 수행하였습니다.</p>
+<h2>물체를 따라 특정 뼈를 회전 시키는 기능</h2>
+<h3>구현 결과</h3>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__45.gif" alt="목-회전.gif" loading="lazy"></figure>
+<ol>
+<li>마우스의 월드 위치에 따라 목뼈를 회전 시킨 모습</li>
+</ol>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__46.gif" alt="몸-회전.gif" loading="lazy"></figure>
+<p>마우스의 월드 위치에 따라 몸통 뼈를 회전 시킨 모습</p>
+<hr>
+<h3>구현 과정</h3>
+<p>우선 회전 시킬 특정 뼈를 애니매이션 업데이트에서 제외 시키고 타겟의 월드 위치를 루트뼈를 기준으로 한 좌표계로 변환, 목뼈의 위치도 루트뼈를 기준으로 한 좌표계로 변환하여 좌표계를 일치 시킨 후 동일한 좌표계에서의 회전행렬을 계산하여 구하고 이 계산한 회전행렬을 목뼈 로컬 좌표계로 다시 변환 하여 목뼈의 로컬 행렬을 변환 시켜 구현하였습니다.</p>
+<hr>
+<h3>Code</h3>
+<figure class="project-image"><img src="../images/Animation_Tool_애니매이션_툴__47.png" alt="image.png" loading="lazy"></figure>
+<ul>
+<li>Code</li>
+</ul>
+<details class="code-toggle"><summary>📝 Code</summary>
+<pre><code class="language-cpp">    void CModel::Rotate_UpdateExcludeBone_To_Target(string strUpdateExcludeBoneName, _fmatrix ContainerObjectWorldMatrix, _fmatrix TargetWorldMatrix)
+    {
+    	if (strUpdateExcludeBoneName == "" || strUpdateExcludeBoneName == "None" || strUpdateExcludeBoneName == "none")
+    		return;
+    
+    	_matrix SrcMatrix = ContainerObjectWorldMatrix;
+    	_matrix SrcMatrixInv = XMMatrixInverse(nullptr, SrcMatrix);
+    
+    	// UEB(UpdateExcludeBone)
+    	// 애니매이션 업데이트에서 제외시킨 뼈의 로컬 행렬
+    	_matrix UEBLocalMatrix = XMLoadFloat4x4(&amp;Get_Origin_UpdateExcludeBone_TransformationMatrix());
+    	_vector UEBLocalPos = UEBLocalMatrix.r[3];
+    	_vector UEBLocalLookDir = XMVector3Normalize(UEBLocalMatrix.r[2]);
+    
+    	// 루트 뼈까지 곱해진 회전할 뼈의 행렬 (루트뼈를 기준으로 한 행렬)
+    	_matrix BoneParentCombinedMatrix = Get_Parent_CombinedTransformationMatrix_From_UpdateExlcudeBone();
+    	_matrix BoneParentCombinedMatrixInv = XMMatrixInverse(nullptr, BoneParentCombinedMatrix);
+    
+    	// 월드 상에 존재하는 '타겟의 월드 행렬 * 부모 월드 변환 행렬의 역행렬 * 루트 뼈 행렬' =&gt; '루트 뼈를 기준으로 한 좌표계로 변환'한다.
+    	_matrix NewTargetMatrix = TargetWorldMatrix * SrcMatrixInv * BoneParentCombinedMatrix;
+    	_vector NewTargetPos = NewTargetMatrix.r[3];
+    
+    	// 회전할 특정 뼈의 룩벡터를 루트 뼈를 기준으로 좌표계로 변환한다.
+    	_vector vBoneLookDir_InRootLocal = XMVector3TransformNormal(UEBLocalLookDir, BoneParentCombinedMatrix);
+    	_vector vBonePos_InRootLocal = XMVector3TransformCoord(UEBLocalPos, BoneParentCombinedMatrix);
+    	_vector vBoneToTargetDir_InRootLocal = XMVector3Normalize(NewTargetPos - vBonePos_InRootLocal);
+    
+    	// 루트뼈를 기준으로 한 두 방향 벡터를 내적하여 회전할 양을 구한다.
+    	_float fDot = XMVectorGetX(XMVector3Dot(vBoneToTargetDir_InRootLocal, vBoneLookDir_InRootLocal));
+    	fDot = max(-1.f, min(1.f, fDot));
+    
+    	// 회전 축을 계산 (외적 사용)
+    	_vector vRotAxis = XMVector3Cross(vBoneLookDir_InRootLocal, vBoneToTargetDir_InRootLocal);
+    	_float axisLengthSq = XMVectorGetX(XMVector3LengthSq(vRotAxis));
+    
+    	// Gimbal Lock 방지 처리
+    	if (axisLengthSq &lt; 0.0001f)
+    	{
+    		vRotAxis = XMVector3Normalize(XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f));
+    		if (fabs(XMVectorGetX(XMVector3Dot(vRotAxis, vBoneLookDir_InRootLocal))) &gt; 0.99f)
+    			vRotAxis = XMVector3Normalize(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f));
+    	}
+    	else
+    		vRotAxis = XMVector3Normalize(vRotAxis);
+    
+    	// 회전 각도 계산
+    	_float fAngle = acosf(fDot);
+    
+    	// 회전 행렬을 생성
+    	_vector QuaternionRot = XMQuaternionRotationAxis(vRotAxis, fAngle);
+    	_matrix RotMatrix = XMMatrixRotationQuaternion(QuaternionRot);
+    
+    	// 행렬곱을 수행하여 회전 시키고 위치를 설정한다.
+    	// **회전 행렬을 로컬 좌표계 기준으로 변환하는 과정**
+    	// 1. BoneParentCombinedMatrixInv를 곱해 부모 좌표계를 제거
+    	// 1-1. 부모 좌표계를 제거하는 말도 맞지만 부모 로컬로의 변환을 의미한다고도 볼 수 있다. A(자식) * B(부모) 인 경우 B기준으로의 A 좌표가 나오는데, A * B^-1을 하면 B기준으로의 A의 좌표가 나온다.
+    	// 2. RotMatrix (부모 좌표계 기준의 회전 행렬)를 적용
+    	// 3. 다시 BoneParentCombinedMatrix를 곱해 부모 좌표계를 되돌림
+    	_matrix RotMatrix_Local = BoneParentCombinedMatrixInv * RotMatrix * BoneParentCombinedMatrix;
+    	UEBLocalMatrix = UEBLocalMatrix * RotMatrix_Local;
+    	UEBLocalMatrix.r[3] = XMVectorSetW(UEBLocalPos, 1.0f);
+    	Set_UpdateExcludeBone_TransformationMatrix(UEBLocalMatrix);
+    }</code></pre>
+</details>
+
+            </div>
+            <div class="project-nav">
+                <a href="../index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> 프로젝트 목록으로</a>
+            </div>
+        </div>
+    </article>
+    <footer class="footer"><p>&copy; 2026 김남영. All rights reserved.</p></footer>
+    <script src="project.js"></script>
+</body>
+</html>

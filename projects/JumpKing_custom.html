@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XDD814ZBH2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XDD814ZBH2');
+</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Jump King 모작 (2D) | 김남영 포트폴리오</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="project.css">
+    <link rel="stylesheet" href="gunfire.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <nav class="nav"><div class="nav-container">
+        <a href="../index.html" class="nav-logo">NY</a>
+        <a href="../index.html#projects" class="back-link"><i class="fas fa-arrow-left"></i> 프로젝트 목록</a>
+    </div></nav>
+
+    <article class="project-detail"><div class="container">
+        <div class="project-meta-card">
+            <p class="meta-desc">WIN32 API, C++로 스팀의 점프킹을 모작. 텍스처 기반 애니메이션, 2D AABB 충돌체, 벡터 수학 + RigidBody 이동 구현.</p>
+            <div class="meta-tags">
+                <span class="tag tag-primary">C++</span><span class="tag tag-primary">Win32 API</span>
+            </div>
+            <div class="meta-info">
+                <span><i class="fas fa-user"></i> 1인 개발</span>
+                <span><i class="fas fa-calendar"></i> 2022.12 ~ 2023.02</span>
+                <span><a href="https://github.com/starkshn/JumpKing" target="_blank"><i class="fab fa-github"></i> GitHub</a></span>
+            </div>
+        </div>
+
+        <h1 class="project-detail-title">Jump King 모작 (2D)</h1>
+        <a href="https://www.youtube.com/watch?v=j1WLpSXeZEQ" target="_blank" class="video-thumbnail">
+            <img src="https://img.youtube.com/vi/j1WLpSXeZEQ/maxresdefault.jpg" alt="프로젝트 영상" loading="lazy">
+            <div class="play-button"><i class="fas fa-play"></i></div>
+        </a>
+
+        <div class="project-content">
+            <div class="feature-summary"><h2>구현 기능</h2>
+                <div class="feature-chips">
+                    <a href="#anim" class="chip">텍스처 애니메이션</a>
+                    <a href="#collision" class="chip">2D AABB 충돌</a>
+                    <a href="#rigidbody" class="chip">RigidBody 이동</a>
+                </div>
+            </div><hr>
+
+            <!-- ===== 텍스처 기반 애니메이션 ===== -->
+            <section class="feature-card" id="anim">
+                <div class="feature-header"><h2>텍스처 기반 애니메이션</h2><span class="feature-badge">Sprite Sheet / 상태 머신</span></div>
+                <blockquote><strong>마젠타 색상</strong>을 제외한 스프라이트 시트에서 <strong>플레이어 상태(enum class)</strong>에 따라 애니메이션 재생. <strong>Animator + Animation</strong> 객체 분리 구조.</blockquote>
+                <p><strong>Animator</strong>와 <strong>Animation</strong> 객체를 분리하여, Animator가 여러 Animation을 관리하는 구조로 구현했습니다. 플레이어 상태가 변경되면 <strong>prevState와 curState를 비교</strong>하여 실제로 상태가 바뀌었을 때만 애니메이션을 전환합니다. 각 애니메이션은 <strong>duration에 따라 프레임을 증가</strong>시키며 텍스처를 변경하는 방식으로 재생됩니다.</p>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/Jump_King_모작_2D__1.png" loading="lazy"><figcaption>스프라이트 시트</figcaption></figure>
+                    <figure class="project-image"><img src="../images/Jump_King_모작_2D__2.png" loading="lazy"><figcaption>애니메이션 구조</figcaption></figure>
+                </div>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/Jump_King_모작_2D__3.png" loading="lazy"><figcaption>상태별 애니메이션 코드</figcaption></figure>
+                    <figure class="project-image"><img src="../images/Jump_King_모작_2D__4.png" loading="lazy"><figcaption>프레임 업데이트</figcaption></figure>
+                </div>
+                <details class="code-toggle"><summary>상태별 애니메이션 전환 핵심</summary>
+<pre><code class="language-cpp">switch (mState) {
+case ePlayerState::IDLE:
+    mAnimator->Play(L"IdleAnim");
+    break;
+case ePlayerState::MOVE:
+    mAnimator->Play(L"MoveAnim");
+    break;
+case ePlayerState::JUMP:
+    mAnimator->Play(L"JumpAnim");
+    break;
+case ePlayerState::FALL:
+    mAnimator->Play(L"FallAnim");
+    break;
+}</code></pre></details>
+            </section>
+
+            <!-- ===== 2D AABB 충돌체 ===== -->
+            <section class="feature-card" id="collision">
+                <div class="feature-header"><h2>2D AABB 충돌체</h2><span class="feature-badge">컴포넌트 / OnEnter, OnStay, OnExit</span></div>
+                <blockquote><strong>Collider를 컴포넌트화</strong>하여 플레이어/Ground에 부착. <strong>OnEnter/OnStay/OnExit</strong>으로 충돌 상태 판별. <strong>WIN32 API PEN</strong>으로 충돌 영역 렌더링.</blockquote>
+                <p><strong>2D Collider를 컴포넌트화</strong>하여 플레이어와 Ground 객체에 부착하는 방식으로 구현했습니다. 플레이어의 위치와 사이즈를 기반으로 Ground 객체의 <strong>어느 면에 충돌했는지(위/아래/좌/우)</strong>를 계산합니다. 예를 들어 플레이어 밑면이 Ground 윗면보다 크거나 같으면 위에서 아래로 떨어진 것으로 판정하고, 세부 조건을 추가하여 정확한 충돌 방향을 분기합니다.</p>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/Jump_King_모작_2D__5.png" loading="lazy"><figcaption>충돌 영역 렌더링 코드</figcaption></figure>
+                    <figure class="project-image"><img src="../images/Jump_King_모작_2D__6.png" loading="lazy"><figcaption>충돌 판정 코드</figcaption></figure>
+                </div>
+                <details class="code-toggle"><summary>AABB 4방향 충돌 판정 핵심</summary>
+<pre><code class="language-cpp">// AABB 충돌 판정
+if (playerBottom >= groundTop
+    && playerTop <= groundBottom
+    && playerRight >= groundLeft
+    && playerLeft <= groundRight) {
+    // 충돌 발생 — 방향 판별
+    float overlapX = min(playerRight - groundLeft, groundRight - playerLeft);
+    float overlapY = min(playerBottom - groundTop, groundBottom - playerTop);
+
+    if (overlapY < overlapX) {
+        // 상하 충돌 (착지 또는 천장)
+        if (playerBottom - groundTop < groundBottom - playerTop)
+            player.y = groundTop - playerHeight; // 착지
+    }
+}</code></pre></details>
+            </section>
+
+            <!-- ===== 벡터 수학 + RigidBody ===== -->
+            <section class="feature-card" id="rigidbody">
+                <div class="feature-header"><h2>벡터 수학 + RigidBody</h2><span class="feature-badge">Vector2 / 마찰력 / 최대속도</span></div>
+                <blockquote><strong>벡터의 길이/정규화/연산자 오버로딩</strong>을 직접 구현. <strong>RigidBody 컴포넌트</strong>로 <strong>가속도 기반 이동</strong> + <strong>마찰력</strong>을 모방하여 자연스러운 물리 이동.</blockquote>
+                <p>수학 벡터의 <strong>길이(Length)</strong>, <strong>정규화(Normalize)</strong>, <strong>연산자 오버로딩(+, -, *, /)</strong>을 직접 구현하여 게임 내에서 사용할 수 있게 했습니다. <strong>RigidBody 컴포넌트</strong>는 힘(Force)을 받아 가속도를 계산하고, 속도에 누적하며, <strong>마찰력</strong>을 반대 방향으로 적용하여 자연스럽게 감속합니다. 최대속도를 초과하면 클램핑하고, 마찰 가속도가 현재 속도보다 크면 즉시 정지시킵니다.</p>
+                <div class="feature-grid triple">
+                    <figure class="project-image"><img src="../images/Jump_King_모작_2D__7.png" loading="lazy"><figcaption>Vector2 구현</figcaption></figure>
+                    <figure class="project-image"><img src="../images/Jump_King_모작_2D__8.png" loading="lazy"><figcaption>RigidBody 구현</figcaption></figure>
+                    <figure class="project-image"><img src="../images/Jump_King_모작_2D__9.png" loading="lazy"><figcaption>Move 로직</figcaption></figure>
+                </div>
+                <details class="code-toggle"><summary>RigidBody::FinalUpdate 핵심</summary>
+<pre><code class="language-cpp">void RigidBody::FinalUpdate() {
+    // 힘 → 가속도
+    mAccel = mForce / mMass;
+    // 가속도 → 속도
+    mVelocity += mAccel * DeltaTime;
+    // 마찰력 적용
+    if (mVelocity.Length() > 0.f) {
+        Vector2 friction = -mVelocity.Normalize() * mFriction * DeltaTime;
+        if (friction.Length() >= mVelocity.Length())
+            mVelocity = Vector2::Zero;
+        else
+            mVelocity += friction;
+    }
+    // 최대속도 제한
+    if (mVelocity.Length() > mMaxSpeed)
+        mVelocity = mVelocity.Normalize() * mMaxSpeed;
+    // 이동 적용
+    mOwner->SetPos(mOwner->GetPos() + mVelocity * DeltaTime);
+    mForce = Vector2::Zero;
+}</code></pre></details>
+            </section>
+        </div>
+
+        <div class="project-nav">
+            <a href="../index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> 프로젝트 목록으로</a>
+        </div>
+    </div></article>
+    <footer class="footer"><p>&copy; 2026 김남영. All rights reserved.</p></footer>
+    <script src="project.js"></script>
+</body>
+</html>

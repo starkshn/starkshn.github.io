@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XDD814ZBH2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XDD814ZBH2');
+</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>테트리스 (2D) | 김남영 포트폴리오</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="project.css">
+    <link rel="stylesheet" href="gunfire.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <nav class="nav"><div class="nav-container">
+        <a href="../index.html" class="nav-logo">NY</a>
+        <a href="../index.html#projects" class="back-link"><i class="fas fa-arrow-left"></i> 프로젝트 목록</a>
+    </div></nav>
+
+    <article class="project-detail"><div class="container">
+        <div class="project-meta-card">
+            <p class="meta-desc">WIN32 API, C++로 테트리스 구현. 2차원 배열 보드, 블록 회전/충돌, 행 삭제 + 점수, HOLD 보관 기능.</p>
+            <div class="meta-tags">
+                <span class="tag tag-primary">C++</span><span class="tag tag-primary">Win32 API</span>
+            </div>
+            <div class="meta-info">
+                <span><i class="fas fa-user"></i> 1인 개발</span>
+                <span><i class="fas fa-calendar"></i> 2024.04</span>
+                <span><a href="https://github.com/starkshn/Tetris_Temp" target="_blank"><i class="fab fa-github"></i> GitHub</a></span>
+            </div>
+        </div>
+
+        <h1 class="project-detail-title">테트리스 (2D)</h1>
+        <a href="https://www.youtube.com/watch?v=KGX1d_1a52I" target="_blank" class="video-thumbnail">
+            <img src="https://img.youtube.com/vi/KGX1d_1a52I/maxresdefault.jpg" alt="프로젝트 영상" loading="lazy">
+            <div class="play-button"><i class="fas fa-play"></i></div>
+        </a>
+
+        <div class="project-content">
+            <div class="feature-summary"><h2>구현 기능</h2>
+                <div class="feature-chips">
+                    <a href="#create" class="chip">블록 생성/삭제</a>
+                    <a href="#move" class="chip">블록 이동/보관</a>
+                </div>
+            </div><hr>
+
+            <!-- ===== 블록 생성 및 삭제 ===== -->
+            <section class="feature-card" id="create">
+                <div class="feature-header"><h2>블록 생성 및 삭제</h2><span class="feature-badge">템플릿 / 2차원 배열</span></div>
+                <blockquote><strong>BlockContainer</strong>가 <strong>Block 4개</strong>를 소유하는 구조. <strong>템플릿 함수</strong>로 랜덤 블록 생성. <strong>2차원 배열(Board)</strong>의 행을 순회하여 꽉 찬 행 탐지 &rarr; <strong>_moveRow 누적</strong>으로 위 블록을 정확한 칸 수만큼 내림.</blockquote>
+                <p><strong>BlockContainer</strong>의 자식 클래스(Yellow, Blue, Green 등)가 각각의 블록 형태, 이동 규칙, 회전 규칙을 정의합니다. 충돌 판정은 별도 충돌체 없이, <strong>Board 객체에 접근</strong>하여 현재 블록의 행/열 위치가 이동/회전 가능한지 직접 확인합니다. 행 삭제 시에는 <strong>아래서부터 위로 순회</strong>하며 꽉 찬 행을 큐에 넣고, _moveRow를 누적하여 위 블록들이 정확한 칸 수만큼 내려오도록 합니다.</p>
+                <figure class="project-image"><img src="../images/테트리스_2D__1.png" loading="lazy"><figcaption>블록 생성 코드</figcaption></figure>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/테트리스_2D__2.png" loading="lazy"><figcaption>행 삭제 로직 1</figcaption></figure>
+                    <figure class="project-image"><img src="../images/테트리스_2D__3.png" loading="lazy"><figcaption>행 삭제 로직 2</figcaption></figure>
+                </div>
+                <details class="code-toggle"><summary>CheckBoardSomthingErase 핵심</summary>
+<pre><code class="language-cpp">void CheckBoardSomthingErase() {
+    int _moveRow = 0;
+    for (int row = BOARD_H - 1; row >= 0; --row) {
+        bool bFull = true;
+        for (int col = 0; col &lt; BOARD_W; ++col) {
+            if (board[row][col] == 0) {
+                bFull = false;
+                break;
+            }
+        }
+        if (bFull) {
+            // 해당 행 삭제
+            ClearRow(row);
+            _moveRow++;
+            score += 100;
+        } else if (_moveRow > 0) {
+            // 위 블록을 _moveRow만큼 아래로 이동
+            MoveRowDown(row, _moveRow);
+        }
+    }
+}</code></pre></details>
+            </section>
+
+            <!-- ===== 블록 이동 및 보관 ===== -->
+            <section class="feature-card" id="move">
+                <div class="feature-header"><h2>블록 이동 및 보관</h2><span class="feature-badge">상태 머신 / HOLD</span></div>
+                <blockquote>블록 이동 시 <strong>Board에서 현재 인덱스 제거 &rarr; 이동 가능 확인 &rarr; 새 인덱스 등록</strong>. 불가 시 <strong>원복(ResetBlockIdxInBoard)</strong>. <strong>C키</strong>로 HOLD 칸에 임시 보관, <strong>상태(USE/HOLD/DOWN_HOLD/GO_DOWN)</strong> 기반 예외 처리.</blockquote>
+                <p>블록 이동은 <strong>Board에서 현재 인덱스를 먼저 지우고</strong>, 이동/회전이 가능한지 확인한 뒤 가능하면 새 위치에 등록하고, 불가능하면 원래 위치로 원복하는 방식입니다. <strong>C키를 누르면 HOLD 칸에 보관</strong>되며, HOLD에 이미 블록이 있으면 현재 블록과 교체합니다. 블록 컨테이너에 <strong>USE/HOLD/DOWN_HOLD/GO_DOWN</strong> 상태를 부여하여, 각 상태에서 수행 가능한 기능을 예외 처리했습니다.</p>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/테트리스_2D__4.png" loading="lazy"><figcaption>블록 이동 코드</figcaption></figure>
+                    <figure class="project-image"><img src="../images/테트리스_2D__5.png" loading="lazy"><figcaption>상태 처리 코드</figcaption></figure>
+                </div>
+                <details class="code-toggle"><summary>DefaultChangePos + 상태 전환 핵심</summary>
+<pre><code class="language-cpp">bool DefaultChangePos(int dx, int dy) {
+    // 1. Board에서 현재 인덱스 제거
+    RemoveBlockIdxFromBoard();
+    // 2. 이동 가능 확인
+    for (auto&amp; block : blocks) {
+        int nx = block.x + dx;
+        int ny = block.y + dy;
+        if (nx &lt; 0 || nx >= BOARD_W || ny >= BOARD_H || board[ny][nx] != 0) {
+            ResetBlockIdxInBoard(); // 원복
+            return false;
+        }
+    }
+    // 3. 새 위치 등록
+    for (auto&amp; block : blocks) { block.x += dx; block.y += dy; }
+    SetBlockIdxInBoard();
+    return true;
+}
+
+// Update 상태 전환
+switch (m_eState) {
+case USE:     HandleInput(); AutoDrop(); break;
+case HOLD:    SwapWithHold(); m_eState = USE; break;
+case GO_DOWN: HardDrop(); LockBlock(); m_eState = USE; break;
+}</code></pre></details>
+            </section>
+        </div>
+
+        <div class="project-nav">
+            <a href="../index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> 프로젝트 목록으로</a>
+        </div>
+    </div></article>
+    <footer class="footer"><p>&copy; 2026 김남영. All rights reserved.</p></footer>
+    <script src="project.js"></script>
+</body>
+</html>

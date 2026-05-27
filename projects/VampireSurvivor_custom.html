@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XDD814ZBH2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XDD814ZBH2');
+</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>뱀파이어 서바이벌 모작 | 김남영 포트폴리오</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="project.css">
+    <link rel="stylesheet" href="gunfire.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <nav class="nav"><div class="nav-container">
+        <a href="../index.html" class="nav-logo">NY</a>
+        <a href="../index.html#projects" class="back-link"><i class="fas fa-arrow-left"></i> 프로젝트 목록</a>
+    </div></nav>
+
+    <article class="project-detail"><div class="container">
+        <div class="project-meta-card">
+            <p class="meta-desc">Unity 6, C#으로 뱀파이어 서바이벌 모작. Addressable 리소스 관리, 오브젝트 풀링, Grid/QuadTree 최적화, 무한맵, 스킬 시스템.</p>
+            <div class="meta-tags">
+                <span class="tag tag-primary">C#</span><span class="tag tag-primary">Unity 6</span>
+                <span class="tag">XML</span><span class="tag">Json</span>
+            </div>
+            <div class="meta-info">
+                <span><i class="fas fa-user"></i> 1인 개발</span>
+                <span><i class="fas fa-calendar"></i> 2025.11~</span>
+            </div>
+        </div>
+
+        <h1 class="project-detail-title">뱀파이어 서바이벌 모작</h1>
+        <a href="https://www.youtube.com/watch?v=mCV-hOCwQ3M" target="_blank" class="video-thumbnail">
+            <img src="https://img.youtube.com/vi/mCV-hOCwQ3M/maxresdefault.jpg" alt="프로젝트 영상" loading="lazy">
+            <div class="play-button"><i class="fas fa-play"></i></div>
+        </a>
+
+        <div class="project-content">
+            <div class="feature-summary"><h2>구현 기능</h2>
+                <div class="feature-chips">
+                    <a href="#addressable" class="chip">Addressable</a>
+                    <a href="#pool" class="chip">오브젝트 풀링</a>
+                    <a href="#grid" class="chip">Grid 최적화</a>
+                    <a href="#quadtree" class="chip">QuadTree</a>
+                    <a href="#infinitemap" class="chip">무한맵</a>
+                    <a href="#skill" class="chip">스킬 시스템</a>
+                </div>
+            </div><hr>
+
+            <!-- ===== Addressable 리소스 관리 ===== -->
+            <section class="feature-card" id="addressable">
+                <div class="feature-header"><h2>Addressable 리소스 관리</h2><span class="feature-badge">비동기 로드 / Remote 서버</span></div>
+                <blockquote><strong>Resource.Load 대신 Addressable</strong>로 라벨 기반 리소스 관리. <strong>Render 서버</strong>에 번들을 배포하여 <strong>빌드 없이 리소스 패치</strong> 가능. <strong>비동기 로드</strong> + <strong>콜백</strong>으로 로딩 진행률 확인.</blockquote>
+                <p>기존 <strong>Resource.Load</strong> 방식은 빌드 시 Resources 폴더의 모든 에셋을 포함하고, 경로 변경 시 코드에 문제가 생깁니다. <strong>Addressable</strong>은 경로를 자동 추적하고, 라벨 기반으로 필요한 리소스만 로드합니다. 나아가 <strong>Render 서버</strong>에 번들을 배포하여, 리소스 변경 시 클라이언트 재빌드 없이 서버의 파일만 교체하면 패치가 완료되는 구조를 구축했습니다.</p>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_1.png" loading="lazy"><figcaption>초기화</figcaption></figure>
+                    <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_2.png" loading="lazy"><figcaption>Resource.Load vs Addressable 비교</figcaption></figure>
+                </div>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_3.png" loading="lazy"><figcaption>Addressable 도식</figcaption></figure>
+                    <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_6.png" loading="lazy"><figcaption>로드 코드</figcaption></figure>
+                </div>
+                <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_7.png" loading="lazy"><figcaption>실사용 예시</figcaption></figure>
+            </section>
+
+            <!-- ===== 오브젝트 풀링 ===== -->
+            <section class="feature-card" id="pool">
+                <div class="feature-header"><h2>오브젝트 풀링</h2><span class="feature-badge">IObjectPool / ResourceManager</span></div>
+                <blockquote><strong>IObjectPool(Unity 2021+)</strong> 기반 풀 구현. <strong>ResourceManager</strong>가 풀링 여부 판단 &rarr; <strong>PoolManager</strong>에서 Pop/Push. <strong>SpawningPool</strong>이 코루틴으로 _maxSpawnCount까지 자동 스폰.</blockquote>
+                <p>게임 특성상 수많은 오브젝트를 생성/삭제하므로, 매번 new/destroy하면 <strong>메모리 단편화</strong>와 <strong>GC 부하</strong>가 심해집니다. <strong>ResourceManager</strong>가 중간 매개체로서 풀링 대상이면 PoolManager에서 Pop하고, 아니면 Instantiate합니다. <strong>SpawningPool</strong>은 코루틴으로 현재 오브젝트 수가 _maxSpawnCount보다 작으면 _spawnInterval 간격으로 자동 스폰합니다.</p>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_16.png" loading="lazy"><figcaption>ResourceManager 도식 1</figcaption></figure>
+                    <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_17.png" loading="lazy"><figcaption>ResourceManager 도식 2</figcaption></figure>
+                </div>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_19.png" loading="lazy"><figcaption>ResourceManager 코드 1</figcaption></figure>
+                    <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_20.png" loading="lazy"><figcaption>ResourceManager 코드 2</figcaption></figure>
+                </div>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_21.png" loading="lazy"><figcaption>PoolManager 도식 1</figcaption></figure>
+                    <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_22.png" loading="lazy"><figcaption>PoolManager 도식 2</figcaption></figure>
+                </div>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_23.png" loading="lazy"><figcaption>Pool 코드 1</figcaption></figure>
+                    <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_24.png" loading="lazy"><figcaption>Pool 코드 2</figcaption></figure>
+                </div>
+                <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_25.png" loading="lazy"><figcaption>ObjectManager</figcaption></figure>
+                <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_26.png" loading="lazy"><figcaption>Spawn 코드</figcaption></figure>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_27.png" loading="lazy"><figcaption>SpawningPool 도식</figcaption></figure>
+                    <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_28.png" loading="lazy"><figcaption>SpawningPool 코드</figcaption></figure>
+                </div>
+            </section>
+
+            <!-- ===== Grid + QuadTree 최적화 ===== -->
+            <section class="feature-card" id="grid">
+                <div class="feature-header"><h2>Grid + QuadTree 최적화</h2><span class="feature-badge">공간 분할 / Cell</span></div>
+                <blockquote>맵을 <strong>Grid로 분할</strong> &rarr; 각 칸에 <strong>Cell</strong> 부여 &rarr; 플레이어 min/max 범위의 Cell만 탐색. <strong>QuadTree</strong>로 아이템 줍기 등 추가 최적화 &mdash; 4분할 재귀로 범위 내 오브젝트만 처리.</blockquote>
+                <p>다수의 오브젝트가 존재할 때 전체를 순회하면 비효율적입니다. 맵을 <strong>Grid로 분할</strong>하고 각 칸에 <strong>Cell</strong>을 부여하여, 플레이어의 <strong>탐색 범위(min/max)</strong>에 걸치는 Cell만 가져옵니다. 각 Cell이 포함한 오브젝트 목록을 반환하여 충돌/아이템 줍기 등을 효율적으로 처리합니다.</p>
+                <div class="feature-grid triple">
+                    <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_29.png" loading="lazy"><figcaption>Grid 구조 1</figcaption></figure>
+                    <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_30.png" loading="lazy"><figcaption>Grid 구조 2</figcaption></figure>
+                    <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_31.png" loading="lazy"><figcaption>Grid 구조 3</figcaption></figure>
+                </div>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_32.png" loading="lazy"><figcaption>Grid 코드 1</figcaption></figure>
+                    <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_33.png" loading="lazy"><figcaption>Grid 코드 2</figcaption></figure>
+                </div>
+            </section>
+
+            <section class="feature-card" id="quadtree">
+                <div class="feature-header"><h2>QuadTree</h2><span class="feature-badge">4분할 재귀 / 범위 탐색</span></div>
+                <p><strong>QuadTree</strong>는 Grid와 별도로 아이템 등 산발적 오브젝트에 적용했습니다. 영역을 <strong>4분할 재귀</strong>로 쪼개고, 각 영역에 오브젝트가 일정 수 이상이면 다시 분할합니다. 특정 범위와 겹치는 오브젝트만 빠르게 추출하여 처리합니다.</p>
+                <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_34.png" loading="lazy"><figcaption>QuadTree 적용 결과</figcaption></figure>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_35.png" loading="lazy"><figcaption>QuadTree 도식 1</figcaption></figure>
+                    <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_36.png" loading="lazy"><figcaption>QuadTree 도식 2</figcaption></figure>
+                </div>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_37.png" loading="lazy"><figcaption>QuadTree 코드 1</figcaption></figure>
+                    <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_38.png" loading="lazy"><figcaption>QuadTree 코드 2</figcaption></figure>
+                </div>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_39.png" loading="lazy"><figcaption>QuadTree 코드 3</figcaption></figure>
+                    <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_40.png" loading="lazy"><figcaption>QuadTree 코드 4</figcaption></figure>
+                </div>
+            </section><hr>
+
+            <!-- ===== 무한맵 ===== -->
+            <section class="feature-card" id="infinitemap">
+                <div class="feature-header"><h2>무한맵</h2><span class="feature-badge">Camera Collider / 타일 재배치</span></div>
+                <blockquote><strong>카메라에 Collider/RigidBody 부착</strong> &rarr; 타일과 <strong>OnTriggerExit</strong> 시 플레이어 이동 방향으로 <strong>타일 위치 재배치</strong>. 무한 스크롤 효과.</blockquote>
+                <p><strong>카메라에 Collider와 RigidBody를 부착</strong>하고, 타일에 <strong>MapTileController</strong>를 붙여서 카메라의 Collider와 <strong>OnTriggerExit</strong> 이벤트를 감지합니다. 타일이 카메라 영역을 벗어나면 플레이어의 <strong>마지막 이동 방향</strong>을 참조하여 해당 방향으로 타일을 재배치합니다.</p>
+                <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_41.png" loading="lazy"><figcaption>무한맵 도식</figcaption></figure>
+                <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_42.gif" loading="lazy"><figcaption>무한맵 동작 결과</figcaption></figure>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_43.png" loading="lazy"><figcaption>카메라 설정 1</figcaption></figure>
+                    <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_44.png" loading="lazy"><figcaption>카메라 설정 2</figcaption></figure>
+                </div>
+                <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_45.png" loading="lazy"><figcaption>타일 재배치 코드</figcaption></figure>
+            </section>
+
+            <!-- ===== 스킬 시스템 ===== -->
+            <section class="feature-card" id="skill">
+                <div class="feature-header"><h2>스킬 시스템</h2><span class="feature-badge">SkillBook / 코루틴</span></div>
+                <blockquote><strong>SkillBook 컴포넌트</strong>가 스킬 목록을 List로 관리. <strong>반복스킬/단발스킬</strong> 분류. <strong>코루틴</strong>으로 스킬 실행 &rarr; <strong>콜백</strong>으로 완료 통보 &rarr; 다음 스킬 준비. <strong>XML 데이터</strong> 기반 스킬 정의.</blockquote>
+                <p>오브젝트는 <strong>Controller(이동 담당)</strong>와 <strong>SkillBook(스킬 담당)</strong> 컴포넌트를 가지며, 스킬은 <strong>반복스킬/단발스킬</strong>로 구분됩니다. 보스 몬스터의 경우 초기화 시 스킬을 등록하고, 스킬이 끝날 때마다 <strong>콜백 함수</strong>를 통해 다음 스킬 사용 준비를 합니다. 스킬 데이터는 <strong>XML</strong>로 정의하고 파싱하여 사용합니다.</p>
+                <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_46.png" loading="lazy"><figcaption>스킬 시스템 구조 도식</figcaption></figure>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_47.png" loading="lazy"><figcaption>스킬 초기화</figcaption></figure>
+                    <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_48.png" loading="lazy"><figcaption>다음 스킬 준비</figcaption></figure>
+                </div>
+                <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_49.png" loading="lazy"><figcaption>스킬 실행 코드</figcaption></figure>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_50.png" loading="lazy"><figcaption>스킬 데이터 1</figcaption></figure>
+                    <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_51.png" loading="lazy"><figcaption>스킬 데이터 2</figcaption></figure>
+                </div>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_52.png" loading="lazy"><figcaption>스킬 실행 3</figcaption></figure>
+                    <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_53.png" loading="lazy"><figcaption>스킬 실행 4</figcaption></figure>
+                </div>
+                <figure class="project-image"><img src="../images/_Unity_벰파이어_서바이벌_모작_54.png" loading="lazy"><figcaption>스킬 실행 5</figcaption></figure>
+            </section>
+        </div>
+
+        <div class="project-nav">
+            <a href="../index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> 프로젝트 목록으로</a>
+        </div>
+    </div></article>
+    <footer class="footer"><p>&copy; 2026 김남영. All rights reserved.</p></footer>
+    <script src="project.js"></script>
+</body>
+</html>

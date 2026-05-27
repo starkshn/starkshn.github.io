@@ -1,433 +1,613 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
-    <meta charset="UTF-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>NamYeong's Portfolio</title>
-    <meta name = "description" content = "Portfolio for world-recommend software engineer NamYeong"/>
-    <meta name = "author" content = "NY"/>
+    <meta charset="UTF-8">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XDD814ZBH2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XDD814ZBH2');
+</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>김남영 | 게임 개발자 포트폴리오</title>
 
-    <!-- font awesome 태그 -->
-    <script
-        src="https://kit.fontawesome.com/f2dbb08f8a.js",
-        crossorigin="anonymous"
-    ></script>
-    <script src="https://kit.fontawesome.com/f2dbb08f8a.js" crossorigin="anonymous"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com"/>
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans&family=Otomanopee+One&family=Roboto+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.2.0/css/all.min.css" integrity="sha512-6c4nX2tn5KbzeBJo9Ywpa0Gkt+mzCzJBrE1RB6fmpcsoN+b/w/euwIMuQKNyUoU/nToKN3a8SgNOtPrbW12fug==" crossorigin="anonymous" />
-    <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"
-  />
-    <!-- font awesome 태그 -->
+    <!-- OG Meta Tags -->
+    <meta name="description" content="저수준부터 이해하는 게임 클라이언트 개발자 김남영의 포트폴리오. DX11, UE5, Unity, C++, IOCP 서버 등 16개 프로젝트.">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="김남영 | 게임 개발자 포트폴리오">
+    <meta property="og:description" content="저수준부터 이해하는 게임 클라이언트 개발자. DX11 렌더링/애니메이션 직접 구현, UE5 스팀 출시, IOCP 서버 개발.">
+    <meta property="og:url" content="https://starkshn.github.io/">
+    <meta property="og:image" content="https://starkshn.github.io/images/og-thumbnail.png">
+    <meta property="og:locale" content="ko_KR">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="김남영 | 게임 개발자 포트폴리오">
+    <meta name="twitter:description" content="저수준부터 이해하는 게임 클라이언트 개발자. DX11, UE5, Unity, C++, IOCP 서버.">
+    <meta name="twitter:image" content="https://starkshn.github.io/images/og-thumbnail.png">
 
-    <!-- icon 태그 -->
-    <link rel="icon" type = "images.png" href="images/turtle_logo.png"/>
-    <!-- icon 태그 -->
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='16' fill='%236c63ff'/><text x='50' y='68' font-size='52' font-weight='bold' font-family='sans-serif' fill='white' text-anchor='middle'>NY</text></svg>">
 
-    <link rel="stylesheet" href="style.css"/>
-    <script src = "main.js" defer></script>
-
-
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
-<body class="beScrollbar">
-
-    <!-- navbar -->
-    <nav id="navbar">
-        
-        <div class="navbar__logo">
-            <i class="fas fa-asterisk"></i>
-            <a href="#">NamYeong</a>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">NY</a>
+            <ul class="nav-links">
+                <li><a href="#about">소개</a></li>
+                <li><a href="#experience">경력</a></li>
+                <li><a href="#skills">기술</a></li>
+                <li><a href="#projects">프로젝트</a></li>
+                <li><a href="#contact">연락처</a></li>
+            </ul>
+            <button class="nav-toggle" aria-label="메뉴">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
-
-        <ul class="navbar__menu">
-            <li class="navbar__menu__item" data-link = "Home">Home</li>
-            <li class="navbar__menu__item" data-link = "about">About</li>
-            <li class="navbar__menu__item" data-link = "skills">Skills</li>
-            <li class="navbar__menu__item" data-link = "work">My work</li>
-            <li class="navbar__menu__item" data-link = "testimonials">Testimonial</li>
-            <li class="navbar__menu__item" data-link = "contact">Contact</li>
-        </ul>
-        
-        <!-- Toggle BTN -->
-        <button class="navbar__toggle__btn">
-            <i class="fas fa-align-justify"></i>
-        </button>
-
     </nav>
 
-    <!-- Home -->
-    <section id="Home" class = "section">
-
-        <div class="home__container">
-            <img src="images/profile_1.JPG" alt="Hello I'm NamYeong Kim" class="home__avatar">
-            <h1 class="home__title">Hello! <i class="fas fa-mitten"></i><br>Welcome to my WebSite</h1>
-            <button class="home__contact">Contact Me</button>
-        </div>
-    </section>
-
-    <!-- about -->
-    <section id="about" class = "section">
-        <div class="section__container">
-            <h1>About me</h1>
-        <p>A person who derives pleasure when doing object-oriented programming. <br>
-            I am Game Programming student And Focus well and pay close attention to the detailed parts.</p>
-
-    <div class="about__majors">
-        <div class="major">
-            <div class="major__icon">
-                <i class="fas fa-gamepad"></i>
+    <!-- Hero Section -->
+    <section class="hero" id="about">
+        <div class="hero-container">
+            <div class="hero-text">
+                <p class="hero-greeting">안녕하세요, 게임 개발자</p>
+                <h1 class="hero-name">김남영입니다<span class="accent">.</span></h1>
+                <p class="hero-tagline">저수준부터 이해하는 게임 클라이언트 개발자입니다.</p>
+                <div class="hero-buttons">
+                    <a href="#projects" class="btn btn-primary">프로젝트 보기</a>
+                    <a href="#contact" class="btn btn-outline">연락하기</a>
+                    <a href="https://cjbworld.tistory.com/" target="_blank" class="btn btn-blog"><i class="fas fa-pen-nib"></i> 공부 블로그</a>
+                </div>
+                <div class="hero-social">
+                    <a href="https://github.com/starkshn" target="_blank"><i class="fab fa-github"></i></a>
+                    <a href="https://www.youtube.com/@user-starkshn" target="_blank"><i class="fab fa-youtube"></i></a>
+                    <a href="mailto:starkshn97@gmail.com"><i class="fas fa-envelope"></i></a>
+                </div>
             </div>
-            <h2 class="major__title">Game Engine</h2>
-            <div class="major__description">Unreal Engine, <br> Unity Engine</div>
-        </div>
-        
-        <div class="major">
-            <div class="major__icon">
-                <i class="fab fa-windows"></i>
-            </div>
-            <h2 class="major__title">API</h2>
-            <div class="major__description">Win32API, CMake, DirectX12</div>
-        </div>
-
-        <div class="major">
-            <div class="major__icon">
-                <i class="fas fa-brain"></i>
-            </div>
-            <h2 class="major__title">Algorithm <br> DataStructure</h2>
-            <div class="major__description">STL, BaekJoon</div>
-        </div>
-    </div> 
-    
-        <div class="about__jobs">
-
-            <div class="job">
-                <a href="https://cjbworld.tistory.com" target="_blank"><img src= "images/MyBlog.png" alt="MyBlog" class="job__logo"></a>
-            <div class="job__description">
-                    <p class="job__name">Blog</p> 
-                    <p class="job__period">C++ && Unreal Engine 개인 공부 정리 블로그입니다.</p>
-            </div>
-            </div>
-
-            <div class="job">
-                <a href="https://velog.io/@starkshn/series" target="_blank"><img src="images/projects/유튜브_로고.png" alt="My Channel" class="job__logo"></a>
-            <div class="job__description">
-                    <p class="job__name">Youtube Channel</p>
-                    <p class="job__period">언리얼 관련 개인 유튜브 채널입니다.</p>
-            </div>
-            </div>
-
-            <div class="job">
-                <a href="https://velog.io/@starkshn/series" target="_blank"><img src="images/projects/Velog.png" alt="My Blog" class="job__logo"></a>
-            <div class="job__description">
-                    <p class="job__name">Velog</p>
-                    <p class="job__period">개인 개발 공부 블로그 입니다.</p>
-            </div>
-            </div>
-
-            <div class="job">
-                <a href="https://github.com/starkshn" target="_blank"><img src="images/projects/d.png" alt="MyGithub" class="job__logo"></a>
-            <div class="job__description">
-                    <p class="job__name">Github</p>
-                    <p class="job__period">개인 프로젝트에 사용한 버젼관리 깃헙입니다.</p>
-            </div>
-            </div>
-
-            <div class="job">
-                <a href="https://www.hanium.or.kr/portal/index.do" target="_blank"><img src="images/한이음로고.JPG" alt="한이음" class="job__logo"></a>
-            <div class="job__description">
-                    <p class="job__name">한이음</p>
-                    <p class="job__period">한이음 ICT 멘토링으로 팀프로젝트 진행</p>
-            </div>
-            </div>
-
-             <!-- GameMakers -->
-             <div class="job">
-                <a href="" target="_blank"><img src="images/GasmeMakers.jpg" alt="GameMakers" class="job__logo"></a>
-            <div class="job__description">
-                    <p class="job__name">GameMakers 6 Member</p>
-                    <p class="job__period">7 Months</p>
-            </div>
-            </div>
-
-            <div class="job">
-                <a href="https://www.sungkyul.ac.kr/sites/skukr/index.do" target="_blank"><img src="images/sungkyul_logo.png" alt="sungjyul_college" class="job__logo"></a>
-            <div class="job__description">
-                    <p class="job__name">SungKyul University</p>
-                    <p class="job__period">4 years</p>
-            </div>
-            </div>
-
-            <div class="job">
-                <!-- <img src="" alt="" class="job__logo"> -->
-                <p class="job__name"></p>
-                <p class="job__period"></p>
-            </div>
-
-            <div class="job">
-                <!-- <img src="" alt="" class="job__logo"> -->
-                <p class="job__name"></p>
-                <p class="job__period"></p>
-            </div>
-
-            
-            <div class="job">
-                <!-- <img src="" alt="" class="job__logo"> -->
-                <p class="job__name"></p>
-                <p class="job__period"></p>
-            </div>
-        
-            <div class="job">
-                <!-- <img src="" alt="" class="job__logo"> -->
-                <p class="job__name"></p>
-                <p class="job__period"></p>
-            </div>
-
-            
-
-        </div>
-
-    </section>
-
-    <!-- skills -->
-    <section id="skills" class = "section">
-        <h1>Skills</h1>
-        <h2>Skills && Attribute</h2>
-        <p>I am passionate and interested in creating high-quality games through Unreal Engine's outstanding technology and advanced graphics.</p>
-
-        <div class="skillset">
-            <div class="skillset__left">
-                <h3 class="skillset__title">Skills</h3>
-                    <div class="skill_description">
-                        <span>C++</span>
-                        <span>90%</span>
-                    </div>   
-                        <div class="skill__bar">
-                            <div class="skill__value" style = "width: 90%"></div>
-                        </div>
-                    
-                    <div class="skill_description">
-                        <span>STL</span>
-                        <span>80%</span>
-                    </div>   
-                        <div class="skill__bar">
-                            <div class="skill__value" style = "width: 80%"></div>
-                        </div>
-                    
-                    <div class="skill_description">
-                        <span>Unreal Engine 5</span>
-                        <span>80%</span>
-                    </div>   
-                        <div class="skill__bar">
-                            <div class="skill__value" style = "width: 80%"></div>
-                        </div>    
-                    
-                    <div class="skill_description">
-                        <span>C#</span>
-                        <span>70%</span>
-                    </div>   
-                        <div class="skill__bar">
-                            <div class="skill__value" style = "width: 70%"></div>
-                        </div>    
-                    
-                    <div class="skill_description">
-                        <span>Unity Engine</span>
-                        <span>70%</span>
-                    </div>   
-                        <div class="skill__bar">
-                            <div class="skill__value" style = "width: 70%"></div>
-                        </div>
-                        
-                    <div class="skill_description">
-                        <span>Algorithm</span>
-                        <span>70%</span>
-                    </div>   
-                        <div class="skill__bar">
-                            <div class="skill__value" style = "width: 70%"></div>
-                        </div>     
-
-                    <div class="skill_description">
-                        <span>Pyhton</span>
-                        <span>70%</span>
-                    </div>   
-                        <div class="skill__bar">
-                            <div class="skill__value" style = "width: 70%"></div>
-                        </div>
-
-                    <div class="skill_description">
-                        <span>SQL</span>
-                        <span>65%</span>
+            <div class="hero-visual">
+                <div class="hero-card">
+                    <div class="card-header">
+                        <span class="card-dot red"></span>
+                        <span class="card-dot yellow"></span>
+                        <span class="card-dot green"></span>
                     </div>
-                        <div class="skill__bar">
-                            <div class="skill__value" style = "width: 65%"></div>
-                        </div>
+                    <pre class="card-code"><code><span class="code-keyword">class</span> <span class="code-class">GameDeveloper</span>
+{
+    <span class="code-type">string</span> name = <span class="code-string">"김남영"</span>;
+    <span class="code-type">string</span> role = <span class="code-string">"Client Programmer"</span>;
 
-                    <div class="skill_description">
-                        <span>HTML/CSS/JS</span>
-                        <span>70%</span>
+    <span class="code-comment">// 엔진이 해주는 일을 직접 구현해본 경험</span>
+    <span class="code-type">string[]</span> lowLevel = {
+        <span class="code-string">"Deferred Rendering"</span>,
+        <span class="code-string">"Skeletal Animation"</span>,
+        <span class="code-string">"A* / NavMesh"</span>,
+        <span class="code-string">"IOCP Server"</span>
+    };
+};</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section class="section" id="experience">
+        <div class="container">
+            <h2 class="section-title">경력<span class="accent">.</span></h2>
+            <div class="exp-timeline">
+                <div class="exp-card">
+                    <div class="exp-period">
+                        <span class="exp-date">2026.03 ~ 재직중</span>
+                        <span class="exp-badge current">CURRENT</span>
                     </div>
-                        <div class="skill__bar">
-                            <div class="skill__value" style = "width: 70%"></div>
+                    <div class="exp-info">
+                        <h3 class="exp-company">넥스쳐</h3>
+                        <p class="exp-role">게임 클라이언트 프로그래머</p>
+                        <ul class="exp-details">
+                            <li>cocos2d-x + Lua 기반 모바일 게임 라이브 서비스 운영</li>
+                            <li>클라이언트-서버(Java) 동기화 및 신규 컨텐츠 개발</li>
+                            <li>186,000줄+ 레거시 코드베이스 유지보수 및 버그 수정</li>
+                            <li>라이브 이슈 긴급 대응 — 원인 분석부터 핫픽스 배포까지</li>
+                            <li>QA 리포트 기반 재현 → 원인 추적 → 사이드이펙트 검증</li>
+                            <li>사내 MCP Server 설계/구축 — 기획자가 AI로 기획 데이터와 소스코드를 직접 조회 → 개발자 문의 응대 시간 대폭 절감</li>
+                            <li>SVN→GitHub 자동 미러링 + AI 코드 리뷰 + Slack 알림 파이프라인 구축 → 코드 리뷰 누락 방지, 커밋 즉시 팀 공유</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="exp-card">
+                    <div class="exp-period">
+                        <span class="exp-date">2025.06 ~ 2025.11</span>
+                    </div>
+                    <div class="exp-info">
+                        <h3 class="exp-company">빅게임스튜디오</h3>
+                        <p class="exp-role">전투 클라이언트 프로그래머 · C++ / Unreal Engine 5</p>
+                        <p class="exp-project">리밋 제로 브레이커스 (신규 프로젝트)</p>
+                        <ul class="exp-details">
+                            <li>스킬 시스템 로직 개선 — 스킬 데이터와 실행 로직 분리, 신규 스킬 추가 시 코드 수정 최소화</li>
+                            <li>버프/디버프 시스템 구조 개선 — 모듈 간 의존성 제거, 독립적 버프 스택 관리</li>
+                            <li>전투 로직 최적화 — 불필요한 Tick 연산 제거, 조건부 업데이트로 CPU 부하 감소</li>
+                            <li>클래스 간 강결합 해소 — 이벤트 기반 통신으로 전환하여 유지보수성 향상</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="section" id="skills">
+        <div class="container">
+            <h2 class="section-title">기술 스택<span class="accent">.</span></h2>
+            <p class="section-subtitle">엔진 내부 동작을 이해하고 있어, 문제의 근본 원인을 빠르게 파악합니다</p>
+
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <div class="skill-icon"><i class="fas fa-gamepad"></i></div>
+                    <h3>Game Engine</h3>
+                    <div class="skill-tags">
+                        <span class="tag tag-primary">Unreal Engine 5</span>
+                        <span class="tag tag-primary">Unity 6</span>
+                        <span class="tag tag-primary">DirectX 11</span>
+                        <span class="tag">DirectX 9</span>
+                        <span class="tag">Win32 API</span>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon"><i class="fas fa-code"></i></div>
+                    <h3>Language</h3>
+                    <div class="skill-tags">
+                        <span class="tag tag-primary">C++</span>
+                        <span class="tag tag-primary">C#</span>
+                        <span class="tag">HLSL</span>
+                        <span class="tag">Lua</span>
+                        <span class="tag">Java</span>
+                        <span class="tag">Python</span>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon"><i class="fas fa-server"></i></div>
+                    <h3>Server & Network</h3>
+                    <div class="skill-tags">
+                        <span class="tag">C++ IOCP</span>
+                        <span class="tag">C# TCP Server</span>
+                        <span class="tag">클라-서버 동기화</span>
+                        <span class="tag">Google Protobuf</span>
+                        <span class="tag">MCP Server</span>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon"><i class="fas fa-tools"></i></div>
+                    <h3>Tools & AI</h3>
+                    <div class="skill-tags">
+                        <span class="tag tag-primary">Claude</span>
+                        <span class="tag tag-primary">Codex</span>
+                        <span class="tag">Visual Studio</span>
+                        <span class="tag">VS Code</span>
+                        <span class="tag">SVN</span>
+                        <span class="tag">Git</span>
+                        <span class="tag">ImGui</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="abilities">
+                <h3 class="abilities-title">핵심 역량 — 엔진 내부를 이해하는 개발자</h3>
+                <div class="abilities-grid">
+                    <div class="ability-item">
+                        <i class="fas fa-draw-polygon"></i>
+                        <span>렌더링 파이프라인 직접 구현 (Deferred Shading, 후처리)</span>
+                    </div>
+                    <div class="ability-item">
+                        <i class="fas fa-bone"></i>
+                        <span>FBX 뼈대 파싱 → 키프레임 보간 → 상하체 분리 직접 구현</span>
+                    </div>
+                    <div class="ability-item">
+                        <i class="fas fa-route"></i>
+                        <span>NavMesh 제작 + A* 길찾기 + 슬라이딩 벡터 직접 구현</span>
+                    </div>
+                    <div class="ability-item">
+                        <i class="fas fa-palette"></i>
+                        <span>HLSL 셰이더 (카툰, Dissolve, Glow, Rim Light, Trail)</span>
+                    </div>
+                    <div class="ability-item">
+                        <i class="fas fa-network-wired"></i>
+                        <span>IOCP 비동기 서버 + 클라-서버 동기화 + 패킷 자동생성</span>
+                    </div>
+                    <div class="ability-item">
+                        <i class="fas fa-bug"></i>
+                        <span>레거시 코드베이스(186K줄) 디버깅 + 라이브 서비스 운영</span>
+                    </div>
+                    <div class="ability-item">
+                        <i class="fas fa-robot"></i>
+                        <span>AI 도구 활용 (Claude Code + MCP Server 직접 설계/구현)</span>
+                    </div>
+                    <div class="ability-item">
+                        <i class="fab fa-steam"></i>
+                        <span>스팀 출시 경험 (DarkAndLight — 팀장/메인개발)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="section" id="projects">
+        <div class="container">
+            <h2 class="section-title">프로젝트<span class="accent">.</span></h2>
+            <p class="section-subtitle">총 16개의 프로젝트</p>
+
+            <!-- Filter Buttons -->
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="featured">대표</button>
+                <button class="filter-btn" data-filter="released">출시</button>
+                <button class="filter-btn" data-filter="server">서버</button>
+                <button class="filter-btn" data-filter="clone">모작</button>
+                <button class="filter-btn" data-filter="wip">진행중</button>
+                <button class="filter-btn" data-filter="school">대학교</button>
+                <button class="filter-btn" data-filter="all">전체</button>
+            </div>
+
+            <div class="projects-grid">
+                <!-- 대표 프로젝트 -->
+                <div class="project-card" data-category="featured">
+                    <div class="project-header">
+                        <span class="project-category">대표 프로젝트</span>
+                        <div class="project-links">
+                            <a href="projects/Animation_Tool_custom.html" target="_blank"><i class="fas fa-external-link-alt"></i></a>
                         </div>
-            </div>
-
-            <div class="skillset__right">
-                <div class="tools">
-                    <h3 class="skillset__title">Tools</h3>
-                    <ul class="tools__list">
-                        <li><span>Unreal Engine,</span></li>
-                        <li><span>Unity Engine,</span></li>
-                        <li><span>Visual Studio,</span></li>
-                        <li><span>DevC++,</span></li>
-                        <li><span>Blender</span></li>
-                    </ul>
+                    </div>
+                    <div class="project-thumbnail">
+                        <img src="images/Animation_Tool_애니매이션_툴__35.gif" alt="Animation Tool" loading="lazy">
+                    </div>
+                    <h3 class="project-title"><i class="fab fa-windows"></i> Animation Tool</h3>
+                    <p class="project-desc">FBX 파싱부터 키프레임 보간, 상하체 분리 블렌딩까지 스켈레탈 애니메이션 전 과정을 DX11로 직접 구현한 툴.</p>
+                    <div class="project-meta">
+                        <span><i class="fas fa-user"></i> 1인 개발</span>
+                        <span><i class="fas fa-calendar"></i> 2025.02</span>
+                    </div>
+                    <div class="project-tags">
+                        <span class="tag">DX11</span>
+                        <span class="tag">C++11</span>
+                        <span class="tag">ImGui</span>
+                        <span class="tag">XML</span>
+                    </div>
                 </div>
-                <div class="etc">
-                    <h3 class="skillset__title">Version Control</h3>
-                    <ul class="etc__list">
-                        <li><span>SVN</span></li>
-                        <li><span>Github</span></li>
-                        <li><span>AWS</span></li>
-                    </ul>    
+
+                <div class="project-card" data-category="featured">
+                    <div class="project-header">
+                        <span class="project-category">대표 프로젝트</span>
+                        <div class="project-links">
+                            <a href="projects/건파이어_custom.html" target="_blank"><i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <div class="project-thumbnail">
+                        <img src="images/건파이어_리본_GunFire_Reborn__38.gif" alt="건파이어 리본" loading="lazy">
+                    </div>
+                    <h3 class="project-title"><i class="fab fa-windows"></i> 건파이어 리본 (GunFire Reborn)</h3>
+                    <p class="project-desc">Deferred Rendering, 카툰 셰이더, NavMesh 길찾기, 파티클 시스템을 DX11로 직접 구현한 FPS 모작.</p>
+                    <div class="project-meta">
+                        <span><i class="fas fa-user"></i> 1인 개발</span>
+                        <span><i class="fas fa-calendar"></i> 2024.10 ~ 2024.12</span>
+                    </div>
+                    <div class="project-tags">
+                        <span class="tag">DX11</span>
+                        <span class="tag">C++11</span>
+                        <span class="tag">HLSL</span>
+                        <span class="tag">ImGui</span>
+                    </div>
+                </div>
+
+                <!-- 대표: 2D Unity Game (+GameServer) -->
+                <div class="project-card" data-category="featured">
+                    <div class="project-header">
+                        <span class="project-category">대표 프로젝트</span>
+                        <div class="project-links">
+                            <a href="projects/Unity2DGameServer_custom.html" target="_blank"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                    <div class="project-thumbnail">
+                        <img src="images/2D_Unity_자체_제작_게임_+GameServer__52.gif" alt="2D Unity Game (+GameServer)" loading="lazy">
+                    </div>
+                    <h3 class="project-title"><i class="fab fa-unity"></i> 2D Unity Game (+GameServer)</h3>
+                    <p class="project-desc">클라이언트(Unity) + 서버(C#) 전체를 직접 구현한 2D 멀티플레이어 게임. Protobuf 통신, 몬스터 AI, 이모티콘/채팅 동기화.</p>
+                    <div class="project-meta">
+                        <span><i class="fas fa-user"></i> 1인 개발</span>
+                        <span><i class="fas fa-calendar"></i> 2025.11</span>
+                    </div>
+                    <div class="project-tags">
+                        <span class="tag tag-primary">C#</span>
+                        <span class="tag tag-primary">Unity</span>
+                        <span class="tag">Google Protobuf</span>
+                    </div>
+                </div>
+
+                <!-- 출시: DarkAndLight -->
+                <div class="project-card project-highlight" data-category="released">
+                    <div class="project-header">
+                        <span class="project-category category-released">출시</span>
+                        <div class="project-links">
+                            <a href="projects/DarkAndLight_custom.html" target="_blank"><i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <div class="project-thumbnail">
+                        <img src="images/DarkAndLight_1.png" alt="DarkAndLight" loading="lazy">
+                    </div>
+                    <h3 class="project-title"><i class="fab fa-steam"></i> DarkAndLight</h3>
+                    <p class="project-desc">UE5 졸업작품으로 팀장/메인 개발을 맡아 스팀에 출시. 전투 시스템, AI, 레벨 디자인 전반 담당.</p>
+                    <div class="project-meta">
+                        <span><i class="fas fa-users"></i> 김남영(팀장), 윤해상, 박태준</span>
+                        <span><i class="fas fa-calendar"></i> 2023.05 ~ 2023.10</span>
+                    </div>
+                    <div class="project-tags">
+                        <span class="tag tag-primary">C++</span>
+                        <span class="tag tag-primary">Unreal Engine 5</span>
+                    </div>
+                </div>
+
+                <div class="project-card project-highlight" data-category="released">
+                    <div class="project-header">
+                        <span class="project-category category-released">출시</span>
+                        <div class="project-links">
+                            <a href="https://play.google.com/store/apps/details?id=com.Dgmmer.ZigZagVersion5" target="_blank"><i class="fab fa-google-play"></i></a>
+                            <a href="projects/InfiniteRunner_custom.html" target="_blank"><i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <h3 class="project-title"><i class="fab fa-google-play"></i> 무한 달리기</h3>
+                    <p class="project-desc">Unity로 1인 개발하여 Google Play에 출시한 모바일 러너 게임.</p>
+                    <div class="project-meta">
+                        <span><i class="fas fa-user"></i> 1인 개발</span>
+                        <span><i class="fas fa-calendar"></i> 2022.10 ~ 2022.11</span>
+                    </div>
+                    <div class="project-tags">
+                        <span class="tag">Unity</span>
+                        <span class="tag">C#</span>
+                    </div>
+                </div>
+
+                <!-- 게임서버 -->
+                <div class="project-card" data-category="server">
+                    <div class="project-header">
+                        <span class="project-category category-server">게임서버</span>
+                        <div class="project-links">
+                            <a href="projects/CSharpGameServer_custom.html" target="_blank"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                    <div class="project-thumbnail">
+                        <img src="images/C_Game_Server_TCP__1.png" alt="C# Game Server" loading="lazy">
+                    </div>
+                    <h3 class="project-title">C# Game Server (TCP)</h3>
+                    <p class="project-desc">세션 관리, 패킷 직렬화, Send/Recv 버퍼를 직접 구현한 TCP 게임 서버.</p>
+                    <div class="project-meta">
+                        <span><i class="fas fa-calendar"></i> 2025.11</span>
+                    </div>
+                    <div class="project-tags">
+                        <span class="tag">C#</span>
+                        <span class="tag">Visual Studio</span>
+                    </div>
+                </div>
+
+                <div class="project-card" data-category="server">
+                    <div class="project-header">
+                        <span class="project-category category-server">게임서버</span>
+                        <div class="project-links">
+                            <a href="projects/IOCP_custom.html" target="_blank"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                    <div class="project-thumbnail">
+                        <img src="images/C++_IOCP_서버_프레임_워크_1.jpg" alt="C++ IOCP 서버" loading="lazy">
+                    </div>
+                    <h3 class="project-title">C++ IOCP 서버 프레임워크</h3>
+                    <p class="project-desc">Completion Port 기반 비동기 I/O, 잡 큐, 패킷 자동 생성까지 포함한 서버 프레임워크.</p>
+                    <div class="project-meta">
+                        <span><i class="fas fa-calendar"></i> 2025.04~</span>
+                    </div>
+                    <div class="project-tags">
+                        <span class="tag">C++</span>
+                        <span class="tag">IOCP</span>
+                    </div>
+                </div>
+
+                <!-- 모작 -->
+                <div class="project-card" data-category="clone">
+                    <div class="project-header">
+                        <span class="project-category">모작</span>
+                        <div class="project-links">
+                            <a href="projects/VampireSurvivor_custom.html" target="_blank"><i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <div class="project-thumbnail">
+                        <img src="images/_Unity_벰파이어_서바이벌_모작_42.gif" alt="뱀파이어 서바이벌 모작" loading="lazy">
+                    </div>
+                    <h3 class="project-title">뱀파이어 서바이벌 모작</h3>
+                    <p class="project-desc">Unity 6으로 구현한 뱀서 모작. 오브젝트 풀링, 무한맵, 레벨업 시스템.</p>
+                    <div class="project-meta">
+                        <span><i class="fas fa-calendar"></i> 2025.11~</span>
+                    </div>
+                    <div class="project-tags">
+                        <span class="tag">C#</span>
+                        <span class="tag">Unity 6</span>
+                    </div>
+                </div>
+
+                <div class="project-card" data-category="clone">
+                    <div class="project-header">
+                        <span class="project-category">모작</span>
+                        <div class="project-links">
+                            <a href="projects/StarCraft_custom.html" target="_blank"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                    <div class="project-thumbnail">
+                        <img src="images/StarCraft_모작_맵툴구현,_2D__1.gif" alt="StarCraft 모작" loading="lazy">
+                    </div>
+                    <h3 class="project-title">StarCraft 모작 (맵툴, 2D)</h3>
+                    <p class="project-desc">Win32 API + C++로 유닛 AI, 맵 에디터, 타일맵 시스템을 직접 구현한 RTS 모작.</p>
+                    <div class="project-meta">
+                        <span><i class="fas fa-calendar"></i> 2024.04~</span>
+                    </div>
+                    <div class="project-tags">
+                        <span class="tag">C++</span>
+                        <span class="tag">Win32 API</span>
+                    </div>
+                </div>
+
+                <div class="project-card" data-category="clone">
+                    <div class="project-header">
+                        <span class="project-category">모작</span>
+                        <div class="project-links">
+                            <a href="projects/OrbitalBullet_custom.html" target="_blank"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                    <div class="project-thumbnail">
+                        <img src="images/Orbital_Bullet_모작_2_5D__1.png" alt="Orbital Bullet 모작" loading="lazy">
+                    </div>
+                    <h3 class="project-title">Orbital Bullet 모작 (2.5D)</h3>
+                    <p class="project-desc">DX9 + C++로 원형 맵 투영, 2.5D 렌더링을 구현한 4인 팀 프로젝트.</p>
+                    <div class="project-meta">
+                        <span><i class="fas fa-users"></i> 4인 팀</span>
+                    </div>
+                    <div class="project-tags">
+                        <span class="tag">C++</span>
+                        <span class="tag">DX9</span>
+                    </div>
+                </div>
+
+                <div class="project-card" data-category="clone">
+                    <div class="project-header">
+                        <span class="project-category">모작</span>
+                        <div class="project-links">
+                            <a href="projects/JumpKing_custom.html" target="_blank"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                    <div class="project-thumbnail">
+                        <img src="images/Jump_King_모작_2D__1.png" alt="Jump King 모작" loading="lazy">
+                    </div>
+                    <h3 class="project-title">Jump King 모작 (2D)</h3>
+                    <p class="project-desc">Win32 API + C++로 점프 물리, 충돌 판정, 스크롤 카메라를 직접 구현.</p>
+                    <div class="project-meta">
+                        <span><i class="fas fa-calendar"></i> 2022.12 ~ 2023.02</span>
+                    </div>
+                    <div class="project-tags">
+                        <span class="tag">C++</span>
+                        <span class="tag">Win32 API</span>
+                    </div>
+                </div>
+
+                <div class="project-card" data-category="clone">
+                    <div class="project-header">
+                        <span class="project-category">모작</span>
+                        <div class="project-links">
+                            <a href="projects/Tetris_custom.html" target="_blank"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                    <div class="project-thumbnail">
+                        <img src="images/테트리스_2D__1.png" alt="테트리스" loading="lazy">
+                    </div>
+                    <h3 class="project-title">테트리스 (2D)</h3>
+                    <p class="project-desc">Win32 API + C++로 블록 회전, 라인 클리어, 점수 시스템을 직접 구현.</p>
+                    <div class="project-tags">
+                        <span class="tag">C++</span>
+                        <span class="tag">Win32 API</span>
+                    </div>
+                </div>
+
+                <!-- 진행중 -->
+                <div class="project-card project-wip" data-category="wip">
+                    <div class="project-header">
+                        <span class="project-category category-wip">진행중</span>
+                    </div>
+                    <div class="project-thumbnail">
+                        <img src="images/스킬_시스템_및_스킬_툴_진행중__9.gif" alt="스킬 시스템" loading="lazy">
+                    </div>
+                    <h3 class="project-title">스킬 시스템 및 스킬 툴</h3>
+                    <p class="project-desc">데이터 드리븐 스킬 시스템 + 기획자용 스킬 에디터 툴. Unity 6 기반.</p>
+                    <div class="project-meta">
+                        <span><i class="fas fa-calendar"></i> 2026.01~</span>
+                    </div>
+                    <div class="project-tags">
+                        <span class="tag">Unity 6</span>
+                        <span class="tag">Visual Studio 2022</span>
+                        <span class="tag">Git</span>
+                    </div>
+                </div>
+
+                <!-- 대학교 -->
+                <div class="project-card" data-category="school">
+                    <div class="project-header">
+                        <span class="project-category">대학교</span>
+                        <div class="project-links">
+                            <a href="projects/Portfolio_custom.html" target="_blank"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                    <div class="project-thumbnail">
+                        <img src="images/개인_포트폴리오_사이트_3학년,_웹_프로그래밍_1.png" alt="포트폴리오 사이트" loading="lazy">
+                    </div>
+                    <h3 class="project-title">개인 포트폴리오 사이트</h3>
+                    <p class="project-desc">HTML/CSS/JS로 제작한 반응형 포트폴리오. GitHub Pages 배포.</p>
+                    <div class="project-tags">
+                        <span class="tag">HTML/CSS</span>
+                        <span class="tag">JS</span>
+                    </div>
+                </div>
+
+                <div class="project-card" data-category="school">
+                    <div class="project-header">
+                        <span class="project-category">대학교</span>
+                        <div class="project-links">
+                            <a href="projects/PangGame_custom.html" target="_blank"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                    <div class="project-thumbnail">
+                        <img src="images/Pang_Game!_1학년,_개인_프로젝트__1.png" alt="Pang Game" loading="lazy">
+                    </div>
+                    <h3 class="project-title">Pang Game!</h3>
+                    <p class="project-desc">Python + Pygame으로 만든 2D 슈팅 게임.</p>
+                    <div class="project-tags">
+                        <span class="tag">Python</span>
+                    </div>
                 </div>
             </div>
         </div>
-
     </section>
 
-   
-    <!-- work -->
-    <section id="work" class = "section">
-
-        <div style="text-align : center;">
-
-            <img class = "project__img" src="images/projects/icegif-941.gif" alt="Game", border: none;, style="border: 0;">
-       
-       </div>
-        <div class="section__container">
-            <h1>My Work</h1>
-            <h3>Projects</h3>
-            
-            <div class="work__catagories">
-                <button class="catagories__btn" data-filter="*">All <span class="catagory__count">5</span></button>
-                <button class="catagories__btn" data-filter="front-end">Unreal<span class="catagory__count">2</span></button>
-                <button class="catagories__btn" data-filter="back-end">Unity<span class="catagory__count">2</span></button>
-                <button class="catagories__btn" data-filter="Win">Win32API<span class="catagory__count">1</span></button>
+    <!-- Contact Section -->
+    <section class="section" id="contact">
+        <div class="container">
+            <h2 class="section-title">연락처<span class="accent">.</span></h2>
+            <div class="contact-grid">
+                <a href="mailto:starkshn97@gmail.com" class="contact-card">
+                    <i class="fas fa-envelope"></i>
+                    <span>starkshn97@gmail.com</span>
+                </a>
+                <a href="tel:010-5885-0097" class="contact-card">
+                    <i class="fas fa-phone"></i>
+                    <span>010-5885-0097</span>
+                </a>
+                <a href="https://github.com/starkshn" target="_blank" class="contact-card">
+                    <i class="fab fa-github"></i>
+                    <span>github.com/starkshn</span>
+                </a>
+                <a href="https://www.youtube.com/@user-starkshn" target="_blank" class="contact-card">
+                    <i class="fab fa-youtube"></i>
+                    <span>YouTube</span>
+                </a>
+                <a href="https://cjbworld.tistory.com/" target="_blank" class="contact-card">
+                    <i class="fas fa-blog"></i>
+                    <span>Tech Blog</span>
+                </a>
             </div>
-    
-        <div class="work__projects">    
-            <a href="https://youtu.be/j1WLpSXeZEQ" class="project" target = "blank" data-type="Win">
-                <img class = "project__img" src="images/projects/JumpKing.jpg" alt="Python instrgram auto login & read comments">
-            <div class="project__description">
-                <h3>Win32API</h3>
-                <span>Made by only C++</span>
-            </div></a>
-    
-            <a href="https://www.youtube.com/watch?v=mhnsu9_LtmY" class="project" target = "blank" data-type="front-end">
-                <img class = "project__img" src="images/projects/Pak.png" alt="Python project">
-            <div class="project__description">
-                <h3>Motion Warping in <br>Unreal Engine5</h3>
-            </div></a>
-    
-            <a href="https://github.com/starkshn/UE4_R" class="project" target = "blank" data-type="front-end">
-                <img class = "project__img" src="images/projects/UE4_R.png" alt="Python Project">
-            <div class="project__description">
-                <h3>Unreal Engine4</h3>
-                <span>AI Project</span>
-            </div></a>
-    
-            <a href="https://play.google.com/store/apps/details?id=com.Dgmmer.ZigZagVersion5&hl=ko&gl=US"  class="project" target = "blank" data-type="back-end">
-                <img class = "project__img" src="images/projects/UnityLogo.png" alt="test portfolio">
-            <div class="project__description">
-                <h3>Aracade Miin Test Game</h3>
-            </div></a>
-    
-            <a href="https://github.com/starkshn/.NetUnityServer"  class="project" target = "blank" data-type="back-end">
-                <img class = "project__img" src="images/projects/UnityServer.png" alt="Python Project">
-            <div class="project__description">
-                <h3>Unity Server Test</h3>
-                <span>By C#</span>
-            </div></a>
-
-            </div>
-        </div>
-        
-    </section>
-
-    <!-- testimonials -->
-    <section id="testimonials" class = "section">
-        <div class="section__container">
-            <h1>Testimonials</h1>
-        <h3>See what they say about me</h3>
-        <div class="testimonials">
-            <div class="testimonial">
-                <img src="images/testimonial_1.jpeg" alt="Lee MinJae" class="testimonial__avatar">
-                <div class="testimonial__speech__bubble">
-                    <p>            
-If you have a great study and passion for Unreal Engine and want to make something, make it to the end and put a lot of effort into it.
-                    </p>
-                    <p class="name"><a href="https://github.com/sochubert" target="blank">Min Jae Lee (Git hub) </a> / FullStackDev</p>
-                </div>
-            </div>
-
-            <div class="testimonial">
-                <div class="testimonial__speech__bubble">
-                    <p>
-                        
-It seems that the passion and persistence for game development is great.
-                    </p>
-                    <p class="name"><a href="https://github.com/tm9704" target="_blank">
-                        Min Hyung Lee (Git hub) </a> / Android Dev</p>
-                    
-                </div>
-                <img src="images/testimonilas_2.jpeg" alt="Guido van Rossum" class="testimonial__avatar">
-            </div>
-        </div>
-
         </div>
     </section>
 
-    <!-- contact -->
-    <section id="contact" class = "section">
-        <h1 class="contact__title">Let's talk</h1>
-        <h2 class="contact__email">starkshn97@gmail.com</h2>
-        <div class="contact__link">
-            <a href="https://github.com/starkshn" target = "blank">
-                <i class="fab fa-github"></i>
-            </a>
-            <a href="https://www.instagram.com/ny_o_ny/" target = "blank">
-                <i class="fab fa-instagram"></i>
-            </a>
-            
-        </div>
-        
-        <div class="icon__description">
-            <p class="Git">&nbsp;Github</p>
-            <p class="Insta">Instagram</p>
-        </div>
-        
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 김남영. All rights reserved.</p>
+    </footer>
 
-
-        <p class="contact__rights">2021 Game Dev Nam Yeong Kim - All rights reserved</p>
-
-
-    </section>
-
-    <!-- arrow btn -->
-    
-        <button class="arrow__btn">
-            <i class="fas fa-arrow-circle-up"></i>
-        </button>
-
-    <!-- make scroll bar -->
-<!--     
-    <div class="scroll_box">
-        asdasd
-    </div> -->
-
-
+    <script src="script.js"></script>
 </body>
 </html>

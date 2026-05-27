@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pang Game!(1학년, 개인 프로젝트) | 김남영 포트폴리오</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="project.css">
+    <link rel="stylesheet" href="gunfire.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">NY</a>
+            <a href="../index.html#projects" class="back-link"><i class="fas fa-arrow-left"></i> 프로젝트 목록</a>
+        </div>
+    </nav>
+    <article class="project-detail">
+        <div class="container">
+            <div class="project-meta-card">
+  <p class="meta-desc">파이썬으로 만든 2D 게임입니다.</p>
+  <div class="meta-tags"><span class="tag">Python</span></div>
+  <div class="meta-info">
+    <span><i class="fas fa-user"></i> 본인</span>
+    <span><i class="fas fa-calendar"></i> 2022/03/03</span>
+  </div>
+</div>
+
+            <h1 class="project-detail-title">Pang Game!(1학년, 개인 프로젝트)</h1>
+            <div class="project-content">
+                <p>깃허브 링크: https://github.com/starkshn/20min_pang_game</p>
+<h1>프로젝트 개발 과정</h1>
+<p>대학교 입학후 첫 게임 프로그래밍 관련 수업에서 진성아 교수님이 학생들에게 어떤 게임이든 혼자 한번 아무거나 만들어봐라 라는 교수님의 말씀을 듣고 무작정 시도하여 만든 프로젝트입니다.</p>
+<p>아무런 기초 지식이 없는채로 학교 도서관의 자료들과 인터넷의 ‘나도 코딩’이라는 유튜브 채널의 파이썬 게임 프로그래밍 영상을 참고하여 제작하였었습니다.</p>
+<hr>
+<h1>플레이어</h1>
+<figure class="project-image"><img src="../images/Pang_Game!_1학년,_개인_프로젝트__1.png" alt="image.png" loading="lazy"></figure>
+<figure class="project-image"><img src="../images/Pang_Game!_1학년,_개인_프로젝트__2.png" alt="image.png" loading="lazy"></figure>
+<p>플레이어는 사용자의 마우스 입력을 받고 상수값을 통해 x 좌표를 변화시켜 이동 시킬 수 있도록 하였습니다.</p>
+<h1>투사체(연필)</h1>
+<figure class="project-image"><img src="../images/Pang_Game!_1학년,_개인_프로젝트__3.png" alt="image.png" loading="lazy"></figure>
+<figure class="project-image"><img src="../images/Pang_Game!_1학년,_개인_프로젝트__4.png" alt="image.png" loading="lazy"></figure>
+<p>Space키를 누르면 투사체가 생성이되고 투사체의 x, y좌표를 매틱 업데이트 시키며 위치를 갱신하고 렌더링하였습니다.</p>
+<h1>충돌판정 및 공 위치</h1>
+<figure class="project-image"><img src="../images/Pang_Game!_1학년,_개인_프로젝트__5.png" alt="image.png" loading="lazy"></figure>
+<figure class="project-image"><img src="../images/Pang_Game!_1학년,_개인_프로젝트__6.png" alt="image.png" loading="lazy"></figure>
+<figure class="project-image"><img src="../images/Pang_Game!_1학년,_개인_프로젝트__7.png" alt="image.png" loading="lazy"></figure>
+<p>공의 가로, 세로 길이 절반으로 중심점을 설정하고 투사체와 충돌 여부를 중점을 기준으로 가로 절반 영역안에 들어와있다면 충돌한 것으로 판정하고 하나였던 공을 여러개로 분리하는식으로 만들었습니다.</p>
+
+            </div>
+            <div class="project-nav">
+                <a href="../index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> 프로젝트 목록으로</a>
+            </div>
+        </div>
+    </article>
+    <footer class="footer"><p>&copy; 2026 김남영. All rights reserved.</p></footer>
+    <script src="project.js"></script>
+</body>
+</html>

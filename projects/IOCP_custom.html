@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XDD814ZBH2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XDD814ZBH2');
+</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>C++ IOCP 서버 프레임워크 | 김남영 포트폴리오</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="project.css">
+    <link rel="stylesheet" href="gunfire.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <nav class="nav"><div class="nav-container">
+        <a href="../index.html" class="nav-logo">NY</a>
+        <a href="../index.html#projects" class="back-link"><i class="fas fa-arrow-left"></i> 프로젝트 목록</a>
+    </div></nav>
+
+    <article class="project-detail"><div class="container">
+        <div class="project-meta-card">
+            <p class="meta-desc">C++로 IOCP 기반 게임 서버 프레임워크 구현. Thread Manager, Reader/Writer Lock(CAS+스핀), DeadLock Profiler(DFS), 커스텀 Allocator, Google Protobuf + Jinja2 코드 자동화.</p>
+            <div class="meta-tags">
+                <span class="tag tag-primary">C++</span><span class="tag tag-primary">IOCP</span>
+            </div>
+            <div class="meta-info">
+                <span><i class="fas fa-user"></i> 1인 개발</span>
+                <span><i class="fas fa-calendar"></i> 2025.04~</span>
+                <span><a href="https://github.com/starkshn/cpp_iocp_server_study_rep" target="_blank"><i class="fab fa-github"></i> GitHub</a></span>
+            </div>
+        </div>
+
+        <h1 class="project-detail-title">C++ IOCP 서버 프레임워크</h1>
+
+        <div class="project-content">
+            <div class="feature-summary"><h2>구현 기능</h2>
+                <div class="feature-chips">
+                    <a href="#diagram" class="chip">Thread Manager</a><a href="#rwlock" class="chip">RW Lock</a>
+                    <a href="#deadlock" class="chip">DeadLock Profiler</a><a href="#protobuf" class="chip">Protobuf 자동화</a>
+                </div>
+            </div><hr>
+
+            <!-- ===== 클래스/시퀀스 다이어그램 ===== -->
+            <section class="feature-card" id="diagram">
+                <div class="feature-header"><h2>클래스/시퀀스 다이어그램</h2><span class="feature-badge">설계</span></div>
+                <blockquote><strong>IOCP 서버 프레임워크</strong> 전체 클래스 계층/포함 관계 + <strong>에코 서버 동작 시퀀스</strong>(동기/비동기 구분) + <strong>클라이언트 ConnectEx→Send→Recv</strong> 시퀀스.</blockquote>
+                <figure class="project-image"><img src="../images/C++_IOCP_서버_프레임_워크_1.jpg" loading="lazy"><figcaption>클래스 다이어그램</figcaption></figure>
+                <div class="feature-grid triple">
+                    <figure class="project-image"><img src="../images/C++_IOCP_서버_프레임_워크_2.png" loading="lazy"><figcaption>시퀀스 범례</figcaption></figure>
+                    <figure class="project-image"><img src="../images/C++_IOCP_서버_프레임_워크_3.png" loading="lazy"><figcaption>서버 시퀀스</figcaption></figure>
+                    <figure class="project-image"><img src="../images/C++_IOCP_서버_프레임_워크_4.png" loading="lazy"><figcaption>클라 시퀀스</figcaption></figure>
+                </div>
+            </section>
+
+            <!-- ===== Thread Manager ===== -->
+            <section class="feature-card" id="threadmgr">
+                <div class="feature-header"><h2>Thread Manager</h2><span class="feature-badge">TLS / Atomic</span></div>
+                <blockquote><strong>Thread Local Storage(TLS)</strong>로 스레드별 고유 ID 부여. <strong>Atomic</strong> 증가로 멀티스레드 안전. <strong>LockGuard(std::lock_guard)</strong>로 _threads 벡터 보호. <strong>Launch</strong> 함수에 <strong>std::function</strong> 매개변수.</blockquote>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/C++_IOCP_서버_프레임_워크_5.png" loading="lazy"><figcaption>Thread Manager 코드 1</figcaption></figure>
+                    <figure class="project-image"><img src="../images/C++_IOCP_서버_프레임_워크_6.png" loading="lazy"><figcaption>Thread Manager 코드 2</figcaption></figure>
+                </div>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/C++_IOCP_서버_프레임_워크_7.png" loading="lazy"><figcaption>TLS 구조</figcaption></figure>
+                    <figure class="project-image"><img src="../images/C++_IOCP_서버_프레임_워크_8.png" loading="lazy"><figcaption>Launch 함수</figcaption></figure>
+                </div>
+            </section>
+
+            <!-- ===== Reader/Writer Lock ===== -->
+            <section class="feature-card" id="rwlock">
+                <div class="feature-header"><h2>Reader/Writer Lock</h2><span class="feature-badge">CAS / 스핀락 / 비트 플래그</span></div>
+                <blockquote><strong>_lockFlag</strong> 32비트 — 상위 16비트: <strong>Writer 소유자 TLS ID</strong>, 하위 16비트: <strong>Reader 공유 카운트</strong>. <strong>compare_exchange_strong(CAS)</strong>로 원자적 획득. <strong>스핀락</strong> + 타임아웃 크래시. <strong>RAII 패턴</strong> ReadLockGuard/WriteLockGuard.</blockquote>
+                <p>정책: W→W 재획득 가능, W→R 가능, <strong>R→W 불가</strong></p>
+                <div class="feature-grid triple">
+                    <figure class="project-image"><img src="../images/C++_IOCP_서버_프레임_워크_9.png" loading="lazy"><figcaption>Lock 코드 1</figcaption></figure>
+                    <figure class="project-image"><img src="../images/C++_IOCP_서버_프레임_워크_10.png" loading="lazy"><figcaption>Lock 코드 2</figcaption></figure>
+                    <figure class="project-image"><img src="../images/C++_IOCP_서버_프레임_워크_11.png" loading="lazy"><figcaption>Lock 코드 3</figcaption></figure>
+                </div>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/C++_IOCP_서버_프레임_워크_12.png" loading="lazy"><figcaption>Lock 코드 4</figcaption></figure>
+                    <figure class="project-image"><img src="../images/C++_IOCP_서버_프레임_워크_13.png" loading="lazy"><figcaption>Lock 코드 5</figcaption></figure>
+                </div>
+                <div class="feature-grid triple">
+                    <figure class="project-image"><img src="../images/C++_IOCP_서버_프레임_워크_14.png" loading="lazy"><figcaption>테스트 1</figcaption></figure>
+                    <figure class="project-image"><img src="../images/C++_IOCP_서버_프레임_워크_15.png" loading="lazy"><figcaption>테스트 2</figcaption></figure>
+                    <figure class="project-image"><img src="../images/C++_IOCP_서버_프레임_워크_16.gif" loading="lazy"><figcaption>테스트 GIF</figcaption></figure>
+                </div>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/C++_IOCP_서버_프레임_워크_17.png" loading="lazy"><figcaption>정책 위반 크래시 1</figcaption></figure>
+                    <figure class="project-image"><img src="../images/C++_IOCP_서버_프레임_워크_18.png" loading="lazy"><figcaption>정책 위반 크래시 2</figcaption></figure>
+                </div>
+            </section>
+
+            <!-- ===== DeadLock Profiler ===== -->
+            <section class="feature-card" id="deadlock">
+                <div class="feature-header"><h2>DeadLock Profiler</h2><span class="feature-badge">DFS / 사이클 탐지</span></div>
+                <blockquote>락 획득 관계를 <strong>방향 그래프</strong>로 모델링. <strong>TLS std::stack</strong>에 방문 락 ID 기록 → <strong>_lockHistory</strong>에 간선 추가 → <strong>DFS</strong>로 <strong>사이클 탐지</strong> 시 즉시 크래시. <strong>_DEBUG</strong> 전처리문으로 릴리즈 무비용.</blockquote>
+                <div class="feature-grid triple">
+                    <figure class="project-image"><img src="../images/C++_IOCP_서버_프레임_워크_19.png" loading="lazy"><figcaption>그래프 모델링</figcaption></figure>
+                    <figure class="project-image"><img src="../images/C++_IOCP_서버_프레임_워크_20.png" loading="lazy"><figcaption>DFS 탐지 코드</figcaption></figure>
+                    <figure class="project-image"><img src="../images/C++_IOCP_서버_프레임_워크_21.png" loading="lazy"><figcaption>간선 추가</figcaption></figure>
+                </div>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/C++_IOCP_서버_프레임_워크_22.png" loading="lazy"><figcaption>사이클 탐지 결과</figcaption></figure>
+                    <figure class="project-image"><img src="../images/C++_IOCP_서버_프레임_워크_23.png" loading="lazy"><figcaption>크래시 출력</figcaption></figure>
+                </div>
+            </section><hr>
+
+            <!-- ===== Protobuf + Jinja2 자동화 ===== -->
+            <section class="feature-card" id="protobuf">
+                <div class="feature-header"><h2>Protobuf + Jinja2 자동화</h2><span class="feature-badge">CMake / 배치 / pyinstaller</span></div>
+                <blockquote><strong>Google Protobuf</strong>를 <strong>CMake</strong>로 Debug/Release 빌드. <strong>.proto 파일</strong>(Enum/Struct/Protocol) 분리 관리. <strong>Jinja2 템플릿</strong>으로 PacketHandler.h 자동 생성 → <strong>pyinstaller</strong>로 exe 변환. 빌드 이벤트에 배치파일 등록하여 <strong>.proto 변경 감지 → 자동 빌드 + 코드 생성 + 복사</strong> 원클릭 파이프라인.</blockquote>
+                <div class="feature-grid triple">
+                    <figure class="project-image"><img src="../images/C++_IOCP_서버_프레임_워크_24.png" loading="lazy"><figcaption>CMake 빌드</figcaption></figure>
+                    <figure class="project-image"><img src="../images/C++_IOCP_서버_프레임_워크_25.png" loading="lazy"><figcaption>Protobuf 빌드 2</figcaption></figure>
+                    <figure class="project-image"><img src="../images/C++_IOCP_서버_프레임_워크_26.png" loading="lazy"><figcaption>Protobuf 빌드 3</figcaption></figure>
+                </div>
+                <div class="feature-grid triple">
+                    <figure class="project-image"><img src="../images/C++_IOCP_서버_프레임_워크_27.png" loading="lazy"><figcaption>.proto 파일 구조</figcaption></figure>
+                    <figure class="project-image"><img src="../images/C++_IOCP_서버_프레임_워크_28.png" loading="lazy"><figcaption>Proto Enum</figcaption></figure>
+                    <figure class="project-image"><img src="../images/C++_IOCP_서버_프레임_워크_29.png" loading="lazy"><figcaption>Proto Struct</figcaption></figure>
+                </div>
+                <div class="feature-grid triple">
+                    <figure class="project-image"><img src="../images/C++_IOCP_서버_프레임_워크_30.png" loading="lazy"><figcaption>Proto Protocol</figcaption></figure>
+                    <figure class="project-image"><img src="../images/C++_IOCP_서버_프레임_워크_31.png" loading="lazy"><figcaption>배치파일 1</figcaption></figure>
+                    <figure class="project-image"><img src="../images/C++_IOCP_서버_프레임_워크_32.png" loading="lazy"><figcaption>배치파일 2</figcaption></figure>
+                </div>
+                <div class="feature-grid triple">
+                    <figure class="project-image"><img src="../images/C++_IOCP_서버_프레임_워크_33.png" loading="lazy"><figcaption>Jinja2 템플릿</figcaption></figure>
+                    <figure class="project-image"><img src="../images/C++_IOCP_서버_프레임_워크_34.png" loading="lazy"><figcaption>Jinja2 코드</figcaption></figure>
+                    <figure class="project-image"><img src="../images/C++_IOCP_서버_프레임_워크_35.png" loading="lazy"><figcaption>pyinstaller 변환</figcaption></figure>
+                </div>
+                <div class="feature-grid triple">
+                    <figure class="project-image"><img src="../images/C++_IOCP_서버_프레임_워크_36.png" loading="lazy"><figcaption>빌드 이벤트</figcaption></figure>
+                    <figure class="project-image"><img src="../images/C++_IOCP_서버_프레임_워크_37.png" loading="lazy"><figcaption>자동 생성 결과 1</figcaption></figure>
+                    <figure class="project-image"><img src="../images/C++_IOCP_서버_프레임_워크_38.png" loading="lazy"><figcaption>자동 생성 결과 2</figcaption></figure>
+                </div>
+                <div class="feature-grid">
+                    <figure class="project-image"><img src="../images/C++_IOCP_서버_프레임_워크_39.png" loading="lazy"><figcaption>최종 파이프라인 1</figcaption></figure>
+                    <figure class="project-image"><img src="../images/C++_IOCP_서버_프레임_워크_40.png" loading="lazy"><figcaption>최종 파이프라인 2</figcaption></figure>
+                </div>
+            </section>
+        </div>
+
+        <div class="project-nav">
+            <a href="../index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> 프로젝트 목록으로</a>
+        </div>
+    </div></article>
+    <footer class="footer"><p>&copy; 2026 김남영. All rights reserved.</p></footer>
+    <script src="project.js"></script>
+</body>
+</html>

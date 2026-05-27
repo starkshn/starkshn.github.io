@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jump King 모작 (2D) | 김남영 포트폴리오</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="project.css">
+    <link rel="stylesheet" href="gunfire.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">NY</a>
+            <a href="../index.html#projects" class="back-link"><i class="fas fa-arrow-left"></i> 프로젝트 목록</a>
+        </div>
+    </nav>
+    <article class="project-detail">
+        <div class="container">
+            <div class="project-meta-card">
+  <p class="meta-desc">WIN32 API, C++로 스팀의 점프킹을 모작한 프로젝트 입니다.</p>
+  <div class="meta-tags"><span class="tag">C++</span><span class="tag">Win32API</span></div>
+  <div class="meta-info">
+    <span><i class="fas fa-user"></i> 김남영(본인)</span>
+    <span><i class="fas fa-calendar"></i> 2022/12/28 → 2023/02/28</span>
+  </div>
+</div>
+
+            <h1 class="project-detail-title">Jump King 모작 (2D)</h1>
+            <div class="project-content">
+                <p>깃허브 링크: https://github.com/starkshn/JumpKing</p>
+<h1>영상</h1>
+<a href="https://www.youtube.com/watch?v=j1WLpSXeZEQ" target="_blank" class="video-thumbnail"><img src="https://img.youtube.com/vi/j1WLpSXeZEQ/maxresdefault.jpg" alt="영상" loading="lazy"><div class="play-button"><i class="fas fa-play"></i></div></a>
+<hr>
+<h1>프로젝트 개요</h1>
+<p>스페이스바를 통해 점프를 하여 성의 꼭대기 까지 무사히 올라가 공주를 구하는 2D형식의 게임입니다.</p>
+<p>처음 Win32API로 게임을 모작한 게임이라 학습을 하기에 적절한 난이도의 게임이 될거같아 점프킹이라는 게임을 선택하여 모작하게 되었습니다.</p>
+<hr>
+<h1>구현 기능</h1>
+<ul>
+<li>텍스쳐 기반 애니매이션 기능 구현</li>
+<li>2D AABB 충돌체 기능 구현</li>
+<li>벡터의 수학적 기능을 직접 구현 & RigidBody를 통한 이동 구현</li>
+</ul>
+<hr>
+<h1>텍스쳐 기반 애니매이션</h1>
+<h3>구현 과정</h3>
+<figure class="project-image"><img src="../images/Jump_King_모작_2D__1.png" alt="image.png" loading="lazy"></figure>
+<figure class="project-image"><img src="../images/Jump_King_모작_2D__2.png" alt="image.png" loading="lazy"></figure>
+<p>위의 두 텍스쳐에서 마젠타 색상을 제외하고 플레이어의 상태에 따라 애니매이션을 재생할 수 있도록 하였습니다.</p>
+<p>상태가 그렇게 많지 않아 enum class로 상태를 제어하였습니다.</p>
+<hr>
+<h3>Code</h3>
+<figure class="project-image"><img src="../images/Jump_King_모작_2D__3.png" alt="image.png" loading="lazy"></figure>
+<ul>
+<li>Code</li>
+</ul>
+<details class="code-toggle"><summary>📝 Code</summary>
+<pre><code class="language-cpp">    void Player::UpdateAnimation()
+    {
+    	if (_prevState == _curState &amp;&amp; _prevDir == _dir)
+    		return;
+    
+    	switch (_curState)
+    	{
+    	case OBJECT_STATE::IDLE:
+    	{
+    		if (_dir == 1)
+    			GetAnimator()-&gt;PlayAnimation(L"IDLE_RIGHT", true);
+    		else
+    			GetAnimator()-&gt;PlayAnimation(L"IDLE_LEFT", true);
+    	}
+    	break;
+    	case OBJECT_STATE::MOVE:
+    	{
+    		if (_dir == 1)
+    			GetAnimator()-&gt;PlayAnimation(L"MOVE_RIGHT", true);
+    		else
+    			GetAnimator()-&gt;PlayAnimation(L"MOVE_LEFT", true);
+    	}
+    	break;
+    	case OBJECT_STATE::SQUAT:
+    	{
+    		if (_dir == 1)
+    			GetAnimator()-&gt;PlayAnimation(L"SQUAT_RIGHT", true);
+    		else
+    			GetAnimator()-&gt;PlayAnimation(L"SQUAT_LEFT", true);
+    	}
+    	break;
+    	case OBJECT_STATE::JUMP:
+    	{
+    		if (_dir == 1)
+    			GetAnimator()-&gt;PlayAnimation(L"JUMP_RIGHT", true);
+    		else
+    			GetAnimator()-&gt;PlayAnimation(L"JUMP_LEFT", true);
+    	}
+    	break;
+    	case OBJECT_STATE::OFF:
+    	{
+    		if (_dir == 1)
+    			GetAnimator()-&gt;PlayAnimation(L"OFF_RIGHT", true);
+    		else
+    			GetAnimator()-&gt;PlayAnimation(L"OFF_LEFT", true);
+    	}
+    	break;
+    	case OBJECT_STATE::FALL:
+    	{
+    		if (_dir == 1)
+    			GetAnimator()-&gt;PlayAnimation(L"FALL_RIGHT", true);
+    		else
+    			GetAnimator()-&gt;PlayAnimation(L"FALL_LEFT", true);
+    	break;
+    	}
+    	case OBJECT_STATE::FALLEN:
+    	{
+    		if (_dir == 1)
+    			GetAnimator()-&gt;PlayAnimation(L"FALLEN_RIGHT", true);
+    		else
+    			GetAnimator()-&gt;PlayAnimation(L"FALLEN_LEFT", true);
+    	}
+    	break;
+    	case OBJECT_STATE::END:
+    	{
+    	}
+    	break;
+    	default:
+    	break;
+    	}
+    }</code></pre>
+</details>
+<ol>
+<li>플레이어 상태에 따라 애니매이션 상태도 같이 변경하며 제어하는 코드.</li>
+</ol>
+<p>Animator와 Animation 객체를 만들고 Animator가 Animation을 관리하는 구조로 구현하였습니다.</p>
+<figure class="project-image"><img src="../images/Jump_King_모작_2D__4.png" alt="image.png" loading="lazy"></figure>
+<ol>
+<li>텍스쳐 기반 애니매이션 재생 코드</li>
+</ol>
+<p>1번에서 변경된 애니매이션에 따라 해당 애니매이션 duration에 따라 프레임을 증가시켜가며 텍스쳐를 변경합니다.</p>
+<hr>
+<h1>2D AABB 충돌체 구현</h1>
+<h3>구현 과정</h3>
+<p>2D Collider를 컴포넌트화 하여 플레이어와 Groud객체에 컴포넌트로 넣는 방식으로 구현하였습니다. OnEnter, OnStay, OnExit 함수를 통해 현재 충돌 상태가 어떤 상태 인지 파악할 수 있도록 하였습니다.</p>
+<h3>Code</h3>
+<figure class="project-image"><img src="../images/Jump_King_모작_2D__5.png" alt="image.png" loading="lazy"></figure>
+<p>Collider를 렌더하는 코드</p>
+<p>위치와 사이즈를 기반으로 직접 WIN32API의 PEN객체를 통해 화면에 그려내었습니다.</p>
+<figure class="project-image"><img src="../images/Jump_King_모작_2D__6.png" alt="image.png" loading="lazy"></figure>
+<ul>
+<li>전체 Code</li>
+</ul>
+<details class="code-toggle"><summary>📝 Code</summary>
+<pre><code class="language-cpp">    bool Player::CheckColDir(Object* otherObj)
+    {
+    	OBJECT_STATE playerState = GetCurState();
+    
+    	Ground* ground = dynamic_cast&lt;Ground*&gt;(otherObj);
+    
+    	Vector2 playerPos = GetCollider()-&gt;GetFinalPos();
+    	Vector2 playerScale = GetCollider()-&gt;GetColliderScale();
+    
+    	Vector2 groundPos = otherObj-&gt;GetCollider()-&gt;GetFinalPos();
+    	Vector2 groundScale = otherObj-&gt;GetCollider()-&gt;GetColliderScale();
+    
+    	float playerRightPosX = playerPos._x + (playerScale._x / 2.f);
+    	float playerLeftPosX = playerPos._x - (playerScale._x / 2.f);
+    	float playerTopPosY = playerPos._y - (playerScale._y / 2.f);
+    	float playerBottomPosY = playerPos._y + (playerScale._y / 2.f);
+    
+    	float groundRightPosX = groundPos._x + (groundScale._x / 2.f);
+    	float groundLeftPosX = groundPos._x - (groundScale._x / 2.f);
+    	float groundTopPosY = groundPos._y - (groundScale._y / 2.f);
+    	float groundBottomPosY = groundPos._y + (groundScale._y / 2.f);
+    
+    	// ground 위쪽면 부딪힐 경우(플레이어가 땅위에 서 있을 경우
+    	if (playerBottomPosY + 5 &gt;= groundTopPosY &amp;&amp; playerPos._y &lt; groundTopPosY)
+    	{
+    		if (playerRightPosX &lt;= (groundRightPosX + groundScale._x / 2.f) &amp;&amp; playerLeftPosX &gt;= groundLeftPosX - (groundScale._x / 2.f))
+    		{
+    			return true;
+    		}
+    	}
+    
+    	// ground 왼쪽면 부딪힐 경우
+    	if (playerRightPosX  &gt;= groundLeftPosX &amp;&amp; playerPos._x &lt; groundLeftPosX)
+    	{
+    		if (groundTopPosY - (groundScale._y / 2.f) &lt; playerTopPosY &amp;&amp; groundBottomPosY + (groundScale._y / 2.f) &gt; playerBottomPosY)
+    		{
+    			return false;
+    		}
+    	}
+    
+    	// ground 오른쪽면 부딪힐 경우
+    	if (playerLeftPosX &lt;= groundRightPosX &amp;&amp; playerPos._x &gt; groundRightPosX)
+    	{
+    		if (groundTopPosY - (groundScale._y / 2.f) &lt; playerTopPosY &amp;&amp; groundBottomPosY + (groundScale._y / 2.f) &gt; playerBottomPosY)
+    		{
+    			return false;
+    		}
+    	}
+    
+    	// ground 아랫면 부딪힐 경우
+    	if (playerTopPosY &lt;= groundBottomPosY &amp;&amp; playerPos._y &gt; groundBottomPosY)
+    	{
+    		if (playerRightPosX &lt;= (groundRightPosX + groundScale._x / 2.f) &amp;&amp; playerLeftPosX &gt;= groundLeftPosX - (groundScale._x / 2.f))
+    		{
+    			return false;
+    		}
+    	}
+    }</code></pre>
+</details>
+<p>2D AABB 충돌을 Groud객체와 수행하는 코드</p>
+<p>플레이어의 위치와 사이즈를 기반으로 Ground객체의 어느 부분에 충돌 했는지 계산하는 코드입니다.</p>
+<p>가령 플레이어 밑면이 Ground객체의 윗면위치보다 크거나 같은 경우 우선 위에서 아래로 떨어진 것이라 판정하고 이후 세부 조건을 더 세워 어디에서 어디로 충돌하였는지 분기하였습니다.</p>
+<hr>
+<h1>벡터의 수학적 기능을 직접 구현 & RigidBody를 통한 이동 구현</h1>
+<h3>구현 과정</h3>
+<p>수학 벡터의 길이, 정규화 등의 기능을 함수화하여 직접 구현하고 이를 활용하여 RigidBody라는 컴포넌트 객체를 통해 이동을 제어하고 마찰력 또한 모방하여 구현하였습니다.</p>
+<figure class="project-image"><img src="../images/Jump_King_모작_2D__7.png" alt="image.png" loading="lazy"></figure>
+<ul>
+<li>전체 Code</li>
+</ul>
+<details class="code-toggle"><summary>📝 Code</summary>
+<pre><code class="language-cpp">    #pragma once
+    
+    #include &lt;assert.h&gt;
+    
+    class Texture;
+    class Object;
+    
+    struct Vector2
+    {
+    	float _x;
+    	float _y;
+    
+    public:
+    	Vector2()
+    		:
+    		_x(0.f),
+    		_y(0.f)
+    	{}
+    	Vector2(float x, float y)
+    		:
+    		_x(x),
+    		_y(y)
+    	{}
+    	Vector2(int x, int y)
+    		:
+    		_x(float(x)),
+    		_y(float(y))
+    	{}
+    	Vector2(const POINT&amp; pt) :
+    		_x(static_cast&lt;float&gt;(pt.x)), _y(static_cast&lt;float&gt;(pt.y))
+    	{}
+    
+    public:
+    	bool IsZero()
+    	{
+    		if (_x == 0.f &amp;&amp; _y == 0.f)
+    			return true;
+    		return false;
+    	}
+    
+    	float Length()
+    	{
+    		return sqrt(_x * _x + _y * _y);
+    	}
+    
+    	Vector2&amp; Normalize()
+    	{
+    		float len = Length();
+    
+    		assert(len != 0.f);
+    
+    		_x /= len;
+    		_y /= len;
+    
+    		return *this;
+    	}
+    
+    public:
+    	Vector2&amp; operator = (POINT&amp; pt)
+    	{
+    		_x = static_cast&lt;float&gt;(pt.x);
+    		_y = static_cast&lt;float&gt;(pt.y);
+    	}
+    
+    	bool operator == (const Vector2&amp; other)
+    	{
+    		if (_x == other._x &amp;&amp; _y == other._y)
+    			return true;
+    		return false;
+    	}
+    	bool operator != (const Vector2&amp; other)
+    	{
+    		return !(*this == other);
+    	}
+    
+    	Vector2 operator + (const Vector2&amp; other)
+    	{
+    		return Vector2(_x + other._x, _y + other._y);
+    	}
+    
+    	void operator += (const Vector2 other)
+    	{
+    		_x += other._x;
+    		_y += other._y;
+    	}
+    
+    	Vector2 operator - ()
+    	{
+    		return Vector2(-_x, -_y);
+    	}
+    	Vector2 operator - (const Vector2&amp; other)
+    	{
+    		return Vector2(_x - other._x, _y - other._y);
+    	}
+    	Vector2 operator -= (const Vector2&amp; other)
+    	{
+    		return Vector2(_x -= other._x, _y -= other._y);
+    	}
+    	Vector2 operator - (float value)
+    	{
+    		return Vector2(_x -= value, _y -= value);
+    	}
+    
+    	Vector2 operator * (const Vector2&amp; other)
+    	{
+    		return Vector2(_x * other._x, _y * other._y);
+    	}
+    	Vector2 operator * (int value)
+    	{
+    		return Vector2(_x * float(value), _y * float(value));
+    	}
+    	Vector2 operator * (float value)
+    	{
+    		return Vector2(_x * value, _y * value);
+    	}
+    	Vector2 operator *= (float value)
+    	{
+    		_x *= value;
+    		_y *= value;
+    		return Vector2(_x, _y);
+    	}
+    
+    	Vector2 operator / (const Vector2&amp; other)
+    	{
+    		assert(!(0.f == other._x || 0.f == other._y));
+    		return Vector2(_x / other._x, _y / other._y);
+    	}
+    	Vector2 operator / (const float&amp; value)
+    	{
+    		assert(!(0.f == value));
+    		return Vector2(_x / value, _y / value);
+    	}
+    };</code></pre>
+</details>
+<p>벡터의 생성자 부터 정규화, 길이 구하기, 연산자 오버로딩을 구현하여 사용할 수 있게 한 코드입니다.</p>
+<figure class="project-image"><img src="../images/Jump_King_모작_2D__8.png" alt="image.png" loading="lazy"></figure>
+<ul>
+<li>전체 Code</li>
+</ul>
+<details class="code-toggle"><summary>📝 Code</summary>
+<pre><code class="language-cpp">    void RigidBody::FinalUpdate()
+    {
+    	// 순수 힘의 크기
+    	float force = _force.Length();
+    
+    	if (0.f != force)
+    	{
+    		// 방향
+    		_force.Normalize();
+    
+    		float accel = force / _mass;
+    
+    		_accel = _force * accel;
+    	}
+    
+    	// ============================================
+    	// 힘이 있든 없든  추가 가속도를 계산을 해야한다.
+    	// ============================================
+    	_accel += _accelAlpha; // 추가 가속도를 더한다.
+    
+    	 // 속도 (방향 + 속력) 한번 붙은 속도는 초기화 할 필요가 없다.
+    	_velocity += _accel * DeltaTime_F;
+    
+    	// =================
+    	// 마찰력 적용
+    	// =================
+    	// 마찰력에 의한 반대방향으로의 가속도
+    	if (!_velocity.IsZero())
+    	{
+    		Vector2 vel = _velocity;
+    		vel.Normalize();
+    		Vector2 friction = (-vel) * _frictCoeff * DeltaTime_F;
+    
+    		if (_velocity.Length() &lt;= friction.Length())
+    		{
+    			// 마찰 가속도가 본래 속도보다 더 큰 경우
+    			_velocity = Vector2(0.f, 0.f);
+    		}
+    		else
+    		{
+    			_velocity += friction;
+    		}
+    	}
+    
+    	// 최대속도 제한 (속도 제한 검사)
+    	if (abs(_maxVelocity._x) &lt; abs(_velocity._x))
+    	{
+    		_velocity._x = (_velocity._x / abs(_velocity._x)) * abs(_maxVelocity._x);
+    	}
+    
+    	if (abs(_maxVelocity._y) &lt; abs(_velocity._y))
+    	{
+    		_velocity._y = (_velocity._y / abs(_velocity._y)) * abs(_maxVelocity._y);
+    	}
+    
+    	Move();
+    
+    	// 힘 초기화
+    	_force = Vector2(0.f, 0.f);
+    
+    	// 추가 가속도 누적량 초기화
+    	_accelAlpha = Vector2(0.f, 0.f);
+    
+    	// 가속도 초기화
+    	_accel = Vector2(0.f, 0.f);
+    }</code></pre>
+</details>
+<p>RigidBody 컴포넌트 객체를 통해 이동하고 마찰력을 계산하는 코드</p>
+<figure class="project-image"><img src="../images/Jump_King_모작_2D__9.png" alt="image.png" loading="lazy"></figure>
+<ul>
+<li>전체 Code</li>
+</ul>
+<details class="code-toggle"><summary>📝 Code</summary>
+<pre><code class="language-cpp">    void RigidBody::Move()
+    {
+    	// 이동 속력
+    	float speed = _velocity.Length();
+    
+    	if (0.f != speed)
+    	{
+    		// 이동 방향
+    		Vector2 dir = _velocity;
+    		dir.Normalize();
+    
+    		Vector2 pos = p_owner-&gt;GetPos();
+    		pos += dir * speed * DeltaTime_F;
+    
+    		p_owner-&gt;SetPos(pos);
+    	}
+    }</code></pre>
+</details>
+<p>RigidBody를 통해 실제 이동하는 코드</p>
+
+            </div>
+            <div class="project-nav">
+                <a href="../index.html#projects" class="btn btn-outline"><i class="fas fa-arrow-left"></i> 프로젝트 목록으로</a>
+            </div>
+        </div>
+    </article>
+    <footer class="footer"><p>&copy; 2026 김남영. All rights reserved.</p></footer>
+    <script src="project.js"></script>
+</body>
+</html>
