@@ -608,6 +608,57 @@
         <p>&copy; 2026 김남영. All rights reserved.</p>
     </footer>
 
+    <!-- Admin Panel (hidden) -->
+    <div id="admin-panel" style="display:none; position:fixed; top:0; right:0; width:340px; height:100vh; background:#111113; border-left:1px solid #2e2e32; z-index:9999; padding:24px; overflow-y:auto; font-family:sans-serif; color:#e4e4e7;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+            <span style="font-weight:700; font-size:16px;">🔒 Admin Panel</span>
+            <button onclick="document.getElementById('admin-panel').style.display='none'" style="background:none; border:none; color:#a1a1aa; font-size:20px; cursor:pointer;">✕</button>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:12px;">
+            <a href="https://analytics.google.com/analytics/web/#/p/G-XDD814ZBH2/realtime/overview" target="_blank" style="display:block; padding:12px 16px; background:#1a1a1e; border:1px solid #2e2e32; border-radius:8px; color:#818cf8; font-size:14px; text-decoration:none;">📊 GA4 실시간</a>
+            <a href="https://analytics.google.com/analytics/web/#/p/G-XDD814ZBH2/reports/dashboard" target="_blank" style="display:block; padding:12px 16px; background:#1a1a1e; border:1px solid #2e2e32; border-radius:8px; color:#818cf8; font-size:14px; text-decoration:none;">📈 GA4 대시보드</a>
+            <a href="https://analytics.google.com/analytics/web/#/p/G-XDD814ZBH2/reports/explorer?params=_u..nav%3Dmaui&r=lifecycle-engagement-pages-and-screens" target="_blank" style="display:block; padding:12px 16px; background:#1a1a1e; border:1px solid #2e2e32; border-radius:8px; color:#818cf8; font-size:14px; text-decoration:none;">📄 페이지별 조회수</a>
+            <a href="https://analytics.google.com/analytics/web/#/p/G-XDD814ZBH2/reports/explorer?params=_u..nav%3Dmaui&r=lifecycle-acquisition-traffic-acquisition" target="_blank" style="display:block; padding:12px 16px; background:#1a1a1e; border:1px solid #2e2e32; border-radius:8px; color:#818cf8; font-size:14px; text-decoration:none;">🔗 유입 경로</a>
+            <a href="https://analytics.google.com/analytics/web/#/p/G-XDD814ZBH2/reports/explorer?params=_u..nav%3Dmaui&r=user-technology-detail" target="_blank" style="display:block; padding:12px 16px; background:#1a1a1e; border:1px solid #2e2e32; border-radius:8px; color:#818cf8; font-size:14px; text-decoration:none;">💻 기기/브라우저</a>
+            <hr style="border:none; height:1px; background:#2e2e32; margin:8px 0;">
+            <a href="https://github.com/starkshn/starkshn.github.io" target="_blank" style="display:block; padding:12px 16px; background:#1a1a1e; border:1px solid #2e2e32; border-radius:8px; color:#a1a1aa; font-size:14px; text-decoration:none;">⚙️ GitHub 레포</a>
+            <a href="https://github.com/starkshn/agentsmd" target="_blank" style="display:block; padding:12px 16px; background:#1a1a1e; border:1px solid #2e2e32; border-radius:8px; color:#a1a1aa; font-size:14px; text-decoration:none;">📝 AI 가이드라인 레포</a>
+        </div>
+        <p style="margin-top:24px; font-size:11px; color:#71717a;">Ctrl+Shift+A 로 토글</p>
+    </div>
+    <script>
+    // Admin: Ctrl+Shift+A → 비밀번호 → 패널 토글
+    (function(){
+        var HASH = '416ebee8db53bd692a556c8b4c307bcc';
+        var authed = sessionStorage.getItem('admin') === '1';
+
+        document.addEventListener('keydown', function(e){
+            if(e.ctrlKey && e.shiftKey && e.key === 'A'){
+                e.preventDefault();
+                var panel = document.getElementById('admin-panel');
+                if(authed){
+                    panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+                    return;
+                }
+                var pw = prompt('Admin Password:');
+                if(!pw) return;
+                // simple hash check
+                var hash = md5(pw);
+                if(hash === HASH){
+                    authed = true;
+                    sessionStorage.setItem('admin','1');
+                    panel.style.display = 'block';
+                } else {
+                    alert('Wrong password');
+                }
+            }
+        });
+
+        // minimal md5 for password check
+        function md5(s){var h=0x67452301,g=0xefcdab89,f=0x98badcfe,e=0x10325476;function r(a,b){return(a<<b)|(a>>>(32-b));}function q(a,b){var c,d,e,f,g;e=a&0x80000000;f=b&0x80000000;c=a&0x40000000;d=b&0x40000000;g=(a&0x3FFFFFFF)+(b&0x3FFFFFFF);if(c&d)return(g^0x80000000^e^f);if(c|d){if(g&0x40000000)return(g^0xC0000000^e^f);else return(g^0x40000000^e^f);}else return(g^e^f);}function p(a,b,c,d,x,s,t){a=q(a,q(q((b&c)|((~b)&d)),q(x,t)));return q(r(a,s),b);}function o(a,b,c,d,x,s,t){a=q(a,q(q((b&d)|(c&(~d))),q(x,t)));return q(r(a,s),b);}function n(a,b,c,d,x,s,t){a=q(a,q(q(b^c^d),q(x,t)));return q(r(a,s),b);}function m(a,b,c,d,x,s,t){a=q(a,q(q(c^(b|(~d))),q(x,t)));return q(r(a,s),b);}var i=[],k,aa,bb,cc,dd,l=s.length,w=[];for(k=0;k<l;k++){w[k>>2]|=(s.charCodeAt(k))<<((k%4)*8);}w[l>>2]|=0x80<<((l%4)*8);w[(((l+8)>>>6)<<4)+14]=l*8;for(k=0;k<w.length;k+=16){aa=h;bb=g;cc=f;dd=e;h=p(h,g,f,e,w[k],7,0xD76AA478);e=p(e,h,g,f,w[k+1],12,0xE8C7B756);f=p(f,e,h,g,w[k+2],17,0x242070DB);g=p(g,f,e,h,w[k+3],22,0xC1BDCEEE);h=p(h,g,f,e,w[k+4],7,0xF57C0FAF);e=p(e,h,g,f,w[k+5],12,0x4787C62A);f=p(f,e,h,g,w[k+6],17,0xA8304613);g=p(g,f,e,h,w[k+7],22,0xFD469501);h=p(h,g,f,e,w[k+8],7,0x698098D8);e=p(e,h,g,f,w[k+9],12,0x8B44F7AF);f=p(f,e,h,g,w[k+10],17,0xFFFF5BB1);g=p(g,f,e,h,w[k+11],22,0x895CD7BE);h=p(h,g,f,e,w[k+12],7,0x6B901122);e=p(e,h,g,f,w[k+13],12,0xFD987193);f=p(f,e,h,g,w[k+14],17,0xA679438E);g=p(g,f,e,h,w[k+15],22,0x49B40821);h=o(h,g,f,e,w[k+1],5,0xF61E2562);e=o(e,h,g,f,w[k+6],9,0xC040B340);f=o(f,e,h,g,w[k+11],14,0x265E5A51);g=o(g,f,e,h,w[k],20,0xE9B6C7AA);h=o(h,g,f,e,w[k+5],5,0xD62F105D);e=o(e,h,g,f,w[k+10],9,0x02441453);f=o(f,e,h,g,w[k+15],14,0xD8A1E681);g=o(g,f,e,h,w[k+4],20,0xE7D3FBC8);h=o(h,g,f,e,w[k+9],5,0x21E1CDE6);e=o(e,h,g,f,w[k+14],9,0xC33707D6);f=o(f,e,h,g,w[k+3],14,0xF4D50D87);g=o(g,f,e,h,w[k+8],20,0x455A14ED);h=o(h,g,f,e,w[k+13],5,0xA9E3E905);e=o(e,h,g,f,w[k+2],9,0xFCEFA3F8);f=o(f,e,h,g,w[k+7],14,0x676F02D9);g=o(g,f,e,h,w[k+12],20,0x8D2A4C8A);h=n(h,g,f,e,w[k+5],4,0xFFFA3942);e=n(e,h,g,f,w[k+8],11,0x8771F681);f=n(f,e,h,g,w[k+11],16,0x6D9D6122);g=n(g,f,e,h,w[k+14],23,0xFDE5380C);h=n(h,g,f,e,w[k+1],4,0xA4BEEA44);e=n(e,h,g,f,w[k+4],11,0x4BDECFA9);f=n(f,e,h,g,w[k+7],16,0xF6BB4B60);g=n(g,f,e,h,w[k+10],23,0xBEBFBC70);h=n(h,g,f,e,w[k+13],4,0x289B7EC6);e=n(e,h,g,f,w[k],11,0xEAA127FA);f=n(f,e,h,g,w[k+3],16,0xD4EF3085);g=n(g,f,e,h,w[k+6],23,0x04881D05);h=n(h,g,f,e,w[k+9],4,0xD9D4D039);e=n(e,h,g,f,w[k+12],11,0xE6DB99E5);f=n(f,e,h,g,w[k+15],16,0x1FA27CF8);g=n(g,f,e,h,w[k+2],23,0xC4AC5665);h=m(h,g,f,e,w[k],6,0xF4292244);e=m(e,h,g,f,w[k+7],10,0x432AFF97);f=m(f,e,h,g,w[k+14],15,0xAB9423A7);g=m(g,f,e,h,w[k+5],21,0xFC93A039);h=m(h,g,f,e,w[k+12],6,0x655B59C3);e=m(e,h,g,f,w[k+3],10,0x8F0CCC92);f=m(f,e,h,g,w[k+10],15,0xFFEFF47D);g=m(g,f,e,h,w[k+1],21,0x85845DD1);h=m(h,g,f,e,w[k+8],6,0x6FA87E4F);e=m(e,h,g,f,w[k+15],10,0xFE2CE6E0);f=m(f,e,h,g,w[k+5],15,0xA3014314);g=m(g,f,e,h,w[k+12],21,0x4E0811A1);h=m(h,g,f,e,w[k+3],6,0xF7537E82);e=m(e,h,g,f,w[k+10],10,0xBD3AF235);f=m(f,e,h,g,w[k+2],15,0x2AD7D2BB);g=m(g,f,e,h,w[k+9],21,0xEB86D391);h=q(h,aa);g=q(g,bb);f=q(f,cc);e=q(e,dd);}var v=function(a){var b='',c,d;for(d=0;d<=3;d++){c=(a>>>(d*8))&255;b+='0123456789abcdef'.charAt((c>>>4)&0x0F)+'0123456789abcdef'.charAt(c&0x0F);}return b;};return v(h)+v(g)+v(f)+v(e);}
+    })();
+    </script>
+
     <script src="script.js"></script>
 </body>
 </html>
