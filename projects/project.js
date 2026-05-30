@@ -3,7 +3,10 @@ window.addEventListener('scroll', () => {
     const scrollTop = document.documentElement.scrollTop;
     const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
     const progress = (scrollTop / scrollHeight) * 100;
-    document.querySelector('.project-detail').style.setProperty('--scroll-progress', progress + '%');
+    const detail = document.querySelector('.project-detail');
+    if (detail) {
+        detail.style.setProperty('--scroll-progress', progress + '%');
+    }
 });
 
 // Lazy image fade-in on scroll
@@ -17,7 +20,7 @@ const imgObserver = new IntersectionObserver((entries) => {
     });
 }, { threshold: 0.1 });
 
-document.querySelectorAll('.project-image').forEach(img => {
+document.querySelectorAll('.project-image').forEach((img) => {
     img.style.opacity = '0';
     img.style.transform = 'translateY(20px)';
     img.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
@@ -25,7 +28,7 @@ document.querySelectorAll('.project-image').forEach(img => {
 });
 
 // Image click to fullscreen
-document.querySelectorAll('.project-image img').forEach(img => {
+document.querySelectorAll('.project-image img').forEach((img) => {
     img.style.cursor = 'zoom-in';
     img.addEventListener('click', () => {
         const overlay = document.createElement('div');
@@ -36,4 +39,43 @@ document.querySelectorAll('.project-image img').forEach(img => {
         overlay.addEventListener('click', () => overlay.remove());
         document.body.appendChild(overlay);
     });
+});
+
+// ==================== Content Protection (Best Effort) ====================
+function blockEvent(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    return false;
+}
+
+document.addEventListener('contextmenu', blockEvent, { capture: true });
+document.addEventListener('selectstart', blockEvent, { capture: true });
+document.addEventListener('dragstart', blockEvent, { capture: true });
+document.addEventListener('copy', blockEvent, { capture: true });
+document.addEventListener('cut', blockEvent, { capture: true });
+document.addEventListener('paste', blockEvent, { capture: true });
+document.addEventListener('mousedown', (e) => {
+    if (e.button === 1) return blockEvent(e);
+}, { capture: true });
+document.addEventListener('selectionchange', () => {
+    const sel = window.getSelection ? window.getSelection() : null;
+    if (sel && sel.rangeCount > 0) {
+        try { sel.removeAllRanges(); } catch (_) {}
+    }
+}, { capture: true });
+
+document.addEventListener('keydown', (e) => {
+    const key = (e.key || '').toLowerCase();
+    const ctrlOrMeta = e.ctrlKey || e.metaKey;
+    const blockedCtrlKeys = ['a', 'c', 's', 'u', 'p', 'x'];
+
+    if (e.key === 'F12') return blockEvent(e);
+    if (ctrlOrMeta && e.shiftKey && (key === 'i' || key === 'j' || key === 'c')) return blockEvent(e);
+    if (ctrlOrMeta && blockedCtrlKeys.includes(key)) return blockEvent(e);
+    if (key === 'printscreen') {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText('');
+        }
+        return blockEvent(e);
+    }
 });

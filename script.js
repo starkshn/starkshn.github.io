@@ -2,14 +2,16 @@
 const navToggle = document.querySelector('.nav-toggle');
 const navLinks = document.querySelector('.nav-links');
 
-navToggle.addEventListener('click', () => {
-    navLinks.classList.toggle('active');
-});
+if (navToggle && navLinks) {
+    navToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+    });
+}
 
 // Close nav on link click (mobile)
-document.querySelectorAll('.nav-links a').forEach(link => {
+document.querySelectorAll('.nav-links a').forEach((link) => {
     link.addEventListener('click', () => {
-        navLinks.classList.remove('active');
+        if (navLinks) navLinks.classList.remove('active');
     });
 });
 
@@ -79,6 +81,7 @@ document.querySelectorAll('.skill-card, .project-card, .exp-card, .contact-card,
 // ==================== Nav Background on Scroll ====================
 window.addEventListener('scroll', () => {
     const nav = document.querySelector('.nav');
+    if (!nav) return;
     if (window.scrollY > 50) {
         nav.style.borderBottomColor = '#333';
     } else {

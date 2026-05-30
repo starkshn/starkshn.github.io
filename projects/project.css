@@ -1,4 +1,13 @@
 /* ==================== Project Detail V3 — Gallery Style ==================== */
+*,
+*::before,
+*::after {
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+    -webkit-touch-callout: none !important;
+}
 
 .back-link {
     color: var(--text-muted);
