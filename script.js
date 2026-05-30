@@ -85,3 +85,32 @@ window.addEventListener('scroll', () => {
         nav.style.borderBottomColor = '#222';
     }
 });
+
+// ==================== Content Protection (Best Effort) ====================
+function blockEvent(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    return false;
+}
+
+document.addEventListener('contextmenu', blockEvent, { capture: true });
+document.addEventListener('selectstart', blockEvent, { capture: true });
+document.addEventListener('dragstart', blockEvent, { capture: true });
+document.addEventListener('copy', blockEvent, { capture: true });
+document.addEventListener('cut', blockEvent, { capture: true });
+
+document.addEventListener('keydown', (e) => {
+    const key = (e.key || '').toLowerCase();
+    const ctrlOrMeta = e.ctrlKey || e.metaKey;
+    const blockedCtrlKeys = ['a', 'c', 's', 'u', 'p', 'x'];
+
+    if (e.key === 'F12') return blockEvent(e);
+    if (ctrlOrMeta && e.shiftKey && (key === 'i' || key === 'j' || key === 'c')) return blockEvent(e);
+    if (ctrlOrMeta && blockedCtrlKeys.includes(key)) return blockEvent(e);
+    if (key === 'printscreen') {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText('');
+        }
+        return blockEvent(e);
+    }
+});
