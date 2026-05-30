@@ -1,3 +1,39 @@
+// Keep inbound UTM params on internal navigation so GA4 attribution does not drop.
+function preserveUtmOnInternalLinks() {
+    const url = new URL(window.location.href);
+    const utmKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
+    const activeUtm = {};
+
+    utmKeys.forEach((k) => {
+        const v = url.searchParams.get(k);
+        if (v) activeUtm[k] = v;
+    });
+
+    if (Object.keys(activeUtm).length === 0) return;
+
+    document.querySelectorAll('a[href]').forEach((a) => {
+        const rawHref = a.getAttribute('href');
+        if (!rawHref) return;
+        if (rawHref.startsWith('#')) return;
+        if (rawHref.startsWith('mailto:') || rawHref.startsWith('tel:') || rawHref.startsWith('javascript:')) return;
+
+        try {
+            const dest = new URL(rawHref, window.location.origin);
+            if (dest.origin !== window.location.origin) return;
+            utmKeys.forEach((k) => {
+                if (activeUtm[k] && !dest.searchParams.get(k)) {
+                    dest.searchParams.set(k, activeUtm[k]);
+                }
+            });
+            a.setAttribute('href', dest.pathname + dest.search + dest.hash);
+        } catch (_) {
+            // Ignore malformed URLs.
+        }
+    });
+}
+
+preserveUtmOnInternalLinks();
+
 // Scroll progress bar
 window.addEventListener('scroll', () => {
     const scrollTop = document.documentElement.scrollTop;
