@@ -125,10 +125,10 @@
                     <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__14.png" loading="lazy"><figcaption>렌더 타겟별 결과 (좌하: 외곽선, 중하: 초록색)</figcaption></figure>
                     <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__15.png" loading="lazy"><figcaption>벽 뒤 적 위치 표시</figcaption></figure>
                 </div>
-                <p>일반적인 Rim Light를 적용하면 모든 외곽선에 빨간 선이 칠해지지만, 원하는 결과는 <strong>완전 겉 테두리만</strong> 적용하는 것이었습니다. 이를 위해 <strong>별도 렌더 타겟의 ClearColor를 검은색</strong>으로 설정하여 대비를 높이고, 초록색으로 렌더링한 오브젝트에 <strong>소벨 필터</strong>를 적용하여 검은색과 초록색이 만나는 <strong>정확한 경계면</strong>만 빨간색으로 추출했습니다.</p>
+                <p>아래 두 이미지는 모두 <strong>완전 겉 테두리만</strong> 남기도록 만든 최종 결과 예시입니다. <strong>별도 렌더 타겟의 ClearColor를 검은색</strong>으로 두고, 초록색으로 렌더링한 오브젝트에 <strong>소벨 필터</strong>를 적용해 검은색과 초록색이 만나는 <strong>정확한 경계면</strong>만 빨간색으로 추출했습니다.</p>
                 <div class="feature-grid">
-                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__16.png" loading="lazy"><figcaption>❌ 모든 외곽선 (원하지 않음)</figcaption></figure>
-                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__17.png" loading="lazy"><figcaption>✅ 겉 테두리만 (원하는 결과)</figcaption></figure>
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__16.png" loading="lazy"><figcaption>✅ 겉 테두리만 (결과 예시 A)</figcaption></figure>
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__17.png" loading="lazy"><figcaption>✅ 겉 테두리만 (결과 예시 B)</figcaption></figure>
                 </div>
                 <details class="code-toggle"><summary>📝 소벨 필터 HLSL</summary>
 <pre><code class="language-cpp">PS_OUT_OUTER PS_MAIN_OUTER(PS_IN In) {
@@ -273,7 +273,7 @@
                     <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__40.gif" loading="lazy"><figcaption>문고리 이펙트</figcaption></figure>
                 </div>
                 <div class="feature-grid triple">
-                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__43.gif" loading="lazy"><figcaption>몬스터 생성 + 피격</figcaption></figure>
+                    <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__43.gif" loading="lazy"><figcaption>몬스터 피격 이펙트</figcaption></figure>
                     <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__44.gif" loading="lazy"><figcaption>보스 내려치기</figcaption></figure>
                     <figure class="project-image"><img src="../images/건파이어_리본_GunFire_Reborn__45.gif" loading="lazy"><figcaption>보스 메테오</figcaption></figure>
                 </div>
