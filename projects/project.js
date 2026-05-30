@@ -34,6 +34,34 @@ function preserveUtmOnInternalLinks() {
 
 preserveUtmOnInternalLinks();
 
+// YouTube thumbnail fallback:
+// maxresdefault is not available for some videos and shows a gray placeholder.
+// Fallback sequence: maxresdefault -> hqdefault -> mqdefault.
+function setupYouTubeThumbnailFallback() {
+    document.querySelectorAll('.video-thumbnail img').forEach((img) => {
+        const original = img.getAttribute('src') || '';
+        if (!/img\.youtube\.com\/vi\/[^/]+\/maxresdefault\.jpg/i.test(original)) return;
+
+        const hq = original.replace(/maxresdefault\.jpg/i, 'hqdefault.jpg');
+        const mq = original.replace(/maxresdefault\.jpg/i, 'mqdefault.jpg');
+
+        let step = 0;
+        img.addEventListener('error', () => {
+            if (step === 0) {
+                step = 1;
+                img.src = hq;
+                return;
+            }
+            if (step === 1) {
+                step = 2;
+                img.src = mq;
+            }
+        });
+    });
+}
+
+setupYouTubeThumbnailFallback();
+
 // Scroll progress bar
 window.addEventListener('scroll', () => {
     const scrollTop = document.documentElement.scrollTop;
