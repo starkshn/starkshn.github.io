@@ -98,6 +98,16 @@ document.addEventListener('selectstart', blockEvent, { capture: true });
 document.addEventListener('dragstart', blockEvent, { capture: true });
 document.addEventListener('copy', blockEvent, { capture: true });
 document.addEventListener('cut', blockEvent, { capture: true });
+document.addEventListener('paste', blockEvent, { capture: true });
+document.addEventListener('mousedown', (e) => {
+    if (e.button === 1) return blockEvent(e);
+}, { capture: true });
+document.addEventListener('selectionchange', () => {
+    const sel = window.getSelection ? window.getSelection() : null;
+    if (sel && sel.rangeCount > 0) {
+        try { sel.removeAllRanges(); } catch (_) {}
+    }
+}, { capture: true });
 
 document.addEventListener('keydown', (e) => {
     const key = (e.key || '').toLowerCase();
